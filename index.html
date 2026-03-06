@@ -37,6 +37,20 @@
             margin-bottom: 10px;
         }
 
+        .league-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
         .subtitle {
             font-size: 1.1em;
             color: #ecf0f1;
@@ -155,13 +169,31 @@
             gap: 10px;
         }
 
-        .team-badge {
-            background-color: #3498db;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+.team-badge {
+            background-color: white;
+            color: #333;
+            padding: 12px 15px;
+            border-radius: 8px;
             font-size: 0.9em;
             font-weight: bold;
+            border: 2px solid #3498db;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .team-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin: 0 auto 8px;
+            display: block;
+        }
+
+        .team-captain {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 6px;
+            font-weight: normal;
         }
 
         .match-count {
@@ -204,8 +236,9 @@
 <body>
     <div class="container">
         <header>
-            <h1>⚽ League Schedule</h1>
-            <p class="subtitle">11 Rounds · 12 Teams · 66 Matches</p>
+            <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
+            <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
+            <p class="subtitle">11 League Games · 12 Teams · 66 Matches</p>
         </header>
 
         <div class="controls">
@@ -231,7 +264,7 @@
                 <option value="Guts N Glory">Guts N Glory</option>
                 <option value="Killer Squad Dallas">Killer Squad Dallas</option>
                 <option value="Mavericks">Mavericks</option>
-                <option value="Roaring Lions">Roaring Lions</option>
+                <option value="Royal Lions">Royal Lions</option>
                 <option value="India blues">India blues</option>
                 <option value="Impact IX">Impact IX</option>
                 <option value="Devils">Devils</option>
@@ -267,9 +300,38 @@
     </div>
 
     <script>
+        const teamsData = {
+            "Guts N Glory": { captain: "Dipesh Shah", logo: "Guts N Glory.jpeg" },
+            "Mavericks": { captain: "Karthick", logo: "Mavericks .jpeg" },
+            "India blues": { captain: "Pratap", logo: "India blues.jpeg" },
+            "Devils": { captain: "Nikhil Reddy", logo: "DEvils.jpg" },
+            "Fighters": { captain: "Krishna Dodla", logo: "Fighters.jpeg" },
+            "Warriors": { captain: "Srikanth Reddy", logo: "Warriors .jpeg" },
+            "DRAGONS": { captain: "Sreedhar", logo: "DRAGONS .jpeg" },
+            "JustinBoys": { captain: "Santosh Kanchinadham", logo: "JustinBoys.jpeg" },
+            "Eagles": { captain: "Naresh", logo: "Eagles.jpg" },
+            "Impact IX": { captain: "Manideep", logo: "Impact X1.jpeg" },
+            "Killer Squad Dallas": { captain: "Venkatesh", logo: "Killers Squad .jpeg" },
+            "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
+        };
+
+        const roundDates = {
+            1: "Mar 20-22",
+            2: "Mar 27-29",
+            3: "Apr 10-12",
+            4: "Apr 17-19",
+            5: "Apr 24-26",
+            6: "May 1-3",
+            7: "May 8-10",
+            8: "May 15-17",
+            9: "May 29-31",
+            10: "Jun 5-7",
+            11: "Jun 12-14"
+        };
+
         const schedule = [
             { round: 1, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Killer Squad Dallas" },
-            { round: 1, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Roaring Lions" },
+            { round: 1, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Royal Lions" },
             { round: 1, day: "Fri", time: "6-10 PM", ground: "FM", team1: "India blues", team2: "Impact IX" },
             { round: 1, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Eagles" },
             { round: 1, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "JustinBoys" },
@@ -279,8 +341,8 @@
             { round: 2, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Eagles", team2: "Mavericks" },
             { round: 2, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "JustinBoys", team2: "India blues" },
             { round: 2, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Impact IX", team2: "Killer Squad Dallas" },
-            { round: 2, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Roaring Lions", team2: "Guts N Glory" },
-            { round: 3, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Eagles" },
+            { round: 2, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Royal Lions", team2: "Guts N Glory" },
+            { round: 3, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Eagles" },
             { round: 3, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Impact IX" },
             { round: 3, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "JustinBoys" },
             { round: 3, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "DRAGONS" },
@@ -288,33 +350,33 @@
             { round: 3, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Devils", team2: "Fighters" },
             { round: 4, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Fighters", team2: "Mavericks" },
             { round: 4, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Devils", team2: "India blues" },
-            { round: 4, day: "Fri", time: "6-10 PM", ground: "FM", team1: "DRAGONS", team2: "Roaring Lions" },
+            { round: 4, day: "Fri", time: "6-10 PM", ground: "FM", team1: "DRAGONS", team2: "Royal Lions" },
             { round: 4, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Warriors", team2: "Killer Squad Dallas" },
             { round: 4, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Eagles", team2: "Guts N Glory" },
             { round: 4, day: "Sun", time: "12-4 PM", ground: "FM", team1: "JustinBoys", team2: "Impact IX" },
             { round: 5, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Warriors" },
             { round: 5, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "JustinBoys" },
             { round: 5, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "Devils" },
-            { round: 5, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Fighters" },
+            { round: 5, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Fighters" },
             { round: 5, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Eagles", team2: "DRAGONS" },
             { round: 5, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Mavericks", team2: "India blues" },
             { round: 6, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "Killer Squad Dallas" },
             { round: 6, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "JustinBoys" },
             { round: 6, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Fighters", team2: "Eagles" },
             { round: 6, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Impact IX" },
-            { round: 6, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Roaring Lions" },
+            { round: 6, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Royal Lions" },
             { round: 6, day: "Sun", time: "12-4 PM", ground: "FM", team1: "DRAGONS", team2: "Guts N Glory" },
             { round: 7, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Eagles", team2: "India blues" },
             { round: 7, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "DRAGONS", team2: "Fighters" },
             { round: 7, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Guts N Glory", team2: "Warriors" },
             { round: 7, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Mavericks" },
             { round: 7, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Devils" },
-            { round: 7, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Roaring Lions", team2: "Killer Squad Dallas" },
+            { round: 7, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Royal Lions", team2: "Killer Squad Dallas" },
             { round: 8, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "DRAGONS" },
             { round: 8, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Killer Squad Dallas", team2: "Eagles" },
             { round: 8, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Mavericks", team2: "JustinBoys" },
             { round: 8, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Fighters", team2: "Guts N Glory" },
-            { round: 8, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Roaring Lions", team2: "Impact IX" },
+            { round: 8, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Royal Lions", team2: "Impact IX" },
             { round: 8, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Devils", team2: "Warriors" },
             { round: 9, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Devils" },
             { round: 9, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Roaring Lions" },
@@ -322,7 +384,7 @@
             { round: 9, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "Killer Squad Dallas" },
             { round: 9, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "Mavericks" },
             { round: 9, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "Impact IX" },
-            { round: 10, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Warriors" },
+            { round: 10, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Warriors" },
             { round: 10, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Devils" },
             { round: 10, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Impact IX", team2: "DRAGONS" },
             { round: 10, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "Guts N Glory" },
@@ -374,7 +436,8 @@
                 const roundDiv = document.createElement('div');
                 const roundTitle = document.createElement('div');
                 roundTitle.className = 'round-title';
-                roundTitle.innerHTML = `<span>Round ${roundNum}</span> <span class="match-count">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>`;
+                const dateStr = roundDates[roundNum] || '';
+                roundTitle.innerHTML = `<span>League Game ${roundNum}</span> <span style="font-size: 0.9em; margin-left: 10px;">${dateStr}</span> <span class="match-count">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>`;
                 roundDiv.appendChild(roundTitle);
 
                 const grid = document.createElement('div');
@@ -383,14 +446,33 @@
                 matches.forEach(match => {
                     const card = document.createElement('div');
                     card.className = 'match-card';
+                    const team1Info = teamsData[match.team1];
+                    const team2Info = teamsData[match.team2];
+                    const logo1Path = `logos/${team1Info.logo}`;
+                    const logo2Path = `logos/${team2Info.logo}`;
+                    
                     card.innerHTML = `
                         <div class="match-meta">
                             ${match.ground} · ${match.day} · ${match.time}
                         </div>
                         <div class="teams">
-                            <div class="team">${match.team1}</div>
+                            <div class="team">
+                                <img src="${logo1Path}" alt="${match.team1}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${match.team1}</strong>
+                                <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
+                                    <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
+                                    <div style="font-weight: bold; color: #2c3e50;">${team1Info.captain}</div>
+                                </div>
+                            </div>
                             <div class="vs">VS</div>
-                            <div class="team">${match.team2}</div>
+                            <div class="team">
+                                <img src="${logo2Path}" alt="${match.team2}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${match.team2}</strong>
+                                <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
+                                    <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
+                                    <div style="font-weight: bold; color: #2c3e50;">${team2Info.captain}</div>
+                                </div>
+                            </div>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -403,7 +485,18 @@
 
         function renderTeams() {
             const teamsList = document.getElementById('teamsList');
-            teamsList.innerHTML = teams.map(t => `<div class="team-badge">${t}</div>`).join('');
+            teamsList.innerHTML = teams.map(t => {
+                const teamInfo = teamsData[t];
+                const logoPath = `logos/${teamInfo.logo}`;
+                return `<div class="team-badge">
+                    <img src="${logoPath}" alt="${t}" class="team-logo" onerror="this.style.display='none'">
+                    <div>${t}</div>
+                    <div style="border-top: 1px solid #bdc3c7; margin-top: 8px; padding-top: 6px;">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #e74c3c;">⭐ CAPTAIN</div>
+                        <div style="font-size: 0.9em; color: #2c3e50; font-weight: bold;">${teamInfo.captain}</div>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         document.getElementById('roundSelect').addEventListener('change', renderSchedule);
