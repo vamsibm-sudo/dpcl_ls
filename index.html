@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Schedule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #ecf0f1;
+        }
+
+        .controls {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            font-size: 1em;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px #3498db;
+        }
+
+        .round-title {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .match-card {
+            background-color: white;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .match-meta {
+            font-size: 0.9em;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .team {
+            flex: 1;
+            padding: 12px;
+            background-color: #ecf0f1;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+        }
+
+        .vs {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 0.9em;
+        }
+
+        .legend {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .legend h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .teams-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .team-badge {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .match-count {
+            background-color: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .no-matches {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ League Schedule</h1>
+            <p class="subtitle">11 Rounds · 12 Teams · 66 Matches</p>
+        </header>
+
+        <div class="controls">
+            <label for="roundSelect" style="font-weight: bold;">Round:</label>
+            <select id="roundSelect">
+                <option value="all">All Rounds</option>
+                <option value="1">Round 1</option>
+                <option value="2">Round 2</option>
+                <option value="3">Round 3</option>
+                <option value="4">Round 4</option>
+                <option value="5">Round 5</option>
+                <option value="6">Round 6</option>
+                <option value="7">Round 7</option>
+                <option value="8">Round 8</option>
+                <option value="9">Round 9</option>
+                <option value="10">Round 10</option>
+                <option value="11">Round 11</option>
+            </select>
+
+            <label for="teamSelect" style="font-weight: bold;">Team:</label>
+            <select id="teamSelect">
+                <option value="all">All Teams</option>
+                <option value="Guts N Glory">Guts N Glory</option>
+                <option value="Killer Squad Dallas">Killer Squad Dallas</option>
+                <option value="Mavericks">Mavericks</option>
+                <option value="Roaring Lions">Roaring Lions</option>
+                <option value="India blues">India blues</option>
+                <option value="Impact IX">Impact IX</option>
+                <option value="Devils">Devils</option>
+                <option value="Eagles">Eagles</option>
+                <option value="Fighters">Fighters</option>
+                <option value="JustinBoys">JustinBoys</option>
+                <option value="Warriors">Warriors</option>
+                <option value="DRAGONS">DRAGONS</option>
+            </select>
+
+            <label for="groundSelect" style="font-weight: bold;">Ground:</label>
+            <select id="groundSelect">
+                <option value="all">All Grounds</option>
+                <option value="Krum">Krum</option>
+                <option value="FM">FM</option>
+            </select>
+
+            <label for="daySelect" style="font-weight: bold;">Day:</label>
+            <select id="daySelect">
+                <option value="all">All Days</option>
+                <option value="Fri">Friday</option>
+                <option value="Sat">Saturday</option>
+                <option value="Sun">Sunday</option>
+            </select>
+        </div>
+
+        <div id="schedule"></div>
+
+        <div class="legend">
+            <h2>Teams</h2>
+            <div class="teams-list" id="teamsList"></div>
+        </div>
+    </div>
+
+    <script>
+        const schedule = [
+            { round: 1, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Killer Squad Dallas" },
+            { round: 1, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Roaring Lions" },
+            { round: 1, day: "Fri", time: "6-10 PM", ground: "FM", team1: "India blues", team2: "Impact IX" },
+            { round: 1, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Eagles" },
+            { round: 1, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "JustinBoys" },
+            { round: 1, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Warriors", team2: "DRAGONS" },
+            { round: 2, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "Devils" },
+            { round: 2, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "Fighters" },
+            { round: 2, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Eagles", team2: "Mavericks" },
+            { round: 2, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "JustinBoys", team2: "India blues" },
+            { round: 2, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Impact IX", team2: "Killer Squad Dallas" },
+            { round: 2, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Roaring Lions", team2: "Guts N Glory" },
+            { round: 3, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Eagles" },
+            { round: 3, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Impact IX" },
+            { round: 3, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "JustinBoys" },
+            { round: 3, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "DRAGONS" },
+            { round: 3, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Warriors" },
+            { round: 3, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Devils", team2: "Fighters" },
+            { round: 4, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Fighters", team2: "Mavericks" },
+            { round: 4, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Devils", team2: "India blues" },
+            { round: 4, day: "Fri", time: "6-10 PM", ground: "FM", team1: "DRAGONS", team2: "Roaring Lions" },
+            { round: 4, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Warriors", team2: "Killer Squad Dallas" },
+            { round: 4, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Eagles", team2: "Guts N Glory" },
+            { round: 4, day: "Sun", time: "12-4 PM", ground: "FM", team1: "JustinBoys", team2: "Impact IX" },
+            { round: 5, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Warriors" },
+            { round: 5, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "JustinBoys" },
+            { round: 5, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "Devils" },
+            { round: 5, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Fighters" },
+            { round: 5, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Eagles", team2: "DRAGONS" },
+            { round: 5, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Mavericks", team2: "India blues" },
+            { round: 6, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "Killer Squad Dallas" },
+            { round: 6, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "JustinBoys" },
+            { round: 6, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Fighters", team2: "Eagles" },
+            { round: 6, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Impact IX" },
+            { round: 6, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Roaring Lions" },
+            { round: 6, day: "Sun", time: "12-4 PM", ground: "FM", team1: "DRAGONS", team2: "Guts N Glory" },
+            { round: 7, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Eagles", team2: "India blues" },
+            { round: 7, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "DRAGONS", team2: "Fighters" },
+            { round: 7, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Guts N Glory", team2: "Warriors" },
+            { round: 7, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Mavericks" },
+            { round: 7, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Devils" },
+            { round: 7, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Roaring Lions", team2: "Killer Squad Dallas" },
+            { round: 8, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "DRAGONS" },
+            { round: 8, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Killer Squad Dallas", team2: "Eagles" },
+            { round: 8, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Mavericks", team2: "JustinBoys" },
+            { round: 8, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Fighters", team2: "Guts N Glory" },
+            { round: 8, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Roaring Lions", team2: "Impact IX" },
+            { round: 8, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Devils", team2: "Warriors" },
+            { round: 9, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Devils" },
+            { round: 9, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Roaring Lions" },
+            { round: 9, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Fighters", team2: "India blues" },
+            { round: 9, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "Killer Squad Dallas" },
+            { round: 9, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "Mavericks" },
+            { round: 9, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "Impact IX" },
+            { round: 10, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Roaring Lions", team2: "Warriors" },
+            { round: 10, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Devils" },
+            { round: 10, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Impact IX", team2: "DRAGONS" },
+            { round: 10, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "Guts N Glory" },
+            { round: 10, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Killer Squad Dallas", team2: "Fighters" },
+            { round: 10, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "JustinBoys" },
+            { round: 11, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "JustinBoys" },
+            { round: 11, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "Impact IX" },
+            { round: 11, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Devils", team2: "Roaring Lions" },
+            { round: 11, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Warriors", team2: "Eagles" },
+            { round: 11, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Mavericks" },
+            { round: 11, day: "Sun", time: "12-4 PM", ground: "FM", team1: "India blues", team2: "Killer Squad Dallas" },
+        ];
+
+        const teams = [...new Set(schedule.flatMap(g => [g.team1, g.team2]))].sort();
+
+        function renderSchedule() {
+            const round = document.getElementById('roundSelect').value;
+            const team = document.getElementById('teamSelect').value;
+            const ground = document.getElementById('groundSelect').value;
+            const day = document.getElementById('daySelect').value;
+
+            let filtered = schedule.filter(match => {
+                if (round !== 'all' && match.round !== parseInt(round)) return false;
+                if (team !== 'all' && match.team1 !== team && match.team2 !== team) return false;
+                if (ground !== 'all' && match.ground !== ground) return false;
+                if (day !== 'all' && match.day !== day) return false;
+                return true;
+            });
+
+            const grouped = {};
+            filtered.forEach(match => {
+                if (!grouped[match.round]) {
+                    grouped[match.round] = [];
+                }
+                grouped[match.round].push(match);
+            });
+
+            const scheduleDiv = document.getElementById('schedule');
+            scheduleDiv.innerHTML = '';
+
+            if (filtered.length === 0) {
+                scheduleDiv.innerHTML = '<div class="no-matches">No matches found for the selected filters.</div>';
+                return;
+            }
+
+            Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
+                const matches = grouped[roundNum];
+                
+                const roundDiv = document.createElement('div');
+                const roundTitle = document.createElement('div');
+                roundTitle.className = 'round-title';
+                roundTitle.innerHTML = `<span>Round ${roundNum}</span> <span class="match-count">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>`;
+                roundDiv.appendChild(roundTitle);
+
+                const grid = document.createElement('div');
+                grid.className = 'matches-grid';
+                
+                matches.forEach(match => {
+                    const card = document.createElement('div');
+                    card.className = 'match-card';
+                    card.innerHTML = `
+                        <div class="match-meta">
+                            ${match.ground} · ${match.day} · ${match.time}
+                        </div>
+                        <div class="teams">
+                            <div class="team">${match.team1}</div>
+                            <div class="vs">VS</div>
+                            <div class="team">${match.team2}</div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                roundDiv.appendChild(grid);
+                scheduleDiv.appendChild(roundDiv);
+            });
+        }
+
+        function renderTeams() {
+            const teamsList = document.getElementById('teamsList');
+            teamsList.innerHTML = teams.map(t => `<div class="team-badge">${t}</div>`).join('');
+        }
+
+        document.getElementById('roundSelect').addEventListener('change', renderSchedule);
+        document.getElementById('teamSelect').addEventListener('change', renderSchedule);
+        document.getElementById('groundSelect').addEventListener('change', renderSchedule);
+        document.getElementById('daySelect').addEventListener('change', renderSchedule);
+
+        renderSchedule();
+        renderTeams();
+    </script>
+</body>
+</html>
