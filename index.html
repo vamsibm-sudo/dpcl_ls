@@ -56,6 +56,24 @@
             color: #ecf0f1;
         }
 
+        .countdown {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #ecf0f1;
+        }
+
+        .countdown-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            display: block;
+        }
+
         .controls {
             background-color: white;
             padding: 20px;
@@ -239,23 +257,28 @@
             <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
             <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
             <p class="subtitle">11 League Games · 12 Teams · 66 Matches</p>
+            <div class="countdown">
+                <span>First Game Starts In:</span>
+                <span class="countdown-number" id="countdownDays">0</span>
+                <span>days</span>
+            </div>
         </header>
 
         <div class="controls">
-            <label for="roundSelect" style="font-weight: bold;">Round:</label>
+            <label for="roundSelect" style="font-weight: bold;">League Game:</label>
             <select id="roundSelect">
-                <option value="all">All Rounds</option>
-                <option value="1">Round 1</option>
-                <option value="2">Round 2</option>
-                <option value="3">Round 3</option>
-                <option value="4">Round 4</option>
-                <option value="5">Round 5</option>
-                <option value="6">Round 6</option>
-                <option value="7">Round 7</option>
-                <option value="8">Round 8</option>
-                <option value="9">Round 9</option>
-                <option value="10">Round 10</option>
-                <option value="11">Round 11</option>
+                <option value="all">All League Games</option>
+                <option value="1">League Game 1</option>
+                <option value="2">League Game 2</option>
+                <option value="3">League Game 3</option>
+                <option value="4">League Game 4</option>
+                <option value="5">League Game 5</option>
+                <option value="6">League Game 6</option>
+                <option value="7">League Game 7</option>
+                <option value="8">League Game 8</option>
+                <option value="9">League Game 9</option>
+                <option value="10">League Game 10</option>
+                <option value="11">League Game 11</option>
             </select>
 
             <label for="teamSelect" style="font-weight: bold;">Team:</label>
@@ -266,7 +289,7 @@
                 <option value="Mavericks">Mavericks</option>
                 <option value="Royal Lions">Royal Lions</option>
                 <option value="India blues">India blues</option>
-                <option value="Impact IX">Impact IX</option>
+                <option value="Impact XI">Impact XI</option>
                 <option value="Devils">Devils</option>
                 <option value="Eagles">Eagles</option>
                 <option value="Fighters">Fighters</option>
@@ -300,6 +323,25 @@
     </div>
 
     <script>
+        // Countdown timer
+        function updateCountdown() {
+            const firstGameDate = new Date(2026, 2, 20); // March 20, 2026
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            firstGameDate.setHours(0, 0, 0, 0);
+            
+            const timeDiff = firstGameDate - today;
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            
+            const countdownElement = document.getElementById('countdownDays');
+            if (countdownElement) {
+                countdownElement.textContent = Math.max(0, daysRemaining);
+            }
+        }
+        
+        // Call countdown on page load
+        document.addEventListener('DOMContentLoaded', updateCountdown);
+
         const teamsData = {
             "Guts N Glory": { captain: "Dipesh Shah", logo: "Guts N Glory.jpeg" },
             "Mavericks": { captain: "Karthik", logo: "Mavericks .jpeg" },
@@ -310,7 +352,7 @@
             "DRAGONS": { captain: "Sreedhar", logo: "DRAGONS .jpeg" },
             "JustinBoys": { captain: "Santosh Kanchinadham", logo: "JustinBoys.jpeg" },
             "Eagles": { captain: "Naresh", logo: "Eagles.jpg" },
-            "Impact IX": { captain: "Manideep", logo: "Impact X1.jpeg" },
+            "Impact XI": { captain: "Manideep", logo: "Impact X1.jpeg" },
             "Killer Squad Dallas": { captain: "Venkatesh", logo: "Killers Squad .jpeg" },
             "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
         };
@@ -329,10 +371,47 @@
             11: "Jun 12-14"
         };
 
+        // Map of (round, day) to specific date
+        const gameDates = {
+            "1-Fri": "3/20",
+            "1-Sat": "3/21",
+            "1-Sun": "3/22",
+            "2-Fri": "3/27",
+            "2-Sat": "3/28",
+            "2-Sun": "3/29",
+            "3-Fri": "4/10",
+            "3-Sat": "4/11",
+            "3-Sun": "4/12",
+            "4-Fri": "4/17",
+            "4-Sat": "4/18",
+            "4-Sun": "4/19",
+            "5-Fri": "4/24",
+            "5-Sat": "4/25",
+            "5-Sun": "4/26",
+            "6-Fri": "5/1",
+            "6-Sat": "5/2",
+            "6-Sun": "5/3",
+            "7-Fri": "5/8",
+            "7-Sat": "5/9",
+            "7-Sun": "5/10",
+            "8-Fri": "5/15",
+            "8-Sat": "5/16",
+            "8-Sun": "5/17",
+            "9-Fri": "5/29",
+            "9-Sat": "5/30",
+            "9-Sun": "5/31",
+            "10-Fri": "6/5",
+            "10-Sat": "6/6",
+            "10-Sun": "6/7",
+            "11-Fri": "6/12",
+            "11-Sat": "6/13",
+            "11-Sun": "6/14"
+        };
+
         const schedule = [
             { round: 1, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Killer Squad Dallas" },
             { round: 1, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Royal Lions" },
-            { round: 1, day: "Fri", time: "6-10 PM", ground: "FM", team1: "India blues", team2: "Impact IX" },
+            { round: 1, day: "Fri", time: "6-10 PM", ground: "FM", team1: "India blues", team2: "Impact XI" },
             { round: 1, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Eagles" },
             { round: 1, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "JustinBoys" },
             { round: 1, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Warriors", team2: "DRAGONS" },
@@ -340,10 +419,10 @@
             { round: 2, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "Fighters" },
             { round: 2, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Eagles", team2: "Mavericks" },
             { round: 2, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "JustinBoys", team2: "India blues" },
-            { round: 2, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Impact IX", team2: "Killer Squad Dallas" },
+            { round: 2, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Impact XI", team2: "Killer Squad Dallas" },
             { round: 2, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Royal Lions", team2: "Guts N Glory" },
             { round: 3, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Eagles" },
-            { round: 3, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Impact IX" },
+            { round: 3, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Impact XI" },
             { round: 3, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "JustinBoys" },
             { round: 3, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "DRAGONS" },
             { round: 3, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Warriors" },
@@ -353,8 +432,8 @@
             { round: 4, day: "Fri", time: "6-10 PM", ground: "FM", team1: "DRAGONS", team2: "Royal Lions" },
             { round: 4, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Warriors", team2: "Killer Squad Dallas" },
             { round: 4, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Eagles", team2: "Guts N Glory" },
-            { round: 4, day: "Sun", time: "12-4 PM", ground: "FM", team1: "JustinBoys", team2: "Impact IX" },
-            { round: 5, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Warriors" },
+            { round: 4, day: "Sun", time: "12-4 PM", ground: "FM", team1: "JustinBoys", team2: "Impact XI" },
+            { round: 5, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Impact XI", team2: "Warriors" },
             { round: 5, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "JustinBoys" },
             { round: 5, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Killer Squad Dallas", team2: "Devils" },
             { round: 5, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Fighters" },
@@ -363,36 +442,36 @@
             { round: 6, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Mavericks", team2: "Killer Squad Dallas" },
             { round: 6, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "JustinBoys" },
             { round: 6, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Fighters", team2: "Eagles" },
-            { round: 6, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Impact IX" },
+            { round: 6, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Devils", team2: "Impact XI" },
             { round: 6, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "India blues", team2: "Royal Lions" },
             { round: 6, day: "Sun", time: "12-4 PM", ground: "FM", team1: "DRAGONS", team2: "Guts N Glory" },
             { round: 7, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Eagles", team2: "India blues" },
             { round: 7, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "DRAGONS", team2: "Fighters" },
             { round: 7, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Guts N Glory", team2: "Warriors" },
-            { round: 7, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Impact IX", team2: "Mavericks" },
+            { round: 7, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Impact XI", team2: "Mavericks" },
             { round: 7, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Devils" },
             { round: 7, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Royal Lions", team2: "Killer Squad Dallas" },
             { round: 8, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "DRAGONS" },
             { round: 8, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Killer Squad Dallas", team2: "Eagles" },
             { round: 8, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Mavericks", team2: "JustinBoys" },
             { round: 8, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Fighters", team2: "Guts N Glory" },
-            { round: 8, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Royal Lions", team2: "Impact IX" },
+            { round: 8, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Royal Lions", team2: "Impact XI" },
             { round: 8, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Devils", team2: "Warriors" },
             { round: 9, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Guts N Glory", team2: "Devils" },
-            { round: 9, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Roaring Lions" },
+            { round: 9, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "JustinBoys", team2: "Royal Lions" },
             { round: 9, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Fighters", team2: "India blues" },
             { round: 9, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "Killer Squad Dallas" },
             { round: 9, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Warriors", team2: "Mavericks" },
-            { round: 9, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "Impact IX" },
+            { round: 9, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "Impact XI" },
             { round: 10, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "Royal Lions", team2: "Warriors" },
             { round: 10, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Mavericks", team2: "Devils" },
-            { round: 10, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Impact IX", team2: "DRAGONS" },
+            { round: 10, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Impact XI", team2: "DRAGONS" },
             { round: 10, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "India blues", team2: "Guts N Glory" },
             { round: 10, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Killer Squad Dallas", team2: "Fighters" },
             { round: 10, day: "Sun", time: "12-4 PM", ground: "FM", team1: "Eagles", team2: "JustinBoys" },
             { round: 11, day: "Sat", time: "8-11:30 AM", ground: "Krum", team1: "DRAGONS", team2: "JustinBoys" },
-            { round: 11, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "Impact IX" },
-            { round: 11, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Devils", team2: "Roaring Lions" },
+            { round: 11, day: "Sat", time: "12-4 PM", ground: "Krum", team1: "Fighters", team2: "Impact XI" },
+            { round: 11, day: "Fri", time: "6-10 PM", ground: "FM", team1: "Devils", team2: "Royal Lions" },
             { round: 11, day: "Sun", time: "8-11:30 AM", ground: "Krum", team1: "Warriors", team2: "Eagles" },
             { round: 11, day: "Sun", time: "12-4 PM", ground: "Krum", team1: "Guts N Glory", team2: "Mavericks" },
             { round: 11, day: "Sun", time: "12-4 PM", ground: "FM", team1: "India blues", team2: "Killer Squad Dallas" },
@@ -431,7 +510,11 @@
             }
 
             Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
-                const matches = grouped[roundNum];
+                let matches = grouped[roundNum];
+                
+                // Sort matches by day order (Fri, Sat, Sun)
+                const dayOrder = { "Fri": 0, "Sat": 1, "Sun": 2 };
+                matches = matches.sort((a, b) => dayOrder[a.day] - dayOrder[b.day]);
                 
                 const roundDiv = document.createElement('div');
                 const roundTitle = document.createElement('div');
@@ -450,10 +533,11 @@
                     const team2Info = teamsData[match.team2];
                     const logo1Path = `logos/${team1Info.logo}`;
                     const logo2Path = `logos/${team2Info.logo}`;
+                    const gameDate = gameDates[`${match.round}-${match.day}`] || '?/?';
                     
                     card.innerHTML = `
                         <div class="match-meta">
-                            ${match.ground} · ${match.day} · ${match.time}
+                            ${gameDate} ${match.day} · ${match.ground} · ${match.time}
                         </div>
                         <div class="teams">
                             <div class="team">
