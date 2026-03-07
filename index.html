@@ -18,6 +18,40 @@
             padding: 20px;
         }
 
+        .page-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .sponsor-sidebar {
+            flex: 0 0 150px;
+            text-align: center;
+        }
+
+        .sponsor-card {
+            background-color: white;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-card img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .sponsor-card-label {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -30,6 +64,34 @@
             border-radius: 8px;
             margin-bottom: 30px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sponsors-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .sponsor-logo {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .sponsor-left, .sponsor-right {
+            flex: 1;
+            text-align: center;
+        }
+
+        .sponsor-label {
+            font-size: 0.8em;
+            color: #ecf0f1;
+            margin-top: 5px;
         }
 
         h1 {
@@ -252,8 +314,27 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="page-wrapper">
+        <!-- Left Sponsor Sidebar -->
+        <div class="sponsor-sidebar">
+            <div class="sponsor-card">
+                <img src="logos/left-sponsor.png" alt="Sponsor" onerror="this.style.display='none'">
+                <div class="sponsor-card-label">Sponsor</div>
+                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
         <header>
+            <div class="sponsors-row">
+                <div style="text-align: center; width: 100%;">
+                    <img src="logos/sponsor.png" alt="Presenting Sponsor" class="sponsor-logo" onerror="this.style.display='none'">
+                    <div class="sponsor-label">Presenting Sponsor</div>
+                    <div style="font-size: 0.85em; color: #bdc3c7; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+                </div>
+            </div>
+
             <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
             <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
             <p class="subtitle">11 League Games · 12 Teams · 66 Matches</p>
@@ -319,6 +400,16 @@
         <div class="legend">
             <h2>Teams</h2>
             <div class="teams-list" id="teamsList"></div>
+        </div>
+        </div>
+
+        <!-- Right Sponsor Sidebar -->
+        <div class="sponsor-sidebar">
+            <div class="sponsor-card">
+                <img src="logos/right-sponsor.png" alt="Sponsor" onerror="this.style.display='none'">
+                <div class="sponsor-card-label">Sponsor</div>
+                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+            </div>
         </div>
     </div>
 
