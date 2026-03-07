@@ -70,6 +70,25 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
+        .package-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .badge-annual {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .badge-season {
+            background-color: #3498db;
+            color: white;
+        }
+
         .sponsorship-package h2 {
             color: #2c3e50;
             font-size: 1.8em;
@@ -161,22 +180,72 @@
             font-size: 1.5em;
         }
 
-        .contact-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background-color: #27ae60;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: background-color 0.3s;
-            border: none;
-            cursor: pointer;
+        .contact-form {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .contact-button:hover {
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
             background-color: #229954;
+        }
+
+        .form-note {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            border-radius: 3px;
+            font-size: 0.95em;
+            color: #27ae60;
         }
 
         @media (max-width: 768px) {
@@ -199,8 +268,8 @@
 
     <div class="container">
         <header>
-            <h1>🏏 DPCL Annual Sponsorship Packages</h1>
-            <p>Grow your brand with the Dallas Premier Cricket League</p>
+            <h1>🏏 Sponsorship Packages</h1>
+            <p>Annual & Season Sponsorship Opportunities</p>
         </header>
 
         <div class="sponsorship-package">
@@ -219,6 +288,21 @@
                 <li>Social media promotions throughout the year</li>
             </ul>
             <p style="margin-top: 15px; font-weight: bold; color: #e74c3c;">This is the highest visibility package in the league.</p>
+        </div>
+
+        <div class="divider">⸻</div>
+
+        <div class="sponsorship-package">
+            <h2>💡 Yearly Combo Package</h2>
+            <div class="package-price">$2,500</div>
+            
+            <h3 style="color: #2c3e50; margin-top: 15px; margin-bottom: 10px;">Includes:</h3>
+            <ul class="benefits">
+                <li>1 Team Sponsorship</li>
+                <li>Ground Banner</li>
+                <li>Social Media Promotions</li>
+                <li>League Recognition</li>
+            </ul>
         </div>
 
         <div class="divider">⸻</div>
@@ -284,38 +368,32 @@
             </ul>
         </div>
 
-        <div class="pro-tip">
-            <h3>💡 Pro Tip for DPCL: Yearly Combo Package – $2,500</h3>
-            <p style="margin-bottom: 15px;">Includes:</p>
-            <ul class="benefits">
-                <li>1 Team Sponsorship</li>
-                <li>Ground Banner</li>
-                <li>Social Media Promotions</li>
-                <li>League Recognition</li>
-            </ul>
-            <p style="margin-top: 15px; font-style: italic; color: #27ae60;">Many local businesses prefer $2k–$3k packages</p>
-        </div>
-
         <div class="contact-section">
             <h3>Interested in Sponsoring DPCL?</h3>
-            <p style="margin-bottom: 20px; color: #7f8c8d;">Get in touch with us to discuss your sponsorship options</p>
-            <button class="contact-button" onclick="initializeContactForm()">Contact Us for Sponsorship</button>
+            <p style="margin-bottom: 40px; color: #7f8c8d;">Reach out to us directly using one of the options below</p>
+            
+            <div style="background-color: #f9f9f9; padding: 40px; border-radius: 8px; text-align: center;">
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 1.1em;">📧 Email Us</h4>
+                    <p style="font-size: 1.2em; font-weight: bold;">
+                        <a href="mailto:fmcricketfever@gmail.com" style="color: #e74c3c; text-decoration: none;">
+                            fmcricketfever@gmail.com
+                        </a>
+                    </p>
+                </div>
+
+                <div style="border-top: 2px solid #bdc3c7; padding-top: 30px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 1.1em;">Or Call Us Directly</h4>
+                    <p style="font-size: 1.2em; font-weight: bold; color: #2c3e50;">
+                        📞 DPCL Management @ (610) 564-2275
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function initializeContactForm() {
-            const email = prompt('Enter your email address:');
-            if (email) {
-                const phone = prompt('Enter your phone number:');
-                if (phone) {
-                    const message = 'I am interested in sponsoring DPCL. Please contact me with more details.';
-                    alert('Thank you! Our sponsorship team will be in touch soon at ' + email);
-                    // In a real scenario, you would send this data to a backend
-                    console.log('Contact Request:', { email, phone, message });
-                }
-            }
-        }
+        // Form submission is handled by Formspree
     </script>
 </body>
 </html>

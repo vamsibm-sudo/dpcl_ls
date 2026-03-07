@@ -412,8 +412,6 @@
         </div>
         </div>
 
-        <div class="visit-counter" id="visitCounter"></div>
-
         <!-- Right Sponsor Sidebar -->
         <div class="sponsor-sidebar">
             <div class="sponsor-card">
@@ -425,17 +423,17 @@
     </div>
 
     <script>
-        // Visit counter
-        function updateVisitCount() {
-            fetch('/api/visits')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('visitCounter').textContent = `Visits: ${data.count}`;
-                })
-                .catch(err => {
-                    console.error('Error fetching visit count:', err);
-                });
-        }
+        // Visit counter - DISABLED
+        // function updateVisitCount() {
+        //     fetch('/api/visits')
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             document.getElementById('visitCounter').textContent = `Visits: ${data.count}`;
+        //         })
+        //         .catch(err => {
+        //             console.error('Error fetching visit count:', err);
+        //         });
+        // }
 
         // Countdown timer
         function updateCountdown() {
@@ -456,7 +454,7 @@
         // Call countdown on page load
         document.addEventListener('DOMContentLoaded', () => {
             updateCountdown();
-            updateVisitCount();
+            // updateVisitCount(); // DISABLED
         });
 
         const teamsData = {
