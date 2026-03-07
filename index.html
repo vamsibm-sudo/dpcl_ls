@@ -22,7 +22,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
-            align-items: flex-start;
+            align-items: stretch;
         }
 
         .sponsor-sidebar {
@@ -294,6 +294,18 @@
             font-size: 1.1em;
         }
 
+        .visit-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
@@ -395,6 +407,8 @@
         </div>
         </div>
 
+        <div class="visit-counter" id="visitCounter"></div>
+
         <!-- Right Sponsor Sidebar -->
         <div class="sponsor-sidebar">
             <div class="sponsor-card">
@@ -406,6 +420,18 @@
     </div>
 
     <script>
+        // Visit counter
+        function updateVisitCount() {
+            fetch('/api/visits')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('visitCounter').textContent = `Visits: ${data.count}`;
+                })
+                .catch(err => {
+                    console.error('Error fetching visit count:', err);
+                });
+        }
+
         // Countdown timer
         function updateCountdown() {
             const firstGameDate = new Date(2026, 2, 20); // March 20, 2026
@@ -423,7 +449,10 @@
         }
         
         // Call countdown on page load
-        document.addEventListener('DOMContentLoaded', updateCountdown);
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            updateVisitCount();
+        });
 
         const teamsData = {
             "Guts N Glory": { captain: "Dipesh Shah", logo: "Guts N Glory.jpeg" },
