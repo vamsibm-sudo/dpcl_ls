@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPCL Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c3e50 0%, #e74c3c 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* Admin Panel Styles */
+        .admin-container {
+            display: none;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .league-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            display: block;
+            background-color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header-controls {
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            padding: 10px 25px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-controls select, .filter-controls input {
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .matches-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .edit-btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .edit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #999;
+            float: right;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-form input, .modal-form select {
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #229954;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #7f8c8d;
+        }
+
+        .success-msg {
+            color: #27ae60;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background-color: #d5f4e6;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-msg {
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background-color: #ffcccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            td, th {
+                padding: 8px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 30% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <h1>🏏 DPCL Admin</h1>
+            <div class="form-group">
+                <label for="adminCode">Admin Code</label>
+                <input type="password" id="adminCode" placeholder="Enter admin code" />
+            </div>
+            <button class="login-btn" onclick="login()">Login</button>
+            <div class="error" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-container" id="adminPanel">
+        <header>
+            <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
+            <h1>🏏 DPCL Admin Dashboard</h1>
+            <div class="header-controls">
+                <a href="/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 10px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2980b9'" onmouseout="this.style.backgroundColor='#3498db'">🏠 Home</a>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <div class="success-msg" id="successMsg">Changes saved successfully!</div>
+            <div class="error-msg" id="errorMsg"></div>
+
+            <div class="filter-section">
+            <div class="filter-controls">
+                <label for="filterRound">League Game:</label>
+                <select id="filterRound" onchange="filterMatches()">
+                    <option value="">All Games</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                </select>
+            </div>
+        </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <button id="swapBtn" class="edit-btn" onclick="swapSelectedGames()" style="display: none; background-color: #f39c12;">🔄 Swap Selected Games</button>
+                <span id="selectionInfo" style="margin-left: 15px; font-weight: bold; color: #2c3e50;"></span>
+            </div>
+
+        <div class="matches-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                        <th>Round</th>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Ground</th>
+                        <th>Team 1</th>
+                        <th>Team 2</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="matchesBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">Edit Match</div>
+            <div class="modal-form">
+                <div>
+                    <label>Day:</label>
+                    <select id="editDay">
+                        <option value="Fri">Friday</option>
+                        <option value="Sat">Saturday</option>
+                        <option value="Sun">Sunday</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Time:</label>
+                    <select id="editTime">
+                        <option value="8-11:30 AM">8-11:30 AM</option>
+                        <option value="12-4 PM">12-4 PM</option>
+                        <option value="6-10 PM">6-10 PM</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Ground:</label>
+                    <select id="editGround">
+                        <option value="Krum">Krum</option>
+                        <option value="FM">FM</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Team 1:</label>
+                    <select id="editTeam1">
+                        <option>Guts N Glory</option>
+                        <option>Mavericks</option>
+                        <option>India blues</option>
+                        <option>Devils</option>
+                        <option>Fighters</option>
+                        <option>Warriors</option>
+                        <option>DRAGONS</option>
+                        <option>JustinBoys</option>
+                        <option>Eagles</option>
+                        <option>Impact XI</option>
+                        <option>Killer Squad Dallas</option>
+                        <option>Royal Lions</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Team 2:</label>
+                    <select id="editTeam2">
+                        <option>Guts N Glory</option>
+                        <option>Mavericks</option>
+                        <option>India blues</option>
+                        <option>Devils</option>
+                        <option>Fighters</option>
+                        <option>Warriors</option>
+                        <option>DRAGONS</option>
+                        <option>JustinBoys</option>
+                        <option>Eagles</option>
+                        <option>Impact XI</option>
+                        <option>Killer Squad Dallas</option>
+                        <option>Royal Lions</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button class="save-btn" onclick="saveMatch()">Save Changes</button>
+                    <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allMatches = [];
+        let currentEditMatchId = null;
+        let adminCode = null;
+        let selectedMatches = new Set();
+
+        const gameDates = {
+            "1-Fri": "3/20",
+            "1-Sat": "3/21",
+            "1-Sun": "3/22",
+            "2-Fri": "3/27",
+            "2-Sat": "3/28",
+            "2-Sun": "3/29",
+            "3-Fri": "4/3",
+            "3-Sat": "4/4",
+            "3-Sun": "4/5",
+            "4-Fri": "4/10",
+            "4-Sat": "4/11",
+            "4-Sun": "4/12",
+            "5-Fri": "4/17",
+            "5-Sat": "4/18",
+            "5-Sun": "4/19",
+            "6-Fri": "4/24",
+            "6-Sat": "4/25",
+            "6-Sun": "4/26",
+            "7-Fri": "5/1",
+            "7-Sat": "5/2",
+            "7-Sun": "5/3",
+            "8-Fri": "5/8",
+            "8-Sat": "5/9",
+            "8-Sun": "5/10",
+            "9-Fri": "5/15",
+            "9-Sat": "5/16",
+            "9-Sun": "5/17",
+            "10-Fri": "5/29",
+            "10-Sat": "5/30",
+            "10-Sun": "5/31",
+            "11-Fri": "6/5",
+            "11-Sat": "6/6",
+            "11-Sun": "6/7"
+        };
+
+        async function login() {
+            const code = document.getElementById('adminCode').value;
+            
+            try {
+                const response = await fetch('/api/verify-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                if (response.ok) {
+                    adminCode = code;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadMatches();
+                } else {
+                    document.getElementById('loginError').textContent = 'Invalid admin code';
+                }
+            } catch (err) {
+                document.getElementById('loginError').textContent = 'Login failed';
+            }
+        }
+
+        function logout() {
+            adminCode = null;
+            document.getElementById('adminCode').value = '';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        async function loadMatches() {
+            try {
+                const response = await fetch('/api/schedule');
+                allMatches = await response.json();
+                displayMatches(allMatches);
+            } catch (err) {
+                showError('Failed to load matches');
+            }
+        }
+
+        function filterMatches() {
+            const round = document.getElementById('filterRound').value;
+            let filtered = allMatches;
+
+            if (round) {
+                filtered = allMatches.filter(m => m.round === parseInt(round));
+            }
+
+            displayMatches(filtered);
+        }
+
+        function displayMatches(matches) {
+            const tbody = document.getElementById('matchesBody');
+            tbody.innerHTML = '';
+            selectedMatches.clear();
+
+            // Sort matches by round, then by day (Fri < Sat < Sun)
+            const dayOrder = { 'Fri': 0, 'Sat': 1, 'Sun': 2 };
+            const sorted = [...matches].sort((a, b) => {
+                if (a.round !== b.round) return a.round - b.round;
+                return dayOrder[a.day] - dayOrder[b.day];
+            });
+
+            sorted.forEach(match => {
+                const date = gameDates[`${match.round}-${match.day}`] || '?/?';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="width: 40px;"><input type="checkbox" class="match-checkbox" value="${match.id}" onchange="toggleMatchSelection(this)"></td>
+                    <td>${match.round}</td>
+                    <td>${date}</td>
+                    <td>${match.day}</td>
+                    <td>${match.time}</td>
+                    <td>${match.ground}</td>
+                    <td>${match.team1}</td>
+                    <td>${match.team2}</td>
+                    <td><button class="edit-btn" onclick="editMatch(${match.id})">Edit</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateSwapButton();
+        }
+
+        function editMatch(matchId) {
+            const match = allMatches.find(m => m.id === matchId);
+            if (!match) return;
+
+            currentEditMatchId = matchId;
+            document.getElementById('editDay').value = match.day;
+            document.getElementById('editTime').value = match.time;
+            document.getElementById('editGround').value = match.ground;
+            document.getElementById('editTeam1').value = match.team1;
+            document.getElementById('editTeam2').value = match.team2;
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditMatchId = null;
+        }
+
+        async function saveMatch() {
+            const updates = {
+                day: document.getElementById('editDay').value,
+                time: document.getElementById('editTime').value,
+                ground: document.getElementById('editGround').value,
+                team1: document.getElementById('editTeam1').value,
+                team2: document.getElementById('editTeam2').value
+            };
+
+            try {
+                const response = await fetch('/api/schedule/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode, matchId: currentEditMatchId, updates })
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    loadMatches();
+                    showSuccess();
+                } else {
+                    showError('Failed to save match');
+                }
+            } catch (err) {
+                showError('Save failed');
+            }
+        }
+
+        function showSuccess() {
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+
+        function showError(message) {
+            const msg = document.getElementById('errorMsg');
+            msg.textContent = message;
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleMatchSelection(checkbox) {
+            const matchId = parseInt(checkbox.value);
+            if (checkbox.checked) {
+                selectedMatches.add(matchId);
+            } else {
+                selectedMatches.delete(matchId);
+            }
+            updateSwapButton();
+        }
+
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const matchCheckboxes = document.querySelectorAll('.match-checkbox');
+            
+            matchCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+                toggleMatchSelection(checkbox);
+            });
+        }
+
+        function updateSwapButton() {
+            const swapBtn = document.getElementById('swapBtn');
+            const selectionInfo = document.getElementById('selectionInfo');
+            
+            if (selectedMatches.size === 2) {
+                swapBtn.style.display = 'inline-block';
+                selectionInfo.textContent = '2 games selected - Ready to swap';
+                selectionInfo.style.color = '#27ae60';
+            } else if (selectedMatches.size > 0) {
+                swapBtn.style.display = 'none';
+                selectionInfo.textContent = `${selectedMatches.size} game(s) selected - Select exactly 2 to swap`;
+                selectionInfo.style.color = '#f39c12';
+            } else {
+                swapBtn.style.display = 'none';
+                selectionInfo.textContent = '';
+            }
+        }
+
+        async function swapSelectedGames() {
+            const matchIds = Array.from(selectedMatches);
+            if (matchIds.length !== 2) return;
+
+            const match1 = allMatches.find(m => m.id === matchIds[0]);
+            const match2 = allMatches.find(m => m.id === matchIds[1]);
+
+            if (!match1 || !match2) return;
+
+            // Swap details
+            const temp = {
+                day: match1.day,
+                time: match1.time,
+                ground: match1.ground,
+                team1: match1.team1,
+                team2: match1.team2
+            };
+
+            const updates1 = {
+                day: match2.day,
+                time: match2.time,
+                ground: match2.ground,
+                team1: match2.team1,
+                team2: match2.team2
+            };
+
+            const updates2 = temp;
+
+            try {
+                // Save both matches
+                const response1 = await fetch('/api/schedule/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode, matchId: matchIds[0], updates: updates1 })
+                });
+
+                const response2 = await fetch('/api/schedule/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode, matchId: matchIds[1], updates: updates2 })
+                });
+
+                if (response1.ok && response2.ok) {
+                    selectedMatches.clear();
+                    loadMatches();
+                    showSuccess('Games swapped successfully!');
+                } else {
+                    showError('Failed to swap games');
+                }
+            } catch (err) {
+                showError('Swap failed');
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
