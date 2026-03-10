@@ -403,6 +403,7 @@
 
             <div style="margin-bottom: 15px;">
                 <button id="swapBtn" class="edit-btn" onclick="swapSelectedGames()" style="display: none; background-color: #f39c12;">🔄 Swap Selected Games</button>
+                <button class="edit-btn" onclick="regenerateUmpires()" style="background-color: #27ae60; margin-left: 10px;">👨‍⚖️ Regenerate Umpires</button>
                 <span id="selectionInfo" style="margin-left: 15px; font-weight: bold; color: #2c3e50;"></span>
             </div>
 
@@ -424,6 +425,25 @@
                 <tbody id="matchesBody">
                 </tbody>
             </table>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section" style="margin-top: 40px; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">📋 Change History</h2>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #34495e; margin-bottom: 15px;">Recent Changes</h3>
+                <div id="changelogContainer" style="background-color: #f5f5f5; border-radius: 5px; padding: 15px; max-height: 400px; overflow-y: auto;">
+                    <p style="color: #7f8c8d;">Loading history...</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #34495e; margin-bottom: 15px;">Restore from Backup</h3>
+                <div id="backupContainer" style="background-color: #f5f5f5; border-radius: 5px; padding: 15px; max-height: 400px; overflow-y: auto;">
+                    <p style="color: #7f8c8d;">Loading backups...</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -555,6 +575,8 @@
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('adminPanel').style.display = 'block';
                     loadMatches();
+                    loadHistory();
+                    loadBackups();
                 } else {
                     document.getElementById('loginError').textContent = 'Invalid admin code';
                 }
@@ -576,6 +598,8 @@
                 const response = await fetch('/api/schedule');
                 allMatches = await response.json();
                 displayMatches(allMatches);
+                loadHistory();
+                loadBackups();
             } catch (err) {
                 showError('Failed to load matches');
             }
@@ -779,10 +803,137 @@
             }
         }
 
+        async function regenerateUmpires() {
+            if (!confirm('Regenerate umpire assignments for all matches? Each team will umpire once per round.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/umpires/regenerate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode })
+                });
+                
+                if (response.ok) {
+                    loadMatches();
+                    loadHistory();
+                    loadBackups();
+                    showSuccess('Umpire assignments regenerated!');
+                } else {
+                    showError('Failed to regenerate umpires');
+                }
+            } catch (err) {
+                showError('Regenerate failed: ' + err.message);
+            }
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('editModal');
             if (event.target === modal) {
                 closeModal();
+            }
+        }
+
+        // Load history when admin logs in
+        async function loadHistory() {
+            try {
+                const response = await fetch(`/api/history?code=${adminCode}`);
+                if (!response.ok) return;
+                
+                const changelog = await response.json();
+                const container = document.getElementById('changelogContainer');
+                
+                if (changelog.length === 0) {
+                    container.innerHTML = '<p style="color: #7f8c8d;">No changes yet.</p>';
+                    return;
+                }
+                
+                let html = '';
+                changelog.slice().reverse().forEach((entry, idx) => {
+                    if (entry.action === 'revert') {
+                        html += `<div style="padding: 10px; margin-bottom: 10px; background-color: white; border-left: 4px solid #3498db; border-radius: 3px;">
+                            <div style="font-weight: bold; color: #2980b9;">↩️ Reverted Schedule</div>
+                            <div style="font-size: 0.9em; color: #7f8c8d;">${new Date(entry.timestamp).toLocaleString()}</div>
+                            <div style="font-size: 0.85em; color: #34495e; margin-top: 5px;">Restored to: ${entry.revertedTo}</div>
+                        </div>`;
+                    } else {
+                        html += `<div style="padding: 10px; margin-bottom: 10px; background-color: white; border-left: 4px solid #27ae60; border-radius: 3px;">
+                            <div style="font-weight: bold; color: #27ae60;">✏️ Match #${entry.matchId} Updated</div>
+                            <div style="font-size: 0.9em; color: #7f8c8d;">${new Date(entry.timestamp).toLocaleString()}</div>
+                            <div style="font-size: 0.85em; color: #34495e; margin-top: 5px;">Fields: ${entry.changes.join(', ')}</div>
+                            ${entry.oldMatch && entry.newMatch ? `
+                                <div style="font-size: 0.8em; color: #7f8c8d; margin-top: 8px; padding-top: 8px; border-top: 1px solid #ecf0f1;">
+                                    <strong>Before:</strong> ${entry.oldMatch.team1} vs ${entry.oldMatch.team2} @ ${entry.oldMatch.ground} ${entry.oldMatch.day} ${entry.oldMatch.time}<br>
+                                    <strong>After:</strong> ${entry.newMatch.team1} vs ${entry.newMatch.team2} @ ${entry.newMatch.ground} ${entry.newMatch.day} ${entry.newMatch.time}
+                                </div>
+                            ` : ''}
+                        </div>`;
+                    }
+                });
+                
+                container.innerHTML = html;
+            } catch (err) {
+                console.error('Failed to load history:', err);
+            }
+        }
+
+        async function loadBackups() {
+            try {
+                const response = await fetch(`/api/history/list?code=${adminCode}`);
+                if (!response.ok) return;
+                
+                const backups = await response.json();
+                const container = document.getElementById('backupContainer');
+                
+                if (backups.length === 0) {
+                    container.innerHTML = '<p style="color: #7f8c8d;">No backups available.</p>';
+                    return;
+                }
+                
+                let html = '';
+                backups.forEach(backup => {
+                    // Parse timestamp
+                    const timestamp = backup.timestamp.replace(/-/g, ':').slice(0, 19);
+                    const date = new Date(timestamp.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$1-$2-$3T$4:$5:$6Z'));
+                    
+                    html += `<div style="padding: 12px; margin-bottom: 10px; background-color: white; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0;">
+                        <div>
+                            <div style="font-weight: bold; color: #2c3e50;">${date.toLocaleString()}</div>
+                            <div style="font-size: 0.85em; color: #7f8c8d; margin-top: 3px;">${backup.filename}</div>
+                        </div>
+                        <button onclick="revertToBackup('${backup.filename}')" class="edit-btn" style="background-color: #e74c3c;">🔄 Restore</button>
+                    </div>`;
+                });
+                
+                container.innerHTML = html;
+            } catch (err) {
+                console.error('Failed to load backups:', err);
+            }
+        }
+
+        async function revertToBackup(filename) {
+            if (!confirm(`Restore schedule to ${filename}? Current schedule will be backed up first.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/history/revert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode, filename })
+                });
+                
+                if (response.ok) {
+                    showSuccess('Schedule restored successfully!');
+                    loadMatches();
+                    loadHistory();
+                    loadBackups();
+                } else {
+                    showError('Failed to restore backup');
+                }
+            } catch (err) {
+                showError('Restore failed: ' + err.message);
             }
         }
     </script>

@@ -350,7 +350,7 @@
             </div>
             <div class="sponsor-card">
                 <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
-                    <img src="logos/onefusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
                 </a>
                 <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
                 <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
@@ -460,7 +460,7 @@
             </div>
             <div class="sponsor-card">
                 <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
-                    <img src="logos/onefusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
                 </a>
                 <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
                 <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
@@ -508,51 +508,9 @@
             "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
         };
 
-        const UmpireAssignments = {};
-
-        function generateUmpireAssignments() {
-            const allTeams = Object.keys(teamsData);
-            
-            const matchesByRound = {};
-            schedule.forEach(match => {
-                if (!matchesByRound[match.round]) {
-                    matchesByRound[match.round] = [];
-                }
-                matchesByRound[match.round].push(match);
-            });
-
-            Object.keys(matchesByRound).forEach(round => {
-                const umpiresPerRound = {};
-                const roundMatches = matchesByRound[round];
-                
-                roundMatches.forEach(match => {
-                    const playingTeams = new Set([match.team1, match.team2]);
-                    
-                    const availableUmpires = allTeams.filter(t => 
-                        !playingTeams.has(t) && !umpiresPerRound[t]
-                    );
-                    
-                    let selectedUmpires;
-                    if (availableUmpires.length >= 2) {
-                        const shuffled = availableUmpires.sort(() => Math.random() - 0.5);
-                        selectedUmpires = shuffled.slice(0, 2);
-                    } else {
-                        const fallbackUmpires = allTeams.filter(t => !playingTeams.has(t));
-                        const shuffled = fallbackUmpires.sort(() => Math.random() - 0.5);
-                        selectedUmpires = shuffled.slice(0, 2);
-                    }
-                    
-                    selectedUmpires.forEach(u => {
-                        umpiresPerRound[u] = true;
-                    });
-                    
-                    UmpireAssignments[match.id] = selectedUmpires;
-                });
-            });
-        }
-
         function getUmpires(matchId) {
-            return UmpireAssignments[matchId] || [];
+            const match = schedule.find(m => m.id === matchId);
+            return match && match.umpires ? match.umpires : [];
         }
 
         const roundDates = {
@@ -717,7 +675,6 @@
 
         // Load schedule from API and render
         loadSchedule().then(() => {
-            generateUmpireAssignments();
             renderSchedule();
             renderTeams();
         });
