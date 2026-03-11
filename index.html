@@ -148,6 +148,29 @@
             align-items: center;
         }
 
+        #unlockPrompt input {
+            padding: 10px;
+            border: 2px solid #e74c3c;
+            border-radius: 4px;
+            font-size: 0.95em;
+            min-width: 180px;
+        }
+
+        #unlockBtn {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #unlockBtn:hover {
+            background-color: #229954;
+        }
+
         select {
             padding: 10px;
             border: 2px solid #3498db;
@@ -381,7 +404,20 @@
         </div>
 
         <div class="controls">
-            <label for="roundSelect" style="font-weight: bold;">League Game:</label>
+            <label for="hideGamesSelect" style="font-weight: bold;">Show Schedules:</label>
+            <select id="hideGamesSelect">
+                <option value="2">Up to League 2 Only</option>
+                <option value="5">Up to League 5</option>
+                <option value="all">All League Games</option>
+            </select>
+
+            <div id="unlockPrompt" style="display: none; gap: 10px; align-items: center;">
+                <label for="hideGamesCode" style="font-weight: bold; margin: 0;">Unlock Code:</label>
+                <input type="password" id="hideGamesCode" placeholder="Enter code to unlock all games" style="padding: 10px; border: 2px solid #e74c3c; border-radius: 4px; font-size: 1em;">
+                <button id="unlockBtn" style="padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Unlock</button>
+            </div>
+
+            <label for="roundSelect" style="font-weight: bold; margin-left: 15px;">League Game:</label>
             <select id="roundSelect">
                 <option value="all">All League Games</option>
                 <option value="1">League Game 1</option>
@@ -542,6 +578,8 @@
         };
 
         let schedule = [];
+        let isUnlocked = false; // Track if games are unlocked
+        const HIDE_CODE = '31020262275'; // Admin code for unlocking all games
 
         // Load schedule from API instead of hardcoded data
         async function loadSchedule() {
@@ -556,13 +594,28 @@
 
         let teams = [];
 
+        function updateHideGamesUI() {
+            const hideGamesSelect = document.getElementById('hideGamesSelect');
+            const unlockPrompt = document.getElementById('unlockPrompt');
+            
+            if (hideGamesSelect.value === 'all') {
+                unlockPrompt.style.display = 'none';
+            } else {
+                unlockPrompt.style.display = isUnlocked ? 'none' : 'flex';
+            }
+        }
+
         function renderSchedule() {
+            const hideGamesValue = parseInt(document.getElementById('hideGamesSelect').value);
             const round = document.getElementById('roundSelect').value;
             const team = document.getElementById('teamSelect').value;
             const ground = document.getElementById('groundSelect').value;
             const day = document.getElementById('daySelect').value;
 
+            let maxRound = isUnlocked || hideGamesValue === 'all' ? 11 : hideGamesValue;
+
             let filtered = schedule.filter(match => {
+                if (match.round > maxRound) return false;
                 if (round !== 'all' && match.round !== parseInt(round)) return false;
                 if (team !== 'all' && match.team1 !== team && match.team2 !== team) return false;
                 if (ground !== 'all' && match.ground !== ground) return false;
@@ -672,9 +725,34 @@
         document.getElementById('teamSelect').addEventListener('change', renderSchedule);
         document.getElementById('groundSelect').addEventListener('change', renderSchedule);
         document.getElementById('daySelect').addEventListener('change', renderSchedule);
+        document.getElementById('hideGamesSelect').addEventListener('change', () => {
+            updateHideGamesUI();
+            renderSchedule();
+        });
+
+        document.getElementById('unlockBtn').addEventListener('click', () => {
+            const codeInput = document.getElementById('hideGamesCode').value;
+            if (codeInput === HIDE_CODE) {
+                isUnlocked = true;
+                document.getElementById('hideGamesCode').value = '';
+                updateHideGamesUI();
+                renderSchedule();
+                alert('✓ All games unlocked!');
+            } else {
+                alert('✗ Invalid code. Please try again.');
+                document.getElementById('hideGamesCode').value = '';
+            }
+        });
+
+        document.getElementById('hideGamesCode').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('unlockBtn').click();
+            }
+        });
 
         // Load schedule from API and render
         loadSchedule().then(() => {
+            updateHideGamesUI();
             renderSchedule();
             renderTeams();
         });
