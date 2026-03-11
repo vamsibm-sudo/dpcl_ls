@@ -2,856 +2,214 @@
   {
     "id": 0,
     "round": 1,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "Guts N Glory",
-    "team2": "Fighters",
+    "day": "Friday",
+    "date": "March 20",
+    "time": "6:00-10:00 pm",
+    "ground": "FM",
+    "team1": [
+      "India blues"
+    ],
+    "team2": [
+      "Impact XI"
+    ],
     "umpires": [
-      "JustinBoys",
-      "Killer Squad Dallas"
+      "India blues",
+      "Impact XI"
     ]
   },
   {
     "id": 1,
     "round": 1,
-    "day": "Sat",
-    "time": "12-4 PM",
+    "day": "Saturday",
+    "date": "March 21",
+    "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": "Mavericks",
-    "team2": "Royal Lions",
-    "umpires": [
-      "India blues",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 2,
-    "round": 1,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "India blues",
-    "team2": "Impact XI",
-    "umpires": [
-      "Devils",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 3,
-    "round": 1,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "Devils",
-    "team2": "Eagles",
-    "umpires": [
-      "Mavericks",
-      "Warriors"
-    ]
-  },
-  {
-    "id": 4,
-    "round": 1,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Killer Squad Dallas",
-    "team2": "JustinBoys",
-    "umpires": [
-      "Fighters",
+    "team1": [
       "Guts N Glory"
-    ]
-  },
-  {
-    "id": 5,
-    "round": 1,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Warriors",
-    "team2": "DRAGONS",
-    "umpires": [
-      "Royal Lions",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 6,
-    "round": 2,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "DRAGONS",
-    "team2": "Devils",
+    ],
+    "team2": [
+      "Fighters"
+    ],
     "umpires": [
       "Guts N Glory",
       "Killer Squad Dallas"
     ]
   },
   {
-    "id": 7,
-    "round": 2,
-    "day": "Sat",
-    "time": "12-4 PM",
+    "id": 2,
+    "round": 1,
+    "day": "Saturday",
+    "date": "March 21",
+    "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": "Warriors",
-    "team2": "Fighters",
+    "team1": [
+      "Mavericks"
+    ],
+    "team2": [
+      "Royal Lions"
+    ],
     "umpires": [
       "Mavericks",
       "Royal Lions"
     ]
   },
   {
-    "id": 8,
-    "round": 2,
-    "day": "Fri",
-    "time": "6-10 PM",
+    "id": 3,
+    "round": 1,
+    "day": "Sunday",
+    "date": "March 22",
+    "time": "8:00-11:30 am",
+    "ground": "Krum",
+    "team1": [
+      "Devils"
+    ],
+    "team2": [
+      "Eagles"
+    ],
+    "umpires": [
+      "Devils",
+      "Eagles"
+    ]
+  },
+  {
+    "id": 4,
+    "round": 1,
+    "day": "Sunday",
+    "date": "March 22",
+    "time": "12:00-4:00 pm",
+    "ground": "Krum",
+    "team1": [
+      "Killer Squad Dallas"
+    ],
+    "team2": [
+      "JustinBoys"
+    ],
+    "umpires": [
+      "Fighters",
+      "JustinBoys"
+    ]
+  },
+  {
+    "id": 5,
+    "round": 1,
+    "day": "Sunday",
+    "date": "March 22",
+    "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": "Eagles",
-    "team2": "Mavericks",
+    "team1": [
+      "Warriors"
+    ],
+    "team2": [
+      "DRAGONS"
+    ],
+    "umpires": [
+      "Warriors",
+      "DRAGONS"
+    ]
+  },
+  {
+    "id": 6,
+    "round": 2,
+    "day": "Friday",
+    "date": "March 27",
+    "time": "6:00-10:00 pm",
+    "ground": "FM",
+    "team1": [
+      "Eagles"
+    ],
+    "team2": [
+      "Mavericks"
+    ],
     "umpires": [
       "India blues",
+      "Impact XI"
+    ]
+  },
+  {
+    "id": 7,
+    "round": 2,
+    "day": "Saturday",
+    "date": "March 28",
+    "time": "8:00-11:30 am",
+    "ground": "Krum",
+    "team1": [
+      "DRAGONS"
+    ],
+    "team2": [
       "Devils"
+    ],
+    "umpires": [
+      "Guts N Glory",
+      "Killer Squad Dallas"
+    ]
+  },
+  {
+    "id": 8,
+    "round": 2,
+    "day": "Saturday",
+    "date": "March 28",
+    "time": "12:00-4:00 pm",
+    "ground": "Krum",
+    "team1": [
+      "Warriors"
+    ],
+    "team2": [
+      "Fighters"
+    ],
+    "umpires": [
+      "Mavericks",
+      "Royal Lions"
     ]
   },
   {
     "id": 9,
     "round": 2,
-    "day": "Sun",
-    "time": "8-11:30 AM",
+    "day": "Sunday",
+    "date": "March 29",
+    "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": "JustinBoys",
-    "team2": "India blues",
+    "team1": [
+      "JustinBoys"
+    ],
+    "team2": [
+      "India blues"
+    ],
     "umpires": [
-      "Impact XI",
+      "Devils",
       "Eagles"
     ]
   },
   {
     "id": 10,
     "round": 2,
-    "day": "Sun",
-    "time": "12-4 PM",
+    "day": "Sunday",
+    "date": "March 29",
+    "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Killer Squad Dallas",
+    "team1": [
+      "Impact XI"
+    ],
+    "team2": [
+      "Killer Squad Dallas"
+    ],
     "umpires": [
       "Fighters",
-      "Warriors"
+      "JustinBoys"
     ]
   },
   {
     "id": 11,
     "round": 2,
-    "day": "Sun",
-    "time": "12-4 PM",
+    "day": "Sunday",
+    "date": "March 29",
+    "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "Guts N Glory",
-    "umpires": [
-      "JustinBoys",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 12,
-    "round": 3,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "Eagles",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 13,
-    "round": 3,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "JustinBoys",
-    "team2": "DRAGONS",
-    "umpires": [
-      "Mavericks",
+    "team1": [
       "Royal Lions"
-    ]
-  },
-  {
-    "id": 14,
-    "round": 3,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Warriors",
-    "umpires": [
-      "India blues",
-      "Devils"
-    ]
-  },
-  {
-    "id": 15,
-    "round": 3,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Killer Squad Dallas",
-    "team2": "Devils",
-    "umpires": [
-      "Impact XI",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 16,
-    "round": 3,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Mavericks",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 17,
-    "round": 3,
-    "day": "Sun",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Fighters",
-    "team2": "India blues",
-    "umpires": [
-      "Warriors",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 18,
-    "round": 4,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Devils",
-    "team2": "Mavericks",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 19,
-    "round": 4,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "India blues",
-    "team2": "Warriors",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
-  },
-  {
-    "id": 20,
-    "round": 4,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "Fighters",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 21,
-    "round": 4,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "DRAGONS",
-    "team2": "JustinBoys",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 22,
-    "round": 4,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Eagles",
-    "team2": "Impact XI",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 23,
-    "round": 4,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Killer Squad Dallas",
-    "umpires": [
-      "Warriors",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 24,
-    "round": 5,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "JustinBoys",
-    "team2": "Royal Lions",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 25,
-    "round": 5,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Killer Squad Dallas",
-    "team2": "Warriors",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
-  },
-  {
-    "id": 26,
-    "round": 5,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Eagles",
-    "team2": "Fighters",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 27,
-    "round": 5,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Mavericks",
-    "team2": "DRAGONS",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 28,
-    "round": 5,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Devils",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 29,
-    "round": 5,
-    "day": "Sun",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "India blues",
-    "team2": "Guts N Glory",
-    "umpires": [
-      "Warriors",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 30,
-    "round": 6,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "Fighters",
-    "team2": "Guts N Glory",
-    "umpires": [
-      "Killer Squad Dallas",
-      "Mavericks"
-    ]
-  },
-  {
-    "id": 31,
-    "round": 6,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Killer Squad Dallas",
-    "umpires": [
-      "Guts N Glory",
-      "Royal Lions"
-    ]
-  },
-  {
-    "id": 32,
-    "round": 6,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "Warriors",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 33,
-    "round": 6,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "DRAGONS",
-    "team2": "Devils",
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
-  },
-  {
-    "id": 34,
-    "round": 6,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "India blues",
-    "team2": "JustinBoys",
-    "umpires": [
-      "Devils",
-      "Warriors"
-    ]
-  },
-  {
-    "id": 35,
-    "round": 6,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Mavericks",
-    "team2": "Eagles",
-    "umpires": [
-      "JustinBoys",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 36,
-    "round": 7,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Warriors",
-    "team2": "Eagles",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 37,
-    "round": 7,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "Mavericks",
-    "team2": "JustinBoys",
-    "umpires": [
-      "Royal Lions",
-      "India blues"
-    ]
-  },
-  {
-    "id": 38,
-    "round": 7,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "DRAGONS",
-    "umpires": [
-      "Mavericks",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 39,
-    "round": 7,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Devils",
-    "team2": "Impact XI",
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
-  },
-  {
-    "id": 40,
-    "round": 7,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Fighters",
-    "umpires": [
-      "Devils",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 41,
-    "round": 7,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Killer Squad Dallas",
-    "team2": "India blues",
-    "umpires": [
-      "Warriors",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 42,
-    "round": 8,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "JustinBoys",
-    "team2": "Devils",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 43,
-    "round": 8,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Mavericks",
-    "umpires": [
-      "Royal Lions",
-      "India blues"
-    ]
-  },
-  {
-    "id": 44,
-    "round": 8,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Eagles",
-    "umpires": [
-      "Mavericks",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 45,
-    "round": 8,
-    "day": "Sat",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Killer Squad Dallas",
-    "team2": "Royal Lions",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 46,
-    "round": 8,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "India blues",
-    "team2": "DRAGONS",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 47,
-    "round": 8,
-    "day": "Sun",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Fighters",
-    "team2": "Warriors",
-    "umpires": [
-      "DRAGONS",
+    ],
+    "team2": [
       "Guts N Glory"
-    ]
-  },
-  {
-    "id": 48,
-    "round": 9,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "Royal Lions",
-    "team2": "Impact XI",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 49,
-    "round": 9,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Warriors",
-    "team2": "Mavericks",
-    "umpires": [
-      "Royal Lions",
-      "India blues"
-    ]
-  },
-  {
-    "id": 50,
-    "round": 9,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "JustinBoys",
-    "team2": "Eagles",
-    "umpires": [
-      "Mavericks",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 51,
-    "round": 9,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "DRAGONS",
-    "team2": "Guts N Glory",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 52,
-    "round": 9,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Devils",
-    "team2": "Killer Squad Dallas",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 53,
-    "round": 9,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "India blues",
-    "team2": "Fighters",
-    "umpires": [
-      "Warriors",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 54,
-    "round": 10,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "Impact XI",
-    "team2": "Eagles",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 55,
-    "round": 10,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Warriors",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
-  },
-  {
-    "id": 56,
-    "round": 10,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Mavericks",
-    "team2": "Killer Squad Dallas",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 57,
-    "round": 10,
-    "day": "Fri",
-    "time": "6-10 PM",
-    "ground": "FM",
-    "team1": "DRAGONS",
-    "team2": "Royal Lions",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 58,
-    "round": 10,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "Krum",
-    "team1": "JustinBoys",
-    "team2": "Devils",
-    "umpires": [
-      "Fighters",
-      "Warriors"
-    ]
-  },
-  {
-    "id": 59,
-    "round": 10,
-    "day": "Sun",
-    "time": "8-11:30 AM",
-    "ground": "FM",
-    "team1": "Fighters",
-    "team2": "India blues",
-    "umpires": [
-      "JustinBoys",
-      "DRAGONS"
-    ]
-  },
-  {
-    "id": 60,
-    "round": 11,
-    "day": "Fri",
-    "time": "8-11:30 AM",
-    "ground": "Krum",
-    "team1": "DRAGONS",
-    "team2": "Impact XI",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
-  },
-  {
-    "id": 61,
-    "round": 11,
-    "day": "Sat",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Killer Squad Dallas",
-    "team2": "Eagles",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
-  },
-  {
-    "id": 62,
-    "round": 11,
-    "day": "Sun",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "Fighters",
-    "team2": "Warriors",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
-  },
-  {
-    "id": 63,
-    "round": 11,
-    "day": "Fri",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "Guts N Glory",
-    "team2": "Mavericks",
-    "umpires": [
-      "Devils",
-      "Eagles"
-    ]
-  },
-  {
-    "id": 64,
-    "round": 11,
-    "day": "Sat",
-    "time": "6-10 PM",
-    "ground": "Krum",
-    "team1": "India blues",
-    "team2": "Royal Lions",
-    "umpires": [
-      "Fighters",
-      "JustinBoys"
-    ]
-  },
-  {
-    "id": 65,
-    "round": 11,
-    "day": "Sun",
-    "time": "12-4 PM",
-    "ground": "FM",
-    "team1": "JustinBoys",
-    "team2": "Devils",
+    ],
     "umpires": [
       "Warriors",
       "DRAGONS"

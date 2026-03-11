@@ -138,50 +138,42 @@
 
         .controls {
             background-color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             margin-bottom: 30px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .control-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        #unlockPrompt input {
-            padding: 10px;
-            border: 2px solid #e74c3c;
-            border-radius: 4px;
-            font-size: 0.95em;
-            min-width: 180px;
-        }
-
-        #unlockBtn {
-            padding: 10px 20px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .control-group label {
             font-weight: bold;
-            transition: background-color 0.3s;
+            color: #2c3e50;
+            font-size: 0.95em;
         }
 
-        #unlockBtn:hover {
-            background-color: #229954;
-        }
-
-        select {
-            padding: 10px;
+        .control-group select,
+        .control-group input {
+            padding: 12px;
             border: 2px solid #3498db;
             border-radius: 4px;
             font-size: 1em;
             background-color: white;
             color: #333;
             cursor: pointer;
+            width: 100%;
         }
 
-        select:focus {
+        .control-group select:focus,
+        .control-group input:focus {
             outline: none;
             border-color: #2980b9;
             box-shadow: 0 0 5px #3498db;
@@ -317,6 +309,18 @@
             font-size: 1.1em;
         }
 
+        .schedule-announcement {
+            background-color: #e8f4f8;
+            color: #2c3e50;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.05em;
+            line-height: 1.6;
+            border-left: 4px solid #3498db;
+        }
+
         .visit-counter {
             position: fixed;
             bottom: 20px;
@@ -390,7 +394,7 @@
         <header>
             <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
             <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
-            <p class="subtitle">11 League Games · 12 Teams · 66 Matches</p>
+            <p class="subtitle">2 League Games · 12 Teams · 12 Matches</p>
             <div class="countdown">
                 <span>First Game Starts In:</span>
                 <span class="countdown-number" id="countdownDays">0</span>
@@ -404,66 +408,52 @@
         </div>
 
         <div class="controls">
-            <label for="hideGamesSelect" style="font-weight: bold;">Show Schedules:</label>
-            <select id="hideGamesSelect">
-                <option value="2">Up to League 2 Only</option>
-                <option value="5">Up to League 5</option>
-                <option value="all">All League Games</option>
-            </select>
-
-            <div id="unlockPrompt" style="display: none; gap: 10px; align-items: center;">
-                <label for="hideGamesCode" style="font-weight: bold; margin: 0;">Unlock Code:</label>
-                <input type="password" id="hideGamesCode" placeholder="Enter code to unlock all games" style="padding: 10px; border: 2px solid #e74c3c; border-radius: 4px; font-size: 1em;">
-                <button id="unlockBtn" style="padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Unlock</button>
+            <div class="control-group">
+                <label for="roundSelect">League Game:</label>
+                <select id="roundSelect">
+                    <option value="all">All League Games</option>
+                    <option value="1">League Game 1</option>
+                    <option value="2">League Game 2</option>
+                </select>
             </div>
 
-            <label for="roundSelect" style="font-weight: bold; margin-left: 15px;">League Game:</label>
-            <select id="roundSelect">
-                <option value="all">All League Games</option>
-                <option value="1">League Game 1</option>
-                <option value="2">League Game 2</option>
-                <option value="3">League Game 3</option>
-                <option value="4">League Game 4</option>
-                <option value="5">League Game 5</option>
-                <option value="6">League Game 6</option>
-                <option value="7">League Game 7</option>
-                <option value="8">League Game 8</option>
-                <option value="9">League Game 9</option>
-                <option value="10">League Game 10</option>
-                <option value="11">League Game 11</option>
-            </select>
+            <div class="control-group">
+                <label for="teamSelect">Team:</label>
+                <select id="teamSelect">
+                    <option value="all">All Teams</option>
+                    <option value="Guts N Glory">Guts N Glory</option>
+                    <option value="Killer Squad Dallas">Killer Squad Dallas</option>
+                    <option value="Mavericks">Mavericks</option>
+                    <option value="Royal Lions">Royal Lions</option>
+                    <option value="India blues">India blues</option>
+                    <option value="Impact XI">Impact XI</option>
+                    <option value="Devils">Devils</option>
+                    <option value="Eagles">Eagles</option>
+                    <option value="Fighters">Fighters</option>
+                    <option value="JustinBoys">JustinBoys</option>
+                    <option value="Warriors">Warriors</option>
+                    <option value="DRAGONS">DRAGONS</option>
+                </select>
+            </div>
 
-            <label for="teamSelect" style="font-weight: bold;">Team:</label>
-            <select id="teamSelect">
-                <option value="all">All Teams</option>
-                <option value="Guts N Glory">Guts N Glory</option>
-                <option value="Killer Squad Dallas">Killer Squad Dallas</option>
-                <option value="Mavericks">Mavericks</option>
-                <option value="Royal Lions">Royal Lions</option>
-                <option value="India blues">India blues</option>
-                <option value="Impact XI">Impact XI</option>
-                <option value="Devils">Devils</option>
-                <option value="Eagles">Eagles</option>
-                <option value="Fighters">Fighters</option>
-                <option value="JustinBoys">JustinBoys</option>
-                <option value="Warriors">Warriors</option>
-                <option value="DRAGONS">DRAGONS</option>
-            </select>
+            <div class="control-group">
+                <label for="groundSelect">Ground:</label>
+                <select id="groundSelect">
+                    <option value="all">All Grounds</option>
+                    <option value="Krum">Krum</option>
+                    <option value="FM">FM</option>
+                </select>
+            </div>
 
-            <label for="groundSelect" style="font-weight: bold;">Ground:</label>
-            <select id="groundSelect">
-                <option value="all">All Grounds</option>
-                <option value="Krum">Krum</option>
-                <option value="FM">FM</option>
-            </select>
-
-            <label for="daySelect" style="font-weight: bold;">Day:</label>
-            <select id="daySelect">
-                <option value="all">All Days</option>
-                <option value="Fri">Friday</option>
-                <option value="Sat">Saturday</option>
-                <option value="Sun">Sunday</option>
-            </select>
+            <div class="control-group">
+                <label for="daySelect">Day:</label>
+                <select id="daySelect">
+                    <option value="all">All Days</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </div>
         </div>
 
         <div id="schedule"></div>
@@ -578,8 +568,6 @@
         };
 
         let schedule = [];
-        let isUnlocked = false; // Track if games are unlocked
-        const HIDE_CODE = '31020262275'; // Admin code for unlocking all games
 
         // Load schedule from API instead of hardcoded data
         async function loadSchedule() {
@@ -594,28 +582,13 @@
 
         let teams = [];
 
-        function updateHideGamesUI() {
-            const hideGamesSelect = document.getElementById('hideGamesSelect');
-            const unlockPrompt = document.getElementById('unlockPrompt');
-            
-            if (hideGamesSelect.value === 'all') {
-                unlockPrompt.style.display = 'none';
-            } else {
-                unlockPrompt.style.display = isUnlocked ? 'none' : 'flex';
-            }
-        }
-
         function renderSchedule() {
-            const hideGamesValue = parseInt(document.getElementById('hideGamesSelect').value);
             const round = document.getElementById('roundSelect').value;
             const team = document.getElementById('teamSelect').value;
             const ground = document.getElementById('groundSelect').value;
             const day = document.getElementById('daySelect').value;
 
-            let maxRound = isUnlocked || hideGamesValue === 'all' ? 11 : hideGamesValue;
-
             let filtered = schedule.filter(match => {
-                if (match.round > maxRound) return false;
                 if (round !== 'all' && match.round !== parseInt(round)) return false;
                 if (team !== 'all' && match.team1 !== team && match.team2 !== team) return false;
                 if (ground !== 'all' && match.ground !== ground) return false;
@@ -639,11 +612,17 @@
                 return;
             }
 
+            // Add announcement heading
+            const announcementDiv = document.createElement('div');
+            announcementDiv.className = 'schedule-announcement';
+            announcementDiv.innerHTML = 'The DPCL schedule will be announced in three-week windows, with subsequent fixtures released periodically throughout the season to assist teams with planning and availability.';
+            scheduleDiv.appendChild(announcementDiv);
+
             Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
                 let matches = grouped[roundNum];
                 
-                const dayOrder = { "Fri": 0, "Sat": 1, "Sun": 2 };
-                const timeOrder = { "8-11:30 AM": 0, "12-4 PM": 1, "6-10 PM": 2 };
+                const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
+                const timeOrder = { "8:00-11:30 am": 0, "12:00-4:00 pm": 1, "6:00-10:00 pm": 2 };
                 matches = matches.sort((a, b) => {
                     const dayDiff = dayOrder[a.day] - dayOrder[b.day];
                     if (dayDiff !== 0) return dayDiff;
@@ -667,7 +646,7 @@
                     const team2Info = teamsData[match.team2];
                     const logo1Path = `logos/${team1Info.logo}`;
                     const logo2Path = `logos/${team2Info.logo}`;
-                    const gameDate = gameDates[`${match.round}-${match.day}`] || '?/?';
+                    const gameDate = match.date || '?/?';
                     
                     const umpires = getUmpires(match.id);
                     const umpireText = umpires.length > 0 ? `<div style="margin-top: 6px; font-size: 0.8em; color: #27ae60; font-weight: bold;">👨‍⚖️ Umpiring Team: ${umpires.join(', ')}</div>` : '';
@@ -725,34 +704,9 @@
         document.getElementById('teamSelect').addEventListener('change', renderSchedule);
         document.getElementById('groundSelect').addEventListener('change', renderSchedule);
         document.getElementById('daySelect').addEventListener('change', renderSchedule);
-        document.getElementById('hideGamesSelect').addEventListener('change', () => {
-            updateHideGamesUI();
-            renderSchedule();
-        });
-
-        document.getElementById('unlockBtn').addEventListener('click', () => {
-            const codeInput = document.getElementById('hideGamesCode').value;
-            if (codeInput === HIDE_CODE) {
-                isUnlocked = true;
-                document.getElementById('hideGamesCode').value = '';
-                updateHideGamesUI();
-                renderSchedule();
-                alert('✓ All games unlocked!');
-            } else {
-                alert('✗ Invalid code. Please try again.');
-                document.getElementById('hideGamesCode').value = '';
-            }
-        });
-
-        document.getElementById('hideGamesCode').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('unlockBtn').click();
-            }
-        });
 
         // Load schedule from API and render
         loadSchedule().then(() => {
-            updateHideGamesUI();
             renderSchedule();
             renderTeams();
         });
