@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPCL Field Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .league-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background-color: #f9f9f9;
+            border-radius: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .pricing-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .pricing-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .pricing-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .pricing-table tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        .best-value {
+            background-color: #d4edda !important;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .best-value::after {
+            content: " ✅ Best Value";
+            color: #28a745;
+            font-size: 0.9em;
+        }
+
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .cancellation-box {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .icon {
+            font-size: 1.3em;
+            margin-right: 10px;
+        }
+
+        ul {
+            margin-left: 30px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.05em;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #1a252f;
+        }
+
+        .button-primary {
+            background-color: #e74c3c;
+        }
+
+        .button-primary:hover {
+            background-color: #c0392b;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .section h2 {
+                font-size: 1.2em;
+            }
+
+            .pricing-table {
+                font-size: 0.9em;
+            }
+
+            .pricing-table th,
+            .pricing-table td {
+                padding: 8px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
+            <h1>🏏 DPCL Field Booking</h1>
+            <p class="subtitle">Pricing & Policy</p>
+        </header>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="index.html" class="button">🏠 Home</a>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="section">
+            <h2><span class="icon">💰</span>Pricing Options</h2>
+            <table class="pricing-table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Morning slot (4 hrs)</td>
+                        <td class="price">$160</td>
+                    </tr>
+                    <tr>
+                        <td>Afternoon slot (4 hrs)</td>
+                        <td class="price">$80</td>
+                    </tr>
+                    <tr class="best-value">
+                        <td>Full Day (both slots)</td>
+                        <td class="price">$200</td>
+                    </tr>
+                    <tr>
+                        <td>Per hour – Morning</td>
+                        <td class="price">$40/hr</td>
+                    </tr>
+                    <tr>
+                        <td>Per hour – Afternoon</td>
+                        <td class="price">$20/hr</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> Full Day at $200 saves you $40 vs booking both slots separately!
+            </div>
+        </div>
+
+        <!-- Full Day Special Rate -->
+        <div class="section">
+            <h2><span class="icon">📋</span>Full Day Special Rate</h2>
+            <div class="warning-box">
+                <p><strong>Effective Rate: $25/hr</strong></p>
+                <p style="margin-top: 10px;">If you commit to a full day booking, you lock in at just <strong>$25/hr</strong>.</p>
+                <p style="margin-top: 10px;">If you cancel and drop to a single slot, pricing reverts back to the standard <strong>$40/hr (morning)</strong> or <strong>$20/hr (afternoon)</strong> rates.</p>
+            </div>
+        </div>
+
+        <!-- Cancellation Policy -->
+        <div class="section">
+            <h2><span class="icon">❌</span>Cancellation Policy</h2>
+            <div class="cancellation-box">
+                <ul>
+                    <li>Cancellations must be made at least <strong>1 week</strong> before your game day</li>
+                    <li>Policy applies to <strong>full day bookings only</strong></li>
+                    <li>You may cancel the full day or choose to keep it</li>
+                    <li><strong>No partial cancellations</strong> (e.g., dropping one slot from a full day)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Reservation Instructions -->
+        <div class="section">
+            <h2><span class="icon">📅</span>To Reserve Your Day(s)</h2>
+            <p style="margin-bottom: 15px;">Please share the following information when booking:</p>
+            <ul>
+                <li><strong>Days:</strong> Saturday, Sunday, or Both?</li>
+                <li><strong>Duration:</strong> Start date & end date OR the specific weeks you want</li>
+                <li><strong>Preference:</strong> Full day or single slot preference</li>
+            </ul>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Don't see what you need?</strong></p>
+                <p style="margin-top: 10px;">If none of these options work for you, reach out and we'll do our best to accommodate. 🙏🏏</p>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="section">
+            <h2><span class="icon">📞</span>Contact DPCL Admin</h2>
+            <div class="info-box">
+                <p style="font-size: 1.1em; margin-bottom: 15px;">
+                    <strong>Phone:</strong> <a href="tel:+16105642275" style="color: #2196f3; text-decoration: none; font-weight: bold;">+1 (610) 564-2275</a>
+                </p>
+                <p style="font-size: 1.1em;">
+                    <strong>WhatsApp:</strong> <a href="https://wa.me/16105642275" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 Message on WhatsApp</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact/Action Buttons -->
+        <div class="button-group">
+            <a href="index.html" class="button">🏠 Home</a>
+            <button class="button button-primary" onclick="handleFieldBooking()">📧 Request Field Booking</button>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 Dallas Premier Cricket League. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleFieldBooking() {
+            // You can replace this with an email link or form submission
+            const email = 'contact@dpcl.com';
+            const subject = 'DPCL Field Booking Request';
+            const body = `Hello DPCL Team,%0A%0AI would like to book a field.%0A%0APreferred Days: (Saturday/Sunday/Both)%0AStart Date: %0AEnd Date: %0APreference: (Full Day/Single Slot)%0A%0AThank you!`;
+            
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+</html>
