@@ -534,9 +534,55 @@
             "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
         };
 
-        function getUmpires(matchId) {
-            const match = schedule.find(m => m.id === matchId);
-            return match && match.umpires ? match.umpires : [];
+        const allTeams = ['Guts N Glory', 'Mavericks', 'India blues', 'Devils', 'Killer Squad Dallas', 'Warriors', 'DRAGONS', 'JustinBoys', 'Eagles', 'Impact XI', 'Fighters', 'Royal Lions'];
+        
+        // Track umpire assignments per round to ensure no duplicates
+        const umpireAssignments = {};
+        
+        function getAssignedUmpires(match) {
+            const team1 = match.team1[0];
+            const team2 = match.team2[0];
+            const round = match.round;
+            
+            // Initialize round tracking if needed
+            if (!umpireAssignments[round]) {
+                umpireAssignments[round] = new Set();
+            }
+            
+            // Get all matches in this round
+            const roundMatches = schedule.filter(m => m.round === round).sort((a, b) => a.id - b.id);
+            
+            // Get all teams that will play in any match in this round
+            const playingInRound = new Set();
+            roundMatches.forEach(m => {
+                playingInRound.add(m.team1[0]);
+                playingInRound.add(m.team2[0]);
+            });
+            
+            // Get eligible teams: not playing THIS match AND not already assigned as umpires this round
+            const eligibleTeams = allTeams.filter(t => 
+                t !== team1 && t !== team2 && !umpireAssignments[round].has(t)
+            );
+            
+            if (eligibleTeams.length < 2) {
+                // Fallback: use any team not playing in this specific match
+                const fallbackTeams = allTeams.filter(t => t !== team1 && t !== team2);
+                const umpire1 = fallbackTeams[0] || team1;
+                const umpire2 = fallbackTeams[1] || team2;
+                umpireAssignments[round].add(umpire1);
+                umpireAssignments[round].add(umpire2);
+                return umpire1 === umpire2 ? [umpire1] : [umpire1, umpire2];
+            }
+            
+            // Assign the first two eligible teams
+            const umpire1 = eligibleTeams[0];
+            const umpire2 = eligibleTeams[1];
+            
+            // Mark them as assigned
+            umpireAssignments[round].add(umpire1);
+            umpireAssignments[round].add(umpire2);
+            
+            return [umpire1, umpire2];
         }
 
         const roundDates = {
@@ -590,7 +636,7 @@
 
             let filtered = schedule.filter(match => {
                 if (round !== 'all' && match.round !== parseInt(round)) return false;
-                if (team !== 'all' && match.team1 !== team && match.team2 !== team) return false;
+                if (team !== 'all' && !match.team1.includes(team) && !match.team2.includes(team)) return false;
                 if (ground !== 'all' && match.ground !== ground) return false;
                 if (day !== 'all' && match.day !== day) return false;
                 return true;
@@ -619,6 +665,9 @@
             scheduleDiv.appendChild(announcementDiv);
 
             Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
+                // Clear umpire assignments for this round
+                umpireAssignments[roundNum] = new Set();
+                
                 let matches = grouped[roundNum];
                 
                 const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
@@ -642,13 +691,15 @@
                 matches.forEach((match) => {
                     const card = document.createElement('div');
                     card.className = 'match-card';
-                    const team1Info = teamsData[match.team1];
-                    const team2Info = teamsData[match.team2];
+                    const team1 = match.team1[0];
+                    const team2 = match.team2[0];
+                    const team1Info = teamsData[team1];
+                    const team2Info = teamsData[team2];
                     const logo1Path = `logos/${team1Info.logo}`;
                     const logo2Path = `logos/${team2Info.logo}`;
                     const gameDate = match.date || '?/?';
                     
-                    const umpires = getUmpires(match.id);
+                    const umpires = getAssignedUmpires(match);
                     const umpireText = umpires.length > 0 ? `<div style="margin-top: 6px; font-size: 0.8em; color: #27ae60; font-weight: bold;">👨‍⚖️ Umpiring Team: ${umpires.join(', ')}</div>` : '';
                     
                     card.innerHTML = `
@@ -658,8 +709,8 @@
                         </div>
                         <div class="teams">
                             <div class="team">
-                                <img src="${logo1Path}" alt="${match.team1}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
-                                <strong>${match.team1}</strong>
+                                <img src="${logo1Path}" alt="${team1}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${team1}</strong>
                                 <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
                                     <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
                                     <div style="font-weight: bold; color: #2c3e50;">${team1Info.captain}</div>
@@ -667,8 +718,8 @@
                             </div>
                             <div class="vs">VS</div>
                             <div class="team">
-                                <img src="${logo2Path}" alt="${match.team2}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
-                                <strong>${match.team2}</strong>
+                                <img src="${logo2Path}" alt="${team2}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${team2}</strong>
                                 <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
                                     <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
                                     <div style="font-weight: bold; color: #2c3e50;">${team2Info.captain}</div>
