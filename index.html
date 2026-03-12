@@ -18,6 +18,23 @@
             padding: 20px;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .page-wrapper {
             display: flex;
             gap: 20px;
@@ -50,48 +67,6 @@
             font-size: 0.8em;
             font-weight: bold;
             color: #2c3e50;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .sponsors-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 20px;
-            gap: 20px;
-        }
-
-        .sponsor-logo {
-            height: 60px;
-            object-fit: contain;
-        }
-
-        .sponsor-left, .sponsor-right {
-            flex: 1;
-            text-align: center;
-        }
-
-        .sponsor-label {
-            font-size: 0.8em;
-            color: #ecf0f1;
-            margin-top: 5px;
         }
 
         h1 {
@@ -334,6 +309,36 @@
             z-index: 1000;
         }
 
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+
+        .sponsor-card {
+            background-color: white;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-card img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .sponsor-card-label {
+            font-size: 0.7em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
@@ -350,6 +355,11 @@
             .matches-grid {
                 grid-template-columns: 1fr;
             }
+
+            .sponsor-grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
         }
     </style>
 </head>
@@ -361,19 +371,6 @@
                 <img src="logos/left-sponsor.png" alt="Farm2Home - Guts & Glory Apparel Sponsor" onerror="this.style.display='none'">
                 <div class="sponsor-card-label">Guts & Glory Team Apparel Sponsor</div>
                 <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
-            </div>
-            <div class="sponsor-card">
-                <a href="https://www.globalcricketstore.com" target="_blank" style="text-decoration: none;">
-                    <img src="logos/gcs_image_logo.jpg" alt="Community Business Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
-                </a>
-                <div class="sponsor-card-label">Community Business Sponsor</div>
-                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
-                    <strong>Global Cricket Store</strong><br>
-                    🌐 www.globalcricketstore.com<br>
-                    📍 2608 Bluewood Lane, Northlake, TX 76226<br>
-                    📱 +1 425-999-7455<br>
-                    📷 @globalcricketstore
-                </div>
             </div>
             <div class="sponsor-card">
                 <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
@@ -388,15 +385,20 @@
                 </div>
             </div>
             <div class="sponsor-card">
-                <a href="https://hhfortworth.com/" target="_blank" style="text-decoration: none;">
-                    <img src="logos/hyderbadnawabs.jpg" alt="HNH - Royal Lions Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                <img src="logos/left-sponsor.png" alt="Farm2Home - Guts & Glory Apparel Sponsor" onerror="this.style.display='none'">
+                <div class="sponsor-card-label">Guts & Glory Team Apparel Sponsor</div>
+                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
                 </a>
-                <div class="sponsor-card-label">Royal Lions Team Apparel Sponsor</div>
+                <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
                 <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
-                    <strong>HNH</strong><br>
-                    🌐 https://hhfortworth.com<br>
-                    📍 1901 Heritage Trace Pkwy, Suite 101<br>
-                    Fort Worth, TX 76177
+                    <strong>OneFusion</strong><br>
+                    🌐 https://onefusionus.com<br>
+                    📍 8131 Gateway Dr Suite 500<br>
+                    Argyle, TX 76226, USA
                 </div>
             </div>
         </div>
@@ -479,9 +481,29 @@
         <!-- Right Sponsor Sidebar -->
         <div class="sponsor-sidebar">
             <div class="sponsor-card">
-                <img src="logos/right-sponsor.png" alt="Farm2Home - Guts & Glory Apparel Sponsor" onerror="this.style.display='none'">
-                <div class="sponsor-card-label">Guts & Glory Team Apparel Sponsor</div>
-                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+                <a href="https://www.globalcricketstore.com" target="_blank" style="text-decoration: none;">
+                    <img src="logos/gcs_image_logo.jpg" alt="Community Business Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Community Business Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Global Cricket Store</strong><br>
+                    🌐 www.globalcricketstore.com<br>
+                    📍 2608 Bluewood Lane, Northlake, TX 76226<br>
+                    📱 +1 425-999-7455<br>
+                    📷 @globalcricketstore
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://hhfortworth.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/hyderbadnawabs.jpg" alt="HNH - Royal Lions Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Royal Lions Team Apparel Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Hyderabad Nawabi House</strong><br>
+                    🌐 https://hhfortworth.com<br>
+                    📍 1901 Heritage Trace Pkwy, Suite 101<br>
+                    Fort Worth, TX 76177
+                </div>
             </div>
             <div class="sponsor-card">
                 <a href="https://www.globalcricketstore.com" target="_blank" style="text-decoration: none;">
@@ -497,24 +519,12 @@
                 </div>
             </div>
             <div class="sponsor-card">
-                <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
-                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
-                </a>
-                <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
-                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
-                    <strong>OneFusion</strong><br>
-                    🌐 https://onefusionus.com<br>
-                    📍 8131 Gateway Dr Suite 500<br>
-                    Argyle, TX 76226, USA
-                </div>
-            </div>
-            <div class="sponsor-card">
                 <a href="https://hhfortworth.com/" target="_blank" style="text-decoration: none;">
                     <img src="logos/hyderbadnawabs.jpg" alt="HNH - Royal Lions Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
                 </a>
                 <div class="sponsor-card-label">Royal Lions Team Apparel Sponsor</div>
                 <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
-                    <strong>HNH</strong><br>
+                    <strong>Hyderabad Nawabi House</strong><br>
                     🌐 https://hhfortworth.com<br>
                     📍 1901 Heritage Trace Pkwy, Suite 101<br>
                     Fort Worth, TX 76177
