@@ -71,8 +71,8 @@ function logChange(matchId, changes, oldMatch, newMatch) {
 function generateUmpireAssignments(schedule) {
     const allTeams = [
         'Guts N Glory', 'Killer Squad Dallas', 'Mavericks', 'Royal Lions',
-        'India blues', 'Impact XI', 'Impact IX', 'Devils', 'Eagles',
-        'Fighters', 'JustinBoys', 'Warriors', 'DRAGONS', 'Roaring Lions'
+        'India blues', 'Impact XI', 'Impact XI', 'Devils', 'Eagles',
+        'Fighters', 'JustinBoys', 'Warriors', 'DRAGONS'
     ];
     
     // Group matches by round
