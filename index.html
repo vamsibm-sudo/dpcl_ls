@@ -179,6 +179,7 @@
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .match-card:hover {
@@ -418,9 +419,7 @@
             <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
             <p class="subtitle">66 league games · 12 teams · Unlimited fun</p>
             <div class="countdown">
-                <span>First Game Starts In:</span>
-                <span class="countdown-number" id="countdownDays">0</span>
-                <span>days</span>
+                <span id="weekStatus">Week 1 Upcoming</span>
             </div>
         </header>
 
@@ -439,6 +438,9 @@
                     <option value="all">All League Games</option>
                     <option value="1">League Game 1</option>
                     <option value="2">League Game 2</option>
+                    <option value="3">League Game 3</option>
+                    <option value="4">League Game 4</option>
+                    <option value="5">League Game 5</option>
                 </select>
             </div>
 
@@ -450,8 +452,10 @@
                     <option value="Killer Squad Dallas">Killer Squad Dallas</option>
                     <option value="Mavericks">Mavericks</option>
                     <option value="Royal Lions">Royal Lions</option>
+                    <option value="Roaring Lions">Roaring Lions</option>
                     <option value="India blues">India blues</option>
                     <option value="Impact XI">Impact XI</option>
+                    <option value="Impact IX">Impact IX</option>
                     <option value="Devils">Devils</option>
                     <option value="Eagles">Eagles</option>
                     <option value="Fighters">Fighters</option>
@@ -546,23 +550,39 @@
     </div>
 
     <script>
-        function updateCountdown() {
-            const firstGameDate = new Date(2026, 2, 20);
+        function updateWeekStatus() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            firstGameDate.setHours(0, 0, 0, 0);
             
-            const timeDiff = firstGameDate - today;
-            const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            // Define week dates
+            const weeks = [
+                { num: 1, start: new Date(2026, 2, 20), end: new Date(2026, 2, 22) },
+                { num: 2, start: new Date(2026, 2, 27), end: new Date(2026, 2, 29) },
+                { num: 3, start: new Date(2026, 3, 3), end: new Date(2026, 3, 5) },
+                { num: 4, start: new Date(2026, 3, 10), end: new Date(2026, 3, 12) },
+                { num: 5, start: new Date(2026, 3, 17), end: new Date(2026, 3, 19) }
+            ];
             
-            const countdownElement = document.getElementById('countdownDays');
-            if (countdownElement) {
-                countdownElement.textContent = Math.max(0, daysRemaining);
+            let upcomingWeek = null;
+            for (let week of weeks) {
+                if (today < week.start) {
+                    upcomingWeek = week.num;
+                    break;
+                }
+            }
+            
+            const weekStatusElement = document.getElementById('weekStatus');
+            if (weekStatusElement) {
+                if (upcomingWeek) {
+                    weekStatusElement.textContent = `Week ${upcomingWeek} Upcoming`;
+                } else {
+                    weekStatusElement.textContent = 'Season Complete';
+                }
             }
         }
         
         document.addEventListener('DOMContentLoaded', () => {
-            updateCountdown();
+            updateWeekStatus();
         });
 
         const teamsData = {
@@ -576,60 +596,13 @@
             "JustinBoys": { captain: "Varun Tej", logo: "JustinBoys.jpeg" },
             "Eagles": { captain: "Naresh", logo: "Eagles.jpg" },
             "Impact XI": { captain: "Manideep", logo: "Impact X1.jpeg" },
+            "Impact IX": { captain: "Manideep", logo: "Impact X1.jpeg" },
             "Killer Squad Dallas": { captain: "Venkatesh", logo: "Killers Squad .jpeg" },
-            "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
+            "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" },
+            "Roaring Lions": { captain: "TBD", logo: "Royal Lions.jpg" }
         };
 
-        const allTeams = ['Guts N Glory', 'Mavericks', 'India blues', 'Devils', 'Killer Squad Dallas', 'Warriors', 'DRAGONS', 'JustinBoys', 'Eagles', 'Impact XI', 'Fighters', 'Royal Lions'];
-        
-        // Track umpire assignments per round to ensure no duplicates
-        const umpireAssignments = {};
-        
-        function getAssignedUmpires(match) {
-            const team1 = match.team1[0];
-            const team2 = match.team2[0];
-            const round = match.round;
-            
-            // Initialize round tracking if needed
-            if (!umpireAssignments[round]) {
-                umpireAssignments[round] = new Set();
-            }
-            
-            // Get all matches in this round
-            const roundMatches = schedule.filter(m => m.round === round).sort((a, b) => a.id - b.id);
-            
-            // Get all teams that will play in any match in this round
-            const playingInRound = new Set();
-            roundMatches.forEach(m => {
-                playingInRound.add(m.team1[0]);
-                playingInRound.add(m.team2[0]);
-            });
-            
-            // Get eligible teams: not playing THIS match AND not already assigned as umpires this round
-            const eligibleTeams = allTeams.filter(t => 
-                t !== team1 && t !== team2 && !umpireAssignments[round].has(t)
-            );
-            
-            if (eligibleTeams.length < 2) {
-                // Fallback: use any team not playing in this specific match
-                const fallbackTeams = allTeams.filter(t => t !== team1 && t !== team2);
-                const umpire1 = fallbackTeams[0] || team1;
-                const umpire2 = fallbackTeams[1] || team2;
-                umpireAssignments[round].add(umpire1);
-                umpireAssignments[round].add(umpire2);
-                return umpire1 === umpire2 ? [umpire1] : [umpire1, umpire2];
-            }
-            
-            // Assign the first two eligible teams
-            const umpire1 = eligibleTeams[0];
-            const umpire2 = eligibleTeams[1];
-            
-            // Mark them as assigned
-            umpireAssignments[round].add(umpire1);
-            umpireAssignments[round].add(umpire2);
-            
-            return [umpire1, umpire2];
-        }
+        const allTeams = ['Guts N Glory', 'Mavericks', 'India blues', 'Devils', 'Killer Squad Dallas', 'Warriors', 'DRAGONS', 'JustinBoys', 'Eagles', 'Impact XI', 'Impact IX', 'Fighters', 'Royal Lions', 'Roaring Lions'];
 
         const roundDates = {
             1: "Mar 20-22",
@@ -666,6 +639,8 @@
             try {
                 const response = await fetch('/api/schedule');
                 schedule = await response.json();
+                console.log('Loaded schedule with', schedule.length, 'total matches');
+                console.log('Rounds in schedule:', [...new Set(schedule.map(m => m.round))].sort((a, b) => a - b));
             } catch (err) {
                 console.error('Error loading schedule:', err);
                 schedule = [];
@@ -680,6 +655,9 @@
             const ground = document.getElementById('groundSelect').value;
             const day = document.getElementById('daySelect').value;
 
+            console.log('renderSchedule called with filters:', { round, team, ground, day });
+            console.log('Total schedule matches:', schedule.length);
+
             let filtered = schedule.filter(match => {
                 if (round !== 'all' && match.round !== parseInt(round)) return false;
                 if (team !== 'all' && !match.team1.includes(team) && !match.team2.includes(team)) return false;
@@ -687,6 +665,9 @@
                 if (day !== 'all' && match.day !== day) return false;
                 return true;
             });
+
+            console.log('Filtered matches:', filtered.length);
+            console.log('Filtered rounds:', [...new Set(filtered.map(m => m.round))].sort((a, b) => a - b));
 
             const grouped = {};
             filtered.forEach(match => {
@@ -711,9 +692,6 @@
             scheduleDiv.appendChild(announcementDiv);
 
             Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
-                // Clear umpire assignments for this round
-                umpireAssignments[roundNum] = new Set();
-                
                 let matches = grouped[roundNum];
                 
                 const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
@@ -744,14 +722,23 @@
                     const logo1Path = `logos/${team1Info.logo}`;
                     const logo2Path = `logos/${team2Info.logo}`;
                     const gameDate = match.date || '?/?';
+                    const winnerTag = match.winner ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #27ae60; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">🏆 ${match.winner}</div>` : '';
                     
-                    const umpires = getAssignedUmpires(match);
-                    const umpireText = umpires.length > 0 ? `<div style="margin-top: 6px; font-size: 0.8em; color: #27ae60; font-weight: bold;">👨‍⚖️ Umpiring Team: ${umpires.join(', ')}</div>` : '';
+                    // Determine border color based on winner
+                    let borderColor = '#3498db'; // default blue
+                    if (match.winner) {
+                        if (team1 === match.winner) {
+                            borderColor = '#27ae60'; // green for team1 if they won
+                        } else {
+                            borderColor = '#e74c3c'; // red for team1 if they lost
+                        }
+                    }
+                    card.style.borderColor = borderColor;
                     
                     card.innerHTML = `
+                        ${winnerTag}
                         <div class="match-meta">
                             ${gameDate} ${match.day} · ${match.ground} · ${match.time}
-                            ${umpireText}
                         </div>
                         <div class="teams">
                             <div class="team">

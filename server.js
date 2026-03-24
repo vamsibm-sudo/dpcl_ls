@@ -71,8 +71,8 @@ function logChange(matchId, changes, oldMatch, newMatch) {
 function generateUmpireAssignments(schedule) {
     const allTeams = [
         'Guts N Glory', 'Killer Squad Dallas', 'Mavericks', 'Royal Lions',
-        'India blues', 'Impact XI', 'Devils', 'Eagles',
-        'Fighters', 'JustinBoys', 'Warriors', 'DRAGONS'
+        'India blues', 'Impact XI', 'Impact IX', 'Devils', 'Eagles',
+        'Fighters', 'JustinBoys', 'Warriors', 'DRAGONS', 'Roaring Lions'
     ];
     
     // Group matches by round
@@ -87,7 +87,12 @@ function generateUmpireAssignments(schedule) {
     // Assign umpires for each round
     Object.keys(matchesByRound).forEach(round => {
         const roundMatches = matchesByRound[round];
-        const umpiresAssigned = {}; // Track which teams have umpired in this round
+        const teamUmpireCount = {}; // Track umpire count for each team in this round
+        
+        // Initialize count to 0 for all teams
+        allTeams.forEach(team => {
+            teamUmpireCount[team] = 0;
+        });
         
         // Sort matches for consistent assignment
         roundMatches.sort((a, b) => a.id - b.id);
@@ -95,34 +100,43 @@ function generateUmpireAssignments(schedule) {
         roundMatches.forEach(match => {
             const playingTeams = new Set([match.team1, match.team2]);
             
-            // Get teams that haven't umpired yet in this round
+            // Get teams NOT playing that haven't umpired yet (count === 0)
             const availableUmpires = allTeams.filter(team =>
-                !playingTeams.has(team) && !umpiresAssigned[team]
+                !playingTeams.has(team) && teamUmpireCount[team] === 0
             );
             
             let selectedUmpires = [];
             
             if (availableUmpires.length >= 2) {
-                // Pick first 2 available teams
+                // Pick first 2 available teams that haven't umpired yet
                 selectedUmpires = availableUmpires.slice(0, 2);
             } else if (availableUmpires.length === 1) {
-                // Only 1 available, need to pick from teams that already umpired
+                // Only 1 available that hasn't umpired - need a second
                 selectedUmpires = [availableUmpires[0]];
-                const alreadyUmpired = allTeams.filter(team =>
-                    !playingTeams.has(team) && umpiresAssigned[team]
+                
+                // Find second team: prefer non-playing teams that haven't umpired over those that have
+                const notPlaying = allTeams.filter(team =>
+                    !playingTeams.has(team) && team !== selectedUmpires[0]
                 );
-                if (alreadyUmpired.length > 0) {
-                    selectedUmpires.push(alreadyUmpired[0]);
+                const notPlayingNotUmpired = notPlaying.filter(t => teamUmpireCount[t] === 0);
+                
+                if (notPlayingNotUmpired.length > 0) {
+                    selectedUmpires.push(notPlayingNotUmpired[0]);
+                } else if (notPlaying.length > 0) {
+                    // Fallback: use team that has already umpired but hasn't played
+                    selectedUmpires.push(notPlaying[0]);
                 }
             } else {
-                // No available teams, pick any 2 not playing
-                const usableUmpires = allTeams.filter(team => !playingTeams.has(team));
-                selectedUmpires = usableUmpires.slice(0, 2);
+                // No non-playing teams available without umpiring count
+                // This should rarely happen in a balanced schedule
+                const notPlaying = allTeams.filter(team => !playingTeams.has(team));
+                const sorted = notPlaying.sort((a, b) => teamUmpireCount[a] - teamUmpireCount[b]);
+                selectedUmpires = sorted.slice(0, 2);
             }
             
             // Mark these teams as having umpired in this round
             selectedUmpires.forEach(team => {
-                umpiresAssigned[team] = true;
+                teamUmpireCount[team]++;
             });
             
             // Store umpires in match
