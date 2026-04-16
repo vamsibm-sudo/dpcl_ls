@@ -441,6 +441,12 @@
                     <option value="3">League Game 3</option>
                     <option value="4">League Game 4</option>
                     <option value="5">League Game 5</option>
+                    <option value="6">League Game 6</option>
+                    <option value="7">League Game 7</option>
+                    <option value="8">League Game 8</option>
+                    <option value="9">League Game 9</option>
+                    <option value="10">League Game 10</option>
+                    <option value="11">League Game 11</option>
                 </select>
             </div>
 
@@ -664,7 +670,7 @@
 
             let filtered = schedule.filter(match => {
                 const roundPass = round === 'all' || match.round === parseInt(round);
-                const teamPass = team === 'all' || (Array.isArray(match.team1) && match.team1.includes(team)) || (Array.isArray(match.team2) && match.team2.includes(team)) || match.team1 === team || match.team2 === team;
+                const teamPass = team === 'all' || match.team1 === team || match.team2 === team;
                 const groundPass = ground === 'all' || match.ground === ground;
                 const dayPass = day === 'all' || match.day === day;
                 
@@ -723,8 +729,8 @@
                 matches.forEach((match) => {
                     const card = document.createElement('div');
                     card.className = 'match-card';
-                    const team1 = match.team1[0];
-                    const team2 = match.team2[0];
+                    const team1 = match.team1;
+                    const team2 = match.team2;
                     const team1Info = teamsData[team1];
                     const team2Info = teamsData[team2];
                     const logo1Path = `logos/${team1Info.logo}`;
@@ -803,8 +809,12 @@
 
         // Load schedule from API and render
         loadSchedule().then(() => {
+            console.log('Schedule loaded successfully');
             renderSchedule();
             renderTeams();
+        }).catch(err => {
+            console.error('Failed to load schedule:', err);
+            document.getElementById('schedule').innerHTML = '<div class="no-matches">Failed to load schedule. Please refresh the page.</div>';
         });
     </script>
 </body>

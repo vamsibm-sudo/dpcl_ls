@@ -6,17 +6,9 @@
     "date": "March 20",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "India blues"
-    ],
-    "team2": [
-      "Impact XI"
-    ],
-    "winner": "India blues",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
+    "team1": "India blues",
+    "team2": "Impact XI",
+    "winner": "India blues"
   },
   {
     "id": 1,
@@ -25,17 +17,9 @@
     "date": "March 21",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "Guts N Glory"
-    ],
-    "team2": [
-      "Fighters"
-    ],
-    "winner": "Fighters",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
+    "team1": "Guts N Glory",
+    "team2": "Fighters",
+    "winner": "Fighters"
   },
   {
     "id": 2,
@@ -44,17 +28,9 @@
     "date": "March 21",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Mavericks"
-    ],
-    "team2": [
-      "Royal Lions"
-    ],
-    "winner": "Mavericks",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
+    "team1": "Mavericks",
+    "team2": "Royal Lions",
+    "winner": "Mavericks"
   },
   {
     "id": 3,
@@ -63,17 +39,9 @@
     "date": "March 22",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "Devils"
-    ],
-    "team2": [
-      "Eagles"
-    ],
-    "winner": "Eagles",
-    "umpires": [
-      "Impact XI",
-      "Devils"
-    ]
+    "team1": "Devils",
+    "team2": "Eagles",
+    "winner": "Eagles"
   },
   {
     "id": 4,
@@ -82,17 +50,9 @@
     "date": "March 22",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Killer Squad Dallas"
-    ],
-    "team2": [
-      "JustinBoys"
-    ],
-    "winner": "JustinBoys",
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
+    "team1": "Killer Squad Dallas",
+    "team2": "JustinBoys",
+    "winner": "JustinBoys"
   },
   {
     "id": 5,
@@ -101,17 +61,9 @@
     "date": "March 22",
     "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": [
-      "Warriors"
-    ],
-    "team2": [
-      "DRAGONS"
-    ],
-    "winner": "DRAGONS",
-    "umpires": [
-      "JustinBoys",
-      "Warriors"
-    ]
+    "team1": "Warriors",
+    "team2": "DRAGONS",
+    "winner": "DRAGONS"
   },
   {
     "id": 6,
@@ -120,17 +72,9 @@
     "date": "March 27",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "Eagles"
-    ],
-    "team2": [
-      "Mavericks"
-    ],
-    "winner": "Eagles",
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
+    "team1": "Eagles",
+    "team2": "Mavericks",
+    "winner": "Eagles"
   },
   {
     "id": 7,
@@ -139,17 +83,9 @@
     "date": "March 28",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "DRAGONS"
-    ],
-    "team2": [
-      "Devils"
-    ],
-    "winner": "Devils",
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
+    "team1": "DRAGONS",
+    "team2": "Devils",
+    "winner": "Devils"
   },
   {
     "id": 8,
@@ -158,17 +94,9 @@
     "date": "March 28",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Warriors"
-    ],
-    "team2": [
-      "Fighters"
-    ],
-    "winner": "Warriors",
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
+    "team1": "Warriors",
+    "team2": "Fighters",
+    "winner": "Warriors"
   },
   {
     "id": 9,
@@ -177,17 +105,9 @@
     "date": "March 29",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "JustinBoys"
-    ],
-    "team2": [
-      "India blues"
-    ],
-    "winner": "JustinBoys",
-    "umpires": [
-      "Impact XI",
-      "Devils"
-    ]
+    "team1": "JustinBoys",
+    "team2": "India blues",
+    "winner": "JustinBoys"
   },
   {
     "id": 10,
@@ -196,17 +116,9 @@
     "date": "March 29",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Impact XI"
-    ],
-    "team2": [
-      "Killer Squad Dallas"
-    ],
-    "winner": "Impact XI",
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
+    "team1": "Impact XI",
+    "team2": "Killer Squad Dallas",
+    "winner": "Impact XI"
   },
   {
     "id": 11,
@@ -215,17 +127,9 @@
     "date": "March 29",
     "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": [
-      "Royal Lions"
-    ],
-    "team2": [
-      "Guts N Glory"
-    ],
-    "winner": "Royal Lions",
-    "umpires": [
-      "JustinBoys",
-      "Warriors"
-    ]
+    "team1": "Royal Lions",
+    "team2": "Guts N Glory",
+    "winner": "Royal Lions"
   },
   {
     "id": 12,
@@ -234,17 +138,9 @@
     "date": "April 3",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "Warriors"
-    ],
-    "team2": [
-      "JustinBoys"
-    ],
-    "washout": true,
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
+    "team1": "Warriors",
+    "team2": "JustinBoys",
+    "washout": true
   },
   {
     "id": 13,
@@ -253,17 +149,9 @@
     "date": "April 4",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "India blues"
-    ],
-    "team2": [
-      "Killer Squad Dallas"
-    ],
-    "washout": true,
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
+    "team1": "India blues",
+    "team2": "Killer Squad Dallas",
+    "washout": true
   },
   {
     "id": 14,
@@ -272,17 +160,9 @@
     "date": "April 4",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Impact XI"
-    ],
-    "team2": [
-      "Royal Lions"
-    ],
-    "washout": true,
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
+    "team1": "Impact XI",
+    "team2": "Royal Lions",
+    "washout": true
   },
   {
     "id": 15,
@@ -291,17 +171,9 @@
     "date": "April 5",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "DRAGONS"
-    ],
-    "team2": [
-      "Eagles"
-    ],
-    "washout": true,
-    "umpires": [
-      "Impact XI",
-      "Devils"
-    ]
+    "team1": "DRAGONS",
+    "team2": "Eagles",
+    "washout": true
   },
   {
     "id": 16,
@@ -310,17 +182,9 @@
     "date": "April 5",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Devils"
-    ],
-    "team2": [
-      "Fighters"
-    ],
-    "washout": true,
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
+    "team1": "Devils",
+    "team2": "Fighters",
+    "washout": true
   },
   {
     "id": 17,
@@ -329,17 +193,9 @@
     "date": "April 5",
     "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": [
-      "Guts N Glory"
-    ],
-    "team2": [
-      "Mavericks"
-    ],
-    "washout": true,
-    "umpires": [
-      "JustinBoys",
-      "Warriors"
-    ]
+    "team1": "Guts N Glory",
+    "team2": "Mavericks",
+    "washout": true
   },
   {
     "id": 18,
@@ -348,16 +204,8 @@
     "date": "April 10",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "Mavericks"
-    ],
-    "team2": [
-      "Devils"
-    ],
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
+    "team1": "Mavericks",
+    "team2": "Devils"
   },
   {
     "id": 19,
@@ -366,16 +214,8 @@
     "date": "April 11",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "Fighters"
-    ],
-    "team2": [
-      "DRAGONS"
-    ],
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
+    "team1": "Fighters",
+    "team2": "DRAGONS"
   },
   {
     "id": 20,
@@ -384,16 +224,8 @@
     "date": "April 11",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Warriors"
-    ],
-    "team2": [
-      "Eagles"
-    ],
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
+    "team1": "Warriors",
+    "team2": "Eagles"
   },
   {
     "id": 23,
@@ -402,16 +234,8 @@
     "date": "April 11",
     "time": "3:00-7:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Royal Lions"
-    ],
-    "team2": [
-      "Killer Squad Dallas"
-    ],
-    "umpires": [
-      "JustinBoys",
-      "Warriors"
-    ]
+    "team1": "Royal Lions",
+    "team2": "Killer Squad Dallas"
   },
   {
     "id": 21,
@@ -420,16 +244,8 @@
     "date": "April 12",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "JustinBoys"
-    ],
-    "team2": [
-      "Impact XI"
-    ],
-    "umpires": [
-      "Impact XI",
-      "Devils"
-    ]
+    "team1": "JustinBoys",
+    "team2": "Impact XI"
   },
   {
     "id": 22,
@@ -438,16 +254,8 @@
     "date": "April 12",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "Guts N Glory"
-    ],
-    "team2": [
-      "India blues"
-    ],
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
+    "team1": "Guts N Glory",
+    "team2": "India blues"
   },
   {
     "id": 24,
@@ -456,16 +264,8 @@
     "date": "April 17",
     "time": "6:00-10:00 pm",
     "ground": "FM",
-    "team1": [
-      "Eagles"
-    ],
-    "team2": [
-      "Killer Squad Dallas"
-    ],
-    "umpires": [
-      "Guts N Glory",
-      "Killer Squad Dallas"
-    ]
+    "team1": "Eagles",
+    "team2": "Killer Squad Dallas"
   },
   {
     "id": 25,
@@ -474,16 +274,8 @@
     "date": "April 18",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "Warriors"
-    ],
-    "team2": [
-      "Impact XI"
-    ],
-    "umpires": [
-      "Mavericks",
-      "Royal Lions"
-    ]
+    "team1": "Warriors",
+    "team2": "Impact XI"
   },
   {
     "id": 26,
@@ -492,16 +284,8 @@
     "date": "April 18",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "Guts N Glory"
-    ],
-    "team2": [
-      "Devils"
-    ],
-    "umpires": [
-      "India blues",
-      "Impact XI"
-    ]
+    "team1": "Guts N Glory",
+    "team2": "Devils"
   },
   {
     "id": 27,
@@ -510,16 +294,8 @@
     "date": "April 19",
     "time": "8:00-11:30 am",
     "ground": "Krum",
-    "team1": [
-      "DRAGONS"
-    ],
-    "team2": [
-      "JustinBoys"
-    ],
-    "umpires": [
-      "Impact XI",
-      "Devils"
-    ]
+    "team1": "DRAGONS",
+    "team2": "JustinBoys"
   },
   {
     "id": 28,
@@ -528,16 +304,8 @@
     "date": "April 19",
     "time": "12:00-4:00 pm",
     "ground": "Krum",
-    "team1": [
-      "India blues"
-    ],
-    "team2": [
-      "Royal Lions"
-    ],
-    "umpires": [
-      "Eagles",
-      "Fighters"
-    ]
+    "team1": "India blues",
+    "team2": "Royal Lions"
   },
   {
     "id": 29,
@@ -546,15 +314,187 @@
     "date": "April 19",
     "time": "12:00-4:00 pm",
     "ground": "FM",
-    "team1": [
-      "Mavericks"
-    ],
-    "team2": [
-      "Fighters"
-    ],
-    "umpires": [
-      "JustinBoys",
-      "Warriors"
-    ]
+    "team1": "Mavericks",
+    "team2": "Fighters"
+  },
+  {
+    "id": 30,
+    "round": 6,
+    "day": "Friday",
+    "date": "April 24",
+    "time": "6:00-10:00 pm",
+    "ground": "FM",
+    "team1": "Devils",
+    "team2": "Impact XI"
+  },
+  {
+    "id": 31,
+    "round": 6,
+    "day": "Saturday",
+    "date": "April 25",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "JustinBoys",
+    "team2": "Royal Lions"
+  },
+  {
+    "id": 32,
+    "round": 6,
+    "day": "Saturday",
+    "date": "April 25",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "Mavericks",
+    "team2": "India blues"
+  },
+  {
+    "id": 33,
+    "round": 6,
+    "day": "Sunday",
+    "date": "April 26",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "Fighters",
+    "team2": "Eagles"
+  },
+  {
+    "id": 34,
+    "round": 6,
+    "day": "Sunday",
+    "date": "April 26",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "DRAGONS",
+    "team2": "Killer Squad Dallas"
+  },
+  {
+    "id": 35,
+    "round": 6,
+    "day": "Sunday",
+    "date": "April 26",
+    "time": "12:00-4:00 pm",
+    "ground": "FM",
+    "team1": "Guts N Glory",
+    "team2": "Warriors"
+  },
+  {
+    "id": 36,
+    "round": 7,
+    "day": "Friday",
+    "date": "May 1",
+    "time": "6:00-10:00 pm",
+    "ground": "FM",
+    "team1": "DRAGONS",
+    "team2": "Royal Lions"
+  },
+  {
+    "id": 37,
+    "round": 7,
+    "day": "Saturday",
+    "date": "May 2",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "Guts N Glory",
+    "team2": "Eagles"
+  },
+  {
+    "id": 38,
+    "round": 7,
+    "day": "Saturday",
+    "date": "May 2",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "India blues",
+    "team2": "Devils"
+  },
+  {
+    "id": 39,
+    "round": 7,
+    "day": "Sunday",
+    "date": "May 3",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "Warriors",
+    "team2": "Killer Squad Dallas"
+  },
+  {
+    "id": 40,
+    "round": 7,
+    "day": "Sunday",
+    "date": "May 3",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "Mavericks",
+    "team2": "JustinBoys"
+  },
+  {
+    "id": 41,
+    "round": 7,
+    "day": "Sunday",
+    "date": "May 3",
+    "time": "12:00-4:00 pm",
+    "ground": "FM",
+    "team1": "Fighters",
+    "team2": "Impact XI"
+  },
+  {
+    "id": 42,
+    "round": 8,
+    "day": "Friday",
+    "date": "May 8",
+    "time": "6:00-10:00 pm",
+    "ground": "FM",
+    "team1": "Warriors",
+    "team2": "Royal Lions"
+  },
+  {
+    "id": 43,
+    "round": 8,
+    "day": "Saturday",
+    "date": "May 9",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "Mavericks",
+    "team2": "Killer Squad Dallas"
+  },
+  {
+    "id": 44,
+    "round": 8,
+    "day": "Saturday",
+    "date": "May 9",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "Guts N Glory",
+    "team2": "DRAGONS"
+  },
+  {
+    "id": 45,
+    "round": 8,
+    "day": "Sunday",
+    "date": "May 10",
+    "time": "7:30-11:30 am",
+    "ground": "Krum",
+    "team1": "India blues",
+    "team2": "Fighters"
+  },
+  {
+    "id": 46,
+    "round": 8,
+    "day": "Sunday",
+    "date": "May 10",
+    "time": "11:30 am-3:30 pm",
+    "ground": "Krum",
+    "team1": "Eagles",
+    "team2": "Impact XI"
+  },
+  {
+    "id": 47,
+    "round": 8,
+    "day": "Sunday",
+    "date": "May 10",
+    "time": "12:00-4:00 pm",
+    "ground": "FM",
+    "team1": "Devils",
+    "team2": "JustinBoys"
   }
 ]

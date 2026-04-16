@@ -98,7 +98,10 @@ function generateUmpireAssignments(schedule) {
         roundMatches.sort((a, b) => a.id - b.id);
         
         roundMatches.forEach(match => {
-            const playingTeams = new Set([match.team1, match.team2]);
+            // Handle teams as arrays
+            const team1 = Array.isArray(match.team1) ? match.team1[0] : match.team1;
+            const team2 = Array.isArray(match.team2) ? match.team2[0] : match.team2;
+            const playingTeams = new Set([team1, team2]);
             
             // Get teams NOT playing that haven't umpired yet (count === 0)
             const availableUmpires = allTeams.filter(team =>
@@ -150,14 +153,6 @@ function generateUmpireAssignments(schedule) {
 // API endpoint for getting schedule
 app.get('/api/schedule', (req, res) => {
     let schedule = loadSchedule();
-    
-    // Ensure umpires are assigned
-    const needsUmpireAssignment = schedule.some(m => !m.umpires || m.umpires.length === 0);
-    if (needsUmpireAssignment) {
-        schedule = generateUmpireAssignments(schedule);
-        saveSchedule(schedule);
-    }
-    
     res.json(schedule);
 });
 
