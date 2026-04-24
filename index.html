@@ -196,6 +196,20 @@
             border-bottom: 2px solid #ecf0f1;
         }
 
+        .reschedule-note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #856404;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .teams {
             display: flex;
             align-items: center;
@@ -738,6 +752,7 @@
                     const gameDate = match.date || '?/?';
                     const winnerTag = match.winner ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #27ae60; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">🏆 ${match.winner}</div>` : '';
                     const washoutTag = match.washout ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #95a5a6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">⛈️ Washout</div>` : '';
+                    const rescheduleNote = match.note ? `<div class="reschedule-note">📅 ${match.note}</div>` : '';
                     
                     // Determine border color based on winner or washout
                     let borderColor = '#3498db'; // default blue
@@ -758,6 +773,7 @@
                         <div class="match-meta">
                             ${gameDate} ${match.day} · ${match.ground} · ${match.time}
                         </div>
+                        ${rescheduleNote}
                         <div class="teams">
                             <div class="team">
                                 <img src="${logo1Path}" alt="${team1}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
