@@ -578,12 +578,19 @@
                 { num: 2, start: new Date(2026, 2, 27), end: new Date(2026, 2, 29) },
                 { num: 3, start: new Date(2026, 3, 3), end: new Date(2026, 3, 5) },
                 { num: 4, start: new Date(2026, 3, 10), end: new Date(2026, 3, 12) },
-                { num: 5, start: new Date(2026, 3, 17), end: new Date(2026, 3, 19) }
+                { num: 5, start: new Date(2026, 3, 17), end: new Date(2026, 3, 26) },
+                { num: 6, start: new Date(2026, 4, 1), end: new Date(2026, 4, 3) },
+                { num: 7, start: new Date(2026, 4, 8), end: new Date(2026, 4, 10) },
+                { num: 8, start: new Date(2026, 4, 15), end: new Date(2026, 4, 17) }
             ];
             
             let upcomingWeek = null;
+            let currentWeek = null;
             for (let week of weeks) {
-                if (today < week.start) {
+                if (today >= week.start && today <= week.end) {
+                    currentWeek = week.num;
+                    break;
+                } else if (today < week.start) {
                     upcomingWeek = week.num;
                     break;
                 }
@@ -591,7 +598,9 @@
             
             const weekStatusElement = document.getElementById('weekStatus');
             if (weekStatusElement) {
-                if (upcomingWeek) {
+                if (currentWeek) {
+                    weekStatusElement.textContent = `Week ${currentWeek} In Progress`;
+                } else if (upcomingWeek) {
                     weekStatusElement.textContent = `Week ${upcomingWeek} Upcoming`;
                 } else {
                     weekStatusElement.textContent = 'Season Complete';
