@@ -243,14 +243,15 @@
   },
   {
     "id": 21,
-    "round": 4,
+    "round": 5,
     "day": "Sunday",
-    "date": "April 12",
-    "time": "8:00-11:30 am",
-    "ground": "Krum",
+    "date": "April 26",
+    "time": "12:00 pm",
+    "ground": "FM",
     "team1": "JustinBoys",
     "team2": "Impact XI",
-    "rescheduled": true
+    "winner": "JustinBoys",
+    "note": "Rescheduled"
   },
   {
     "id": 22,
@@ -261,7 +262,8 @@
     "ground": "FM",
     "team1": "Guts N Glory",
     "team2": "India blues",
-    "rescheduled": true
+    "rescheduled": true,
+    "winner": "Royal Lions"
   },
   {
     "id": 24,
@@ -292,7 +294,8 @@
     "time": "7:30-11:30 am",
     "ground": "Krum",
     "team1": "Guts N Glory",
-    "team2": "Devils"
+    "team2": "Devils",
+    "winner": "Devils"
   },
   {
     "id": 51,
@@ -302,7 +305,8 @@
     "time": "11:30 am-3:30 pm",
     "ground": "Krum",
     "team1": "India blues",
-    "team2": "Royal Lions"
+    "team2": "Royal Lions",
+    "winner": "India blues"
   },
   {
     "id": 52,
@@ -315,17 +319,6 @@
     "team2": "DRAGONS"
   },
   {
-    "id": 21,
-    "round": 5,
-    "day": "Sunday",
-    "date": "April 26",
-    "time": "12:00 pm",
-    "ground": "FM",
-    "team1": "JustinBoys",
-    "team2": "Impact XI",
-    "note": "Rescheduled from Week 4"
-  },
-  {
     "id": 53,
     "round": 5,
     "day": "Sunday",
@@ -333,7 +326,8 @@
     "time": "6:00-10:00 pm",
     "ground": "FM",
     "team1": "Fighters",
-    "team2": "Mavericks"
+    "team2": "Mavericks",
+    "winner": "Fighters"
   },
   {
     "id": 30,
