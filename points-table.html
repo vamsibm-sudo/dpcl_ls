@@ -69,38 +69,42 @@
         .table-wrap {
             background: white;
             border-radius: 8px;
-            overflow-x: auto;
+            overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 760px;
+            table-layout: fixed;
         }
 
         th {
             background-color: #2c3e50;
             color: white;
-            padding: 14px 12px;
+            padding: 14px 10px;
             text-align: right;
             font-size: 0.95em;
+            white-space: nowrap;
         }
 
         th:first-child {
             text-align: left;
+            width: 32%;
         }
 
         td {
-            padding: 13px 12px;
+            padding: 13px 10px;
             border-bottom: 1px solid #ecf0f1;
             text-align: right;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         td:first-child {
             text-align: left;
             color: #2c3e50;
+            white-space: normal;
         }
 
         tr:nth-child(even) {
@@ -120,6 +124,10 @@
             font-size: 0.85em;
         }
 
+        .mobile-label {
+            display: none;
+        }
+
         .loading,
         .error {
             background: white;
@@ -136,7 +144,7 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 12px;
+                padding: 10px;
             }
 
             header {
@@ -145,6 +153,63 @@
 
             h1 {
                 font-size: 1.7em;
+            }
+
+            th,
+            td {
+                padding: 10px 6px;
+                font-size: 0.82em;
+            }
+
+            th:first-child {
+                width: 35%;
+            }
+
+            .rank {
+                width: 22px;
+                height: 22px;
+                margin-right: 6px;
+                font-size: 0.75em;
+            }
+
+            .desktop-label {
+                display: none;
+            }
+
+            .mobile-label {
+                display: inline;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .league-logo {
+                width: 64px;
+                height: 64px;
+            }
+
+            h1 {
+                font-size: 1.45em;
+            }
+
+            th,
+            td {
+                padding: 8px 4px;
+                font-size: 0.72em;
+            }
+
+            th:first-child {
+                width: 38%;
+            }
+
+            .rank {
+                width: 18px;
+                height: 18px;
+                margin-right: 4px;
+                font-size: 0.7em;
             }
         }
     </style>
@@ -187,12 +252,12 @@
                     <thead>
                         <tr>
                             <th>Team</th>
-                            <th>Matches</th>
-                            <th>Win</th>
-                            <th>Lost</th>
-                            <th>Tied</th>
-                            <th>No Result</th>
-                            <th>Points</th>
+                            <th><span class="desktop-label">Matches</span><span class="mobile-label">M</span></th>
+                            <th><span class="desktop-label">Win</span><span class="mobile-label">W</span></th>
+                            <th><span class="desktop-label">Lost</span><span class="mobile-label">L</span></th>
+                            <th><span class="desktop-label">Tied</span><span class="mobile-label">T</span></th>
+                            <th><span class="desktop-label">No Result</span><span class="mobile-label">NR</span></th>
+                            <th><span class="desktop-label">Points</span><span class="mobile-label">Pts</span></th>
                             <th>NRR</th>
                         </tr>
                     </thead>
