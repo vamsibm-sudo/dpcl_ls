@@ -230,7 +230,9 @@ function sheetRowsToSchedule(csv) {
                 time: getValue(row, ['time', 'slot', 'timeslot', 'time slot', 'start time', 'starttime']),
                 ground: getValue(row, ['ground', 'field', 'venue', 'location']),
                 team1: getValue(row, ['team1', 'team 1', 'team a', 'teama', 'home', 'home team', 'hometeam']) || teams[0] || '',
-                team2: getValue(row, ['team2', 'team 2', 'team b', 'teamb', 'away', 'away team', 'awayteam']) || teams[1] || ''
+                team2: getValue(row, ['team2', 'team 2', 'team b', 'teamb', 'away', 'away team', 'awayteam']) || teams[1] || '',
+                team1Score: getValue(row, ['team1score', 'team 1 score', 'team a score', 'home score', 'homescore']),
+                team2Score: getValue(row, ['team2score', 'team 2 score', 'team b score', 'away score', 'awayscore'])
             };
 
             if (!Number.isFinite(match.round) && previousMatch.round) match.round = previousMatch.round;

@@ -215,6 +215,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
+            margin-bottom: 12px;
         }
 
         .team {
@@ -232,6 +233,52 @@
             font-weight: bold;
             color: #e74c3c;
             font-size: 0.9em;
+        }
+
+        .winner-info {
+            background-color: #eafaf1;
+            border-left: 4px solid #27ae60;
+            color: #145a32;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .score-lines {
+            margin-top: 8px;
+            display: grid;
+            gap: 4px;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .score-line {
+            display: grid;
+            grid-template-columns: minmax(120px, 1fr) auto minmax(60px, 1fr);
+            justify-content: center;
+            column-gap: 8px;
+            text-align: left;
+        }
+
+        .score-team {
+            text-align: left;
+        }
+
+        .score-value {
+            text-align: right;
+        }
+
+        .washout-info {
+            background-color: #f2f4f4;
+            border-left: 4px solid #95a5a6;
+            color: #566573;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
         }
 
         .legend {
@@ -791,8 +838,14 @@
                     const logo1Path = team1Info.logo ? `logos/${team1Info.logo}` : '';
                     const logo2Path = team2Info.logo ? `logos/${team2Info.logo}` : '';
                     const gameDate = match.date || '?/?';
-                    const winnerTag = match.winner ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #27ae60; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">🏆 ${match.winner}</div>` : '';
-                    const washoutTag = match.washout ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #95a5a6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">⛈️ Washout</div>` : '';
+                    const scoresInfo = (match.team1Score || match.team2Score) ? `
+                        <div class="score-lines">
+                            ${match.team1Score ? `<div class="score-line"><span class="score-team">${team1}</span><span>&nbsp;&nbsp;:&nbsp;&nbsp;</span><strong class="score-value">${match.team1Score}</strong></div>` : ''}
+                            ${match.team2Score ? `<div class="score-line"><span class="score-team">${team2}</span><span>&nbsp;&nbsp;:&nbsp;&nbsp;</span><strong class="score-value">${match.team2Score}</strong></div>` : ''}
+                        </div>
+                    ` : '';
+                    const winnerInfo = match.winner ? `<div class="winner-info">🏆 Winner: ${match.winner}${scoresInfo}</div>` : '';
+                    const washoutInfo = match.washout ? `<div class="washout-info">⛈️ Washout</div>` : '';
                     const rescheduleNote = match.note ? `<div class="reschedule-note">📅 ${match.note}</div>` : '';
                     
                     // Determine border color based on winner or washout
@@ -807,10 +860,8 @@
                         }
                     }
                     card.style.borderColor = borderColor;
-                    
+
                     card.innerHTML = `
-                        ${washoutTag}
-                        ${winnerTag}
                         <div class="match-meta">
                             ${gameDate} ${match.day} · ${match.ground} · ${match.time}
                         </div>
@@ -834,6 +885,8 @@
                                 </div>
                             </div>
                         </div>
+                        ${washoutInfo}
+                        ${winnerInfo}
                     `;
                     grid.appendChild(card);
                 });
