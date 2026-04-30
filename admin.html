@@ -381,24 +381,24 @@
             <div class="error-msg" id="errorMsg"></div>
 
             <div class="filter-section">
-            <div class="filter-controls">
-                <label for="filterRound">League Game:</label>
-                <select id="filterRound" onchange="filterMatches()">
-                    <option value="">All Games</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                </select>
+                <div class="filter-controls">
+                    <label for="filterRound">League Game:</label>
+                    <select id="filterRound" onchange="filterMatches()">
+                        <option value="">All Games</option>
+                    </select>
+                </div>
             </div>
-        </div>
+
+            <div class="filter-section">
+                <div class="filter-controls">
+                    <label for="publicRoundLimit">Public Schedule Visible Until:</label>
+                    <select id="publicRoundLimit">
+                        <option value="">All League Games</option>
+                    </select>
+                    <button class="edit-btn" onclick="savePublicRoundLimit()" style="background-color: #27ae60;">Save Public Visibility</button>
+                    <span id="publicRoundStatus" style="font-weight: bold; color: #2c3e50;"></span>
+                </div>
+            </div>
             </div>
 
             <div style="margin-bottom: 15px;">
@@ -595,14 +595,83 @@
 
         async function loadMatches() {
             try {
-                const response = await fetch('/api/schedule');
-                allMatches = await response.json();
+                const response = await fetch(`/api/schedule?code=${adminCode}`);
+                const data = await response.json();
+                if (!response.ok || !Array.isArray(data)) {
+                    throw new Error(data.error || 'Invalid schedule response');
+                }
+                allMatches = data;
+                populateRoundDropdowns();
+                loadPublicRoundLimit();
                 displayMatches(allMatches);
                 loadHistory();
                 loadBackups();
             } catch (err) {
-                showError('Failed to load matches');
+                showError('Failed to load matches: ' + err.message);
             }
+        }
+
+        function getScheduleRounds() {
+            return [...new Set(allMatches.map(match => Number(match.round)).filter(Number.isFinite))]
+                .sort((a, b) => a - b);
+        }
+
+        function populateRoundDropdowns() {
+            const rounds = getScheduleRounds();
+            const filterRound = document.getElementById('filterRound');
+            const selectedFilterRound = filterRound.value;
+            filterRound.innerHTML = '<option value="">All Games</option>' + rounds.map(round =>
+                `<option value="${round}">${round}</option>`
+            ).join('');
+            filterRound.value = selectedFilterRound;
+
+            const publicRoundLimit = document.getElementById('publicRoundLimit');
+            const selectedLimit = publicRoundLimit.value;
+            publicRoundLimit.innerHTML = '<option value="">All League Games</option>' + rounds.map(round =>
+                `<option value="${round}">Until League Game ${round}</option>`
+            ).join('');
+            publicRoundLimit.value = selectedLimit;
+        }
+
+        async function loadPublicRoundLimit() {
+            try {
+                const response = await fetch(`/api/schedule/visibility?code=${adminCode}`);
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load public visibility');
+                }
+                document.getElementById('publicRoundLimit').value = data.maxPublicRound || '';
+                updatePublicRoundStatus(data.maxPublicRound);
+            } catch (err) {
+                showError('Failed to load public visibility: ' + err.message);
+            }
+        }
+
+        async function savePublicRoundLimit() {
+            const maxPublicRound = document.getElementById('publicRoundLimit').value;
+
+            try {
+                const response = await fetch('/api/schedule/visibility', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: adminCode, maxPublicRound })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to save public visibility');
+                }
+                updatePublicRoundStatus(data.visibility.maxPublicRound);
+                showSuccess('Public visibility updated!');
+            } catch (err) {
+                showError('Failed to save public visibility: ' + err.message);
+            }
+        }
+
+        function updatePublicRoundStatus(maxPublicRound) {
+            const status = document.getElementById('publicRoundStatus');
+            status.textContent = maxPublicRound
+                ? `Public page shows games through League Game ${maxPublicRound}`
+                : 'Public page shows all league games';
         }
 
         function filterMatches() {
@@ -687,15 +756,16 @@
                     loadMatches();
                     showSuccess();
                 } else {
-                    showError('Failed to save match');
+                    showError(await getErrorMessage(response, 'Failed to save match'));
                 }
             } catch (err) {
                 showError('Save failed');
             }
         }
 
-        function showSuccess() {
+        function showSuccess(message = 'Changes saved successfully!') {
             const msg = document.getElementById('successMsg');
+            msg.textContent = message;
             msg.style.display = 'block';
             setTimeout(() => {
                 msg.style.display = 'none';
@@ -709,6 +779,15 @@
             setTimeout(() => {
                 msg.style.display = 'none';
             }, 3000);
+        }
+
+        async function getErrorMessage(response, fallback) {
+            try {
+                const data = await response.json();
+                return data.error || fallback;
+            } catch (err) {
+                return fallback;
+            }
         }
 
         function toggleMatchSelection(checkbox) {
@@ -796,7 +875,8 @@
                     loadMatches();
                     showSuccess('Games swapped successfully!');
                 } else {
-                    showError('Failed to swap games');
+                    const failedResponse = response1.ok ? response2 : response1;
+                    showError(await getErrorMessage(failedResponse, 'Failed to swap games'));
                 }
             } catch (err) {
                 showError('Swap failed');
@@ -821,7 +901,7 @@
                     loadBackups();
                     showSuccess('Umpire assignments regenerated!');
                 } else {
-                    showError('Failed to regenerate umpires');
+                    showError(await getErrorMessage(response, 'Failed to regenerate umpires'));
                 }
             } catch (err) {
                 showError('Regenerate failed: ' + err.message);
@@ -930,7 +1010,7 @@
                     loadHistory();
                     loadBackups();
                 } else {
-                    showError('Failed to restore backup');
+                    showError(await getErrorMessage(response, 'Failed to restore backup'));
                 }
             } catch (err) {
                 showError('Restore failed: ' + err.message);

@@ -664,7 +664,11 @@
         async function loadSchedule() {
             try {
                 const response = await fetch('/api/schedule');
-                schedule = await response.json();
+                const data = await response.json();
+                if (!response.ok || !Array.isArray(data)) {
+                    throw new Error(data.error || 'Invalid schedule response');
+                }
+                schedule = data;
                 console.log('Loaded schedule with', schedule.length, 'total matches');
                 console.log('Rounds in schedule:', [...new Set(schedule.map(m => m.round))].sort((a, b) => a - b));
             } catch (err) {
@@ -674,6 +678,34 @@
         }
 
         let teams = [];
+
+        function normalizeName(value) {
+            return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function getTeamInfo(teamName) {
+            const exact = teamsData[teamName];
+            if (exact) return exact;
+
+            const normalized = normalizeName(teamName);
+            const matchedName = Object.keys(teamsData).find(name => normalizeName(name) === normalized);
+            return matchedName ? teamsData[matchedName] : { captain: 'TBD', logo: '' };
+        }
+
+        function updateDynamicFilters() {
+            teams = [...new Set(schedule.flatMap(match => [match.team1, match.team2]).filter(Boolean))].sort();
+
+            const teamSelect = document.getElementById('teamSelect');
+            teamSelect.innerHTML = '<option value="all">All Teams</option>' + teams.map(team =>
+                `<option value="${team}">${team}</option>`
+            ).join('');
+
+            const groundSelect = document.getElementById('groundSelect');
+            const grounds = [...new Set(schedule.map(match => match.ground).filter(Boolean))].sort();
+            groundSelect.innerHTML = '<option value="all">All Grounds</option>' + grounds.map(ground =>
+                `<option value="${ground}">${ground}</option>`
+            ).join('');
+        }
 
         function renderSchedule() {
             const round = document.getElementById('roundSelect').value;
@@ -734,9 +766,9 @@
                 const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
                 const timeOrder = { "8:00-11:30 am": 0, "12:00-4:00 pm": 1, "6:00-10:00 pm": 2 };
                 matches = matches.sort((a, b) => {
-                    const dayDiff = dayOrder[a.day] - dayOrder[b.day];
+                    const dayDiff = (dayOrder[a.day] ?? 99) - (dayOrder[b.day] ?? 99);
                     if (dayDiff !== 0) return dayDiff;
-                    return timeOrder[a.time] - timeOrder[b.time];
+                    return (timeOrder[a.time] ?? 99) - (timeOrder[b.time] ?? 99);
                 });
                 
                 const roundDiv = document.createElement('div');
@@ -754,10 +786,10 @@
                     card.className = 'match-card';
                     const team1 = match.team1;
                     const team2 = match.team2;
-                    const team1Info = teamsData[team1];
-                    const team2Info = teamsData[team2];
-                    const logo1Path = `logos/${team1Info.logo}`;
-                    const logo2Path = `logos/${team2Info.logo}`;
+                    const team1Info = getTeamInfo(team1);
+                    const team2Info = getTeamInfo(team2);
+                    const logo1Path = team1Info.logo ? `logos/${team1Info.logo}` : '';
+                    const logo2Path = team2Info.logo ? `logos/${team2Info.logo}` : '';
                     const gameDate = match.date || '?/?';
                     const winnerTag = match.winner ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #27ae60; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">🏆 ${match.winner}</div>` : '';
                     const washoutTag = match.washout ? `<div style="position: absolute; top: 10px; right: 10px; background-color: #95a5a6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold;">⛈️ Washout</div>` : '';
@@ -814,8 +846,8 @@
         function renderTeams() {
             const teamsList = document.getElementById('teamsList');
             teamsList.innerHTML = teams.map(t => {
-                const teamInfo = teamsData[t];
-                const logoPath = `logos/${teamInfo.logo}`;
+                const teamInfo = getTeamInfo(t);
+                const logoPath = teamInfo.logo ? `logos/${teamInfo.logo}` : '';
                 return `<div class="team-badge">
                     <img src="${logoPath}" alt="${t}" class="team-logo" onerror="this.style.display='none'">
                     <div>${t}</div>
@@ -835,6 +867,7 @@
         // Load schedule from API and render
         loadSchedule().then(() => {
             console.log('Schedule loaded successfully');
+            updateDynamicFilters();
             renderSchedule();
             renderTeams();
         }).catch(err => {

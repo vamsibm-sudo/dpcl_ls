@@ -8,7 +8,28 @@ const visitsFile = path.join(__dirname, 'visits.json');
 const scheduleFile = path.join(__dirname, 'schedule.json');
 const historyDir = path.join(__dirname, 'history');
 const changelogFile = path.join(__dirname, 'changelog.json');
+const visibilityFile = path.join(__dirname, 'visibility.json');
 const ADMIN_CODE = '31020262275'; // Admin code
+const GOOGLE_SHEET_URL = process.env.GOOGLE_SHEET_URL ||
+    'https://docs.google.com/spreadsheets/d/1E2h7NoZPrk8k7WZXEOxRnaYm4dAeKo0t/edit?usp=sharing&ouid=105805913902765284661&rtpof=true&sd=true';
+const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID ||
+    (GOOGLE_SHEET_URL.match(/\/spreadsheets\/d\/([^/]+)/) || [])[1] ||
+    '1E2h7NoZPrk8k7WZXEOxRnaYm4dAeKo0t';
+const GOOGLE_SHEET_GID = process.env.GOOGLE_SHEET_GID || '0';
+const GOOGLE_SHEET_CSV_URLS = process.env.GOOGLE_SHEET_CSV_URL
+    ? [process.env.GOOGLE_SHEET_CSV_URL]
+    : [
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GOOGLE_SHEET_GID}`,
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${GOOGLE_SHEET_GID}`,
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&single=true&gid=${GOOGLE_SHEET_GID}`,
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/pub?output=csv&gid=${GOOGLE_SHEET_GID}`
+    ];
+const READ_SCHEDULE_FROM_GOOGLE = process.env.READ_SCHEDULE_FROM_GOOGLE !== 'false';
+const FALLBACK_TO_LOCAL_SCHEDULE = process.env.FALLBACK_TO_LOCAL_SCHEDULE === 'true';
+const SCHEDULE_CACHE_MS = parseInt(process.env.SCHEDULE_CACHE_MS || '300000', 10);
+const GOOGLE_SHEET_TIMEOUT_MS = parseInt(process.env.GOOGLE_SHEET_TIMEOUT_MS || '10000', 10);
+let scheduleCache = { data: null, fetchedAt: 0 };
+let lastGoogleSheetAttempts = [];
 
 app.use(express.static(path.join(__dirname)));
 app.use(express.json());
@@ -18,8 +39,8 @@ if (!fs.existsSync(historyDir)) {
     fs.mkdirSync(historyDir, { recursive: true });
 }
 
-// Load schedule from JSON
-function loadSchedule() {
+// Load schedule from JSON as a fallback when Google Sheets is unavailable.
+function loadLocalSchedule() {
     try {
         return JSON.parse(fs.readFileSync(scheduleFile, 'utf8'));
     } catch (err) {
@@ -27,8 +48,353 @@ function loadSchedule() {
     }
 }
 
+function loadVisibility() {
+    try {
+        const visibility = JSON.parse(fs.readFileSync(visibilityFile, 'utf8'));
+        return {
+            maxPublicRound: Number.isFinite(Number(visibility.maxPublicRound))
+                ? Number(visibility.maxPublicRound)
+                : null
+        };
+    } catch (err) {
+        return { maxPublicRound: null };
+    }
+}
+
+function saveVisibility(visibility) {
+    fs.writeFileSync(visibilityFile, JSON.stringify(visibility, null, 2));
+}
+
+function filterPublicSchedule(schedule) {
+    const { maxPublicRound } = loadVisibility();
+    if (!Number.isFinite(maxPublicRound)) {
+        return schedule;
+    }
+    return schedule.filter(match => Number(match.round) <= maxPublicRound);
+}
+
+function normalizeHeader(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+}
+
+function getValue(row, aliases) {
+    for (const alias of aliases) {
+        const key = normalizeHeader(alias);
+        if (Object.prototype.hasOwnProperty.call(row, key) && row[key] !== '') {
+            return row[key];
+        }
+    }
+    return '';
+}
+
+function normalizeDay(value) {
+    const normalized = String(value || '').trim().toLowerCase();
+    const dayMap = {
+        fri: 'Friday',
+        friday: 'Friday',
+        sat: 'Saturday',
+        saturday: 'Saturday',
+        sun: 'Sunday',
+        sunday: 'Sunday'
+    };
+    return dayMap[normalized] || String(value || '').trim();
+}
+
+function parseNumber(value) {
+    const match = String(value || '').match(/\d+/);
+    return match ? Number(match[0]) : NaN;
+}
+
+function parseBoolean(value) {
+    const normalized = String(value || '').trim().toLowerCase();
+    return ['true', 'yes', 'y', '1', 'x', 'checked', 'washout', 'washed out'].includes(normalized);
+}
+
+function parseUmpires(value) {
+    return String(value || '')
+        .split(/[,;/|]/)
+        .map(umpire => umpire.trim())
+        .filter(Boolean);
+}
+
+function parseCsv(csv) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < csv.length; i++) {
+        const char = csv[i];
+        const next = csv[i + 1];
+
+        if (char === '"') {
+            if (inQuotes && next === '"') {
+                field += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if (char === ',' && !inQuotes) {
+            row.push(field);
+            field = '';
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+            if (char === '\r' && next === '\n') {
+                i++;
+            }
+            row.push(field);
+            if (row.some(cell => String(cell).trim() !== '')) {
+                rows.push(row);
+            }
+            row = [];
+            field = '';
+        } else {
+            field += char;
+        }
+    }
+
+    row.push(field);
+    if (row.some(cell => String(cell).trim() !== '')) {
+        rows.push(row);
+    }
+
+    return rows;
+}
+
+function rowMatchesAliases(row, aliases) {
+    const normalizedCells = row.map(normalizeHeader);
+    return aliases.some(alias => normalizedCells.includes(normalizeHeader(alias)));
+}
+
+function findScheduleHeaderIndex(rows) {
+    const maxRowsToScan = Math.min(rows.length, 20);
+
+    for (let index = 0; index < maxRowsToScan; index++) {
+        const row = rows[index];
+        const hasRound = rowMatchesAliases(row, ['round', 'league game', 'game']);
+        const hasTime = rowMatchesAliases(row, ['time', 'slot', 'time slot', 'start time']);
+        const hasGround = rowMatchesAliases(row, ['ground', 'field', 'venue', 'location']);
+        const hasTeam1 = rowMatchesAliases(row, ['team1', 'team 1', 'team a', 'home', 'home team']);
+        const hasTeam2 = rowMatchesAliases(row, ['team2', 'team 2', 'team b', 'away', 'away team']);
+        const hasTeams = rowMatchesAliases(row, ['teams', 'match', 'fixture']);
+
+        if (hasRound && hasTime && hasGround && ((hasTeam1 && hasTeam2) || hasTeams)) {
+            return index;
+        }
+    }
+
+    return 0;
+}
+
+function buildRow(headers, values) {
+    const row = {};
+    headers.forEach((header, headerIndex) => {
+        const key = normalizeHeader(header) || `column${headerIndex + 1}`;
+        row[key] = String(values[headerIndex] || '').trim();
+    });
+    return row;
+}
+
+function parseTeams(value) {
+    const match = String(value || '').split(/\s+(?:vs\.?|v\.?|versus)\s+/i);
+    return match.length === 2 ? match.map(team => team.trim()) : [];
+}
+
+function sheetRowsToSchedule(csv) {
+    const rows = parseCsv(csv);
+    if (rows.length < 2) {
+        return [];
+    }
+
+    const headerIndex = findScheduleHeaderIndex(rows);
+    const headers = rows[headerIndex];
+
+    let previousMatch = {};
+
+    return rows.slice(headerIndex + 1)
+        .map((values, index) => {
+            const row = buildRow(headers, values);
+
+            const idValue = getValue(row, ['id', 'match id', 'matchid']);
+            const roundValue = getValue(row, ['round', 'league game', 'leaguegame', 'game', 'game number', 'gamenumber']);
+            const teams = parseTeams(getValue(row, ['teams', 'match', 'fixture']));
+            const washout = parseBoolean(getValue(row, ['washout', 'washed out', 'washedout']));
+            const umpires = parseUmpires(getValue(row, ['umpires', 'umpire', 'umpire teams']));
+            const match = {
+                id: idValue === '' ? index : Number(idValue),
+                round: parseNumber(roundValue),
+                day: normalizeDay(getValue(row, ['day', 'match day', 'matchday'])),
+                date: getValue(row, ['date', 'match date', 'matchdate']),
+                time: getValue(row, ['time', 'slot', 'timeslot', 'time slot', 'start time', 'starttime']),
+                ground: getValue(row, ['ground', 'field', 'venue', 'location']),
+                team1: getValue(row, ['team1', 'team 1', 'team a', 'teama', 'home', 'home team', 'hometeam']) || teams[0] || '',
+                team2: getValue(row, ['team2', 'team 2', 'team b', 'teamb', 'away', 'away team', 'awayteam']) || teams[1] || ''
+            };
+
+            if (!Number.isFinite(match.round) && previousMatch.round) match.round = previousMatch.round;
+            if (!match.day && previousMatch.day) match.day = previousMatch.day;
+            if (!match.date && previousMatch.date) match.date = previousMatch.date;
+            if (!match.time && previousMatch.time) match.time = previousMatch.time;
+            if (!match.ground && previousMatch.ground) match.ground = previousMatch.ground;
+
+            const winner = getValue(row, ['winner', 'winners', 'winning team', 'winningteam']);
+            const note = getValue(row, ['note', 'notes', 'reschedule note', 'reschedulenote']);
+
+            if (winner) match.winner = winner;
+            if (note) match.note = note;
+            if (washout) match.washout = true;
+            if (umpires.length > 0) match.umpires = umpires;
+            if (Number.isFinite(match.round) || match.day || match.date || match.time || match.ground) {
+                previousMatch = match;
+            }
+
+            return match;
+        })
+        .filter(match =>
+            Number.isFinite(match.id) &&
+            Number.isFinite(match.round) &&
+            match.day &&
+            match.time &&
+            match.ground &&
+            match.team1 &&
+            match.team2
+        )
+        .sort((a, b) => a.id - b.id);
+}
+
+function fetchText(url, redirectCount = 0) {
+    return new Promise((resolve, reject) => {
+        const https = require('https');
+        const request = https.get(url, {
+            headers: {
+                Accept: 'text/csv,text/plain,*/*',
+                'User-Agent': 'DPCL-Schedule/1.0'
+            }
+        }, response => {
+            const { statusCode, headers } = response;
+
+            if ([301, 302, 303, 307, 308].includes(statusCode) && headers.location) {
+                response.resume();
+                if (redirectCount >= 5) {
+                    reject(new Error('Too many redirects while loading Google Sheet'));
+                    return;
+                }
+                const redirectUrl = new URL(headers.location, url).toString();
+                resolve(fetchText(redirectUrl, redirectCount + 1));
+                return;
+            }
+
+            if (statusCode < 200 || statusCode >= 300) {
+                response.resume();
+                reject(new Error(`Google Sheet returned HTTP ${statusCode}`));
+                return;
+            }
+
+            response.setEncoding('utf8');
+            let data = '';
+            response.on('data', chunk => {
+                data += chunk;
+            });
+            response.on('end', () => {
+                const contentType = headers['content-type'] || '';
+                if (contentType.includes('text/html') || data.trim().startsWith('<!DOCTYPE html')) {
+                    reject(new Error('Google returned an HTML page instead of CSV. Confirm the sheet is shared publicly or publish it to the web.'));
+                    return;
+                }
+                resolve(data);
+            });
+        });
+
+        request.setTimeout(GOOGLE_SHEET_TIMEOUT_MS, () => {
+            request.destroy(new Error(`Google Sheet request timed out after ${GOOGLE_SHEET_TIMEOUT_MS}ms`));
+        });
+
+        request.on('error', reject);
+    });
+}
+
+async function fetchGoogleSheetCsv() {
+    const attempts = [];
+
+    for (const url of GOOGLE_SHEET_CSV_URLS) {
+        try {
+            const csv = await fetchText(url);
+            attempts.push({ url, ok: true });
+            lastGoogleSheetAttempts = attempts;
+            return csv;
+        } catch (err) {
+            attempts.push({ url, ok: false, error: err.message });
+        }
+    }
+
+    lastGoogleSheetAttempts = attempts;
+    const details = attempts
+        .map((attempt, index) => `${index + 1}. ${attempt.url} -> ${attempt.error}`)
+        .join('; ');
+    throw new Error(`Unable to load CSV from Google Sheets. Attempts: ${details}`);
+}
+
+async function getGoogleSheetDiagnostics() {
+    const csv = await fetchGoogleSheetCsv();
+    const rows = parseCsv(csv);
+    const headerIndex = findScheduleHeaderIndex(rows);
+    const headers = rows[headerIndex] || [];
+    const schedule = sheetRowsToSchedule(csv);
+
+    return {
+        readScheduleFromGoogle: READ_SCHEDULE_FROM_GOOGLE,
+        fallbackToLocalSchedule: FALLBACK_TO_LOCAL_SCHEDULE,
+        googleSheetUrl: GOOGLE_SHEET_URL,
+        googleSheetCsvUrls: GOOGLE_SHEET_CSV_URLS,
+        googleSheetAttempts: lastGoogleSheetAttempts,
+        rowCount: Math.max(rows.length - 1, 0),
+        detectedHeaderRow: headerIndex + 1,
+        headers,
+        sampleRows: rows.slice(0, 5),
+        validScheduleRows: schedule.length,
+        firstValidMatch: schedule[0] || null
+    };
+}
+
+async function loadSchedule(forceRefresh = false) {
+    if (!READ_SCHEDULE_FROM_GOOGLE) {
+        return loadLocalSchedule();
+    }
+
+    const now = Date.now();
+    if (!forceRefresh && scheduleCache.data && now - scheduleCache.fetchedAt < SCHEDULE_CACHE_MS) {
+        return scheduleCache.data;
+    }
+
+    try {
+        const csv = await fetchGoogleSheetCsv();
+        const schedule = sheetRowsToSchedule(csv);
+        if (schedule.length === 0) {
+            const rows = parseCsv(csv);
+            const headerIndex = findScheduleHeaderIndex(rows);
+            const headers = rows[headerIndex] || [];
+            throw new Error(`Google Sheet did not contain any valid schedule rows. Detected header row ${headerIndex + 1}: ${headers.join(' | ')}`);
+        }
+        scheduleCache = { data: schedule, fetchedAt: now };
+        return schedule;
+    } catch (err) {
+        if (FALLBACK_TO_LOCAL_SCHEDULE) {
+            console.error('Failed to load schedule from Google Sheets. Falling back to schedule.json:', err.message);
+            const fallbackSchedule = loadLocalSchedule();
+            scheduleCache = { data: fallbackSchedule, fetchedAt: now };
+            return fallbackSchedule;
+        }
+
+        scheduleCache = { data: null, fetchedAt: 0 };
+        throw err;
+    }
+}
+
 function saveSchedule(schedule) {
     fs.writeFileSync(scheduleFile, JSON.stringify(schedule, null, 2));
+    scheduleCache = { data: schedule, fetchedAt: Date.now() };
 }
 
 // Save timestamped backup
@@ -151,20 +517,94 @@ function generateUmpireAssignments(schedule) {
 }
 
 // API endpoint for getting schedule
-app.get('/api/schedule', (req, res) => {
-    let schedule = loadSchedule();
-    res.json(schedule);
+app.get('/api/schedule', async (req, res) => {
+    try {
+        const forceRefresh = req.query.refresh === 'true';
+        const schedule = await loadSchedule(forceRefresh);
+        const isAdmin = req.query.code === ADMIN_CODE;
+        res.json(isAdmin ? schedule : filterPublicSchedule(schedule));
+    } catch (err) {
+        console.error('Failed to load schedule from Google Sheets:', err.message);
+        res.status(502).json({
+            error: 'Failed to load schedule from Google Sheets',
+            details: err.message
+        });
+    }
 });
 
-// API endpoint for updating a match
-app.post('/api/schedule/update', (req, res) => {
-    const { code, matchId, updates } = req.body;
-    
+app.get('/api/schedule/debug', async (req, res) => {
+    try {
+        const diagnostics = await getGoogleSheetDiagnostics();
+        res.type('text/plain').send([
+            `readScheduleFromGoogle: ${diagnostics.readScheduleFromGoogle}`,
+            `fallbackToLocalSchedule: ${diagnostics.fallbackToLocalSchedule}`,
+            `googleSheetUrl: ${diagnostics.googleSheetUrl}`,
+            `googleSheetCsvUrls:\n${diagnostics.googleSheetCsvUrls.map(url => `- ${url}`).join('\n')}`,
+            `googleSheetAttempts:\n${diagnostics.googleSheetAttempts.map(attempt => `- ${attempt.ok ? 'OK' : 'FAILED'} ${attempt.url}${attempt.error ? ` (${attempt.error})` : ''}`).join('\n')}`,
+            `rowCount: ${diagnostics.rowCount}`,
+            `detectedHeaderRow: ${diagnostics.detectedHeaderRow}`,
+            `headers: ${diagnostics.headers.join(' | ')}`,
+            `sampleRows: ${JSON.stringify(diagnostics.sampleRows, null, 2)}`,
+            `validScheduleRows: ${diagnostics.validScheduleRows}`,
+            `firstValidMatch: ${JSON.stringify(diagnostics.firstValidMatch, null, 2)}`
+        ].join('\n'));
+    } catch (err) {
+        res.status(502).type('text/plain').send([
+            'Failed to load Google Sheet.',
+            `Error: ${err.message}`,
+            `Google Sheet URL: ${GOOGLE_SHEET_URL}`,
+            `CSV URLs tried:\n${GOOGLE_SHEET_CSV_URLS.map(url => `- ${url}`).join('\n')}`,
+            '',
+            'Confirm the spreadsheet is shared with "Anyone with the link can view" or publish it to the web.'
+        ].join('\n'));
+    }
+});
+
+app.get('/api/schedule/visibility', (req, res) => {
+    const { code } = req.query;
+
     if (code !== ADMIN_CODE) {
         return res.status(401).json({ error: 'Invalid admin code' });
     }
+
+    res.json(loadVisibility());
+});
+
+app.post('/api/schedule/visibility', (req, res) => {
+    const { code, maxPublicRound } = req.body;
+
+    if (code !== ADMIN_CODE) {
+        return res.status(401).json({ error: 'Invalid admin code' });
+    }
+
+    const round = maxPublicRound === '' || maxPublicRound === null
+        ? null
+        : Number(maxPublicRound);
+
+    if (round !== null && (!Number.isInteger(round) || round < 1)) {
+        return res.status(400).json({ error: 'Invalid round selected' });
+    }
+
+    const visibility = { maxPublicRound: round };
+    saveVisibility(visibility);
+    res.json({ success: true, visibility });
+});
+
+// API endpoint for updating a match
+app.post('/api/schedule/update', async (req, res) => {
+    const { code, matchId, updates } = req.body;
+
+    if (code !== ADMIN_CODE) {
+        return res.status(401).json({ error: 'Invalid admin code' });
+    }
+
+    if (READ_SCHEDULE_FROM_GOOGLE) {
+        return res.status(400).json({
+            error: 'Schedule is managed in Google Sheets. Update the sheet, then refresh the schedule.'
+        });
+    }
     
-    const schedule = loadSchedule();
+    const schedule = await loadSchedule(true);
     const matchIndex = schedule.findIndex(m => m.id === matchId);
     
     if (matchIndex === -1) {
@@ -199,15 +639,21 @@ app.post('/api/verify-admin', (req, res) => {
 });
 
 // API endpoint to regenerate umpire assignments
-app.post('/api/umpires/regenerate', (req, res) => {
+app.post('/api/umpires/regenerate', async (req, res) => {
     const { code } = req.body;
-    
+
     if (code !== ADMIN_CODE) {
         return res.status(401).json({ error: 'Invalid admin code' });
     }
+
+    if (READ_SCHEDULE_FROM_GOOGLE) {
+        return res.status(400).json({
+            error: 'Schedule is managed in Google Sheets. Update umpire assignments in the sheet.'
+        });
+    }
     
     try {
-        let schedule = loadSchedule();
+        let schedule = await loadSchedule(true);
         
         // Save current state as backup
         saveBackup(schedule);
@@ -267,11 +713,17 @@ app.get('/api/history/list', (req, res) => {
 });
 
 // API endpoint for reverting to a backup
-app.post('/api/history/revert', (req, res) => {
+app.post('/api/history/revert', async (req, res) => {
     const { code, filename } = req.body;
-    
+
     if (code !== ADMIN_CODE) {
         return res.status(401).json({ error: 'Invalid admin code' });
+    }
+
+    if (READ_SCHEDULE_FROM_GOOGLE) {
+        return res.status(400).json({
+            error: 'Schedule is managed in Google Sheets. Backups can only be restored when READ_SCHEDULE_FROM_GOOGLE=false.'
+        });
     }
     
     try {
@@ -285,7 +737,7 @@ app.post('/api/history/revert', (req, res) => {
         const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
         
         // Save current state as a new backup before reverting
-        const currentSchedule = loadSchedule();
+        const currentSchedule = await loadSchedule(true);
         saveBackup(currentSchedule);
         
         // Restore the backup
