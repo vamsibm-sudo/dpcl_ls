@@ -24,11 +24,19 @@ const GOOGLE_SHEET_CSV_URLS = process.env.GOOGLE_SHEET_CSV_URL
         `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&single=true&gid=${GOOGLE_SHEET_GID}`,
         `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/pub?output=csv&gid=${GOOGLE_SHEET_GID}`
     ];
+const GOOGLE_POINTS_SHEET_NAME = process.env.GOOGLE_POINTS_SHEET_NAME || 'Points';
+const GOOGLE_POINTS_CSV_URLS = process.env.GOOGLE_POINTS_CSV_URL
+    ? [process.env.GOOGLE_POINTS_CSV_URL]
+    : [
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(GOOGLE_POINTS_SHEET_NAME)}`,
+        `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/pub?output=csv&sheet=${encodeURIComponent(GOOGLE_POINTS_SHEET_NAME)}`
+    ];
 const READ_SCHEDULE_FROM_GOOGLE = process.env.READ_SCHEDULE_FROM_GOOGLE !== 'false';
 const FALLBACK_TO_LOCAL_SCHEDULE = process.env.FALLBACK_TO_LOCAL_SCHEDULE === 'true';
 const SCHEDULE_CACHE_MS = parseInt(process.env.SCHEDULE_CACHE_MS || '300000', 10);
 const GOOGLE_SHEET_TIMEOUT_MS = parseInt(process.env.GOOGLE_SHEET_TIMEOUT_MS || '10000', 10);
 let scheduleCache = { data: null, fetchedAt: 0 };
+let pointsCache = { data: null, fetchedAt: 0 };
 let lastGoogleSheetAttempts = [];
 
 app.use(express.static(path.join(__dirname)));
@@ -108,6 +116,11 @@ function parseNumber(value) {
     return match ? Number(match[0]) : NaN;
 }
 
+function parseDecimal(value) {
+    const match = String(value || '').match(/[+-]?\d+(?:\.\d+)?/);
+    return match ? Number(match[0]) : NaN;
+}
+
 function parseBoolean(value) {
     const normalized = String(value || '').trim().toLowerCase();
     return ['true', 'yes', 'y', '1', 'x', 'checked', 'washout', 'washed out'].includes(normalized);
@@ -181,6 +194,23 @@ function findScheduleHeaderIndex(rows) {
         const hasTeams = rowMatchesAliases(row, ['teams', 'match', 'fixture']);
 
         if (hasRound && hasTime && hasGround && ((hasTeam1 && hasTeam2) || hasTeams)) {
+            return index;
+        }
+    }
+
+    return 0;
+}
+
+function findPointsHeaderIndex(rows) {
+    const maxRowsToScan = Math.min(rows.length, 20);
+
+    for (let index = 0; index < maxRowsToScan; index++) {
+        const row = rows[index];
+        const hasTeam = rowMatchesAliases(row, ['team', 'team name', 'teamname']);
+        const hasPoints = rowMatchesAliases(row, ['points', 'pts']);
+        const hasNrr = rowMatchesAliases(row, ['nrr', 'net run rate', 'netrunrate']);
+
+        if (hasTeam && hasPoints && hasNrr) {
             return index;
         }
     }
@@ -266,6 +296,45 @@ function sheetRowsToSchedule(csv) {
         .sort((a, b) => a.id - b.id);
 }
 
+function sheetRowsToPoints(csv) {
+    const rows = parseCsv(csv);
+    if (rows.length < 2) {
+        return [];
+    }
+
+    const headerIndex = findPointsHeaderIndex(rows);
+    const headers = rows[headerIndex];
+
+    return rows.slice(headerIndex + 1)
+        .map(values => {
+            const row = buildRow(headers, values);
+            const points = getValue(row, ['points', 'pts']);
+            const nrr = getValue(row, ['nrr', 'net run rate', 'netrunrate']);
+
+            return {
+                team: getValue(row, ['team', 'team name', 'teamname']),
+                matches: getValue(row, ['matches', 'match', 'played', 'p']),
+                win: getValue(row, ['win', 'wins', 'won', 'w']),
+                lost: getValue(row, ['lost', 'loss', 'losses', 'l']),
+                tied: getValue(row, ['tied', 'tie', 'ties', 't']),
+                noResult: getValue(row, ['no result', 'noresult', 'nr', 'n/r']),
+                points,
+                nrr,
+                pointsValue: parseDecimal(points),
+                nrrValue: parseDecimal(nrr)
+            };
+        })
+        .filter(row => row.team)
+        .sort((a, b) => {
+            const pointsDiff = (Number.isFinite(b.pointsValue) ? b.pointsValue : 0) -
+                (Number.isFinite(a.pointsValue) ? a.pointsValue : 0);
+            if (pointsDiff !== 0) return pointsDiff;
+            return (Number.isFinite(b.nrrValue) ? b.nrrValue : 0) -
+                (Number.isFinite(a.nrrValue) ? a.nrrValue : 0);
+        })
+        .map(({ pointsValue, nrrValue, ...row }) => row);
+}
+
 function fetchText(url, redirectCount = 0) {
     return new Promise((resolve, reject) => {
         const https = require('https');
@@ -338,6 +407,25 @@ async function fetchGoogleSheetCsv() {
     throw new Error(`Unable to load CSV from Google Sheets. Attempts: ${details}`);
 }
 
+async function fetchPointsSheetCsv() {
+    const attempts = [];
+
+    for (const url of GOOGLE_POINTS_CSV_URLS) {
+        try {
+            const csv = await fetchText(url);
+            attempts.push({ url, ok: true });
+            return csv;
+        } catch (err) {
+            attempts.push({ url, ok: false, error: err.message });
+        }
+    }
+
+    const details = attempts
+        .map((attempt, index) => `${index + 1}. ${attempt.url} -> ${attempt.error}`)
+        .join('; ');
+    throw new Error(`Unable to load Points tab CSV from Google Sheets. Attempts: ${details}`);
+}
+
 async function getGoogleSheetDiagnostics() {
     const csv = await fetchGoogleSheetCsv();
     const rows = parseCsv(csv);
@@ -392,6 +480,25 @@ async function loadSchedule(forceRefresh = false) {
         scheduleCache = { data: null, fetchedAt: 0 };
         throw err;
     }
+}
+
+async function loadPoints(forceRefresh = false) {
+    const now = Date.now();
+    if (!forceRefresh && pointsCache.data && now - pointsCache.fetchedAt < SCHEDULE_CACHE_MS) {
+        return pointsCache.data;
+    }
+
+    const csv = await fetchPointsSheetCsv();
+    const points = sheetRowsToPoints(csv);
+    if (points.length === 0) {
+        const rows = parseCsv(csv);
+        const headerIndex = findPointsHeaderIndex(rows);
+        const headers = rows[headerIndex] || [];
+        throw new Error(`Points tab did not contain any valid rows. Detected header row ${headerIndex + 1}: ${headers.join(' | ')}`);
+    }
+
+    pointsCache = { data: points, fetchedAt: now };
+    return points;
 }
 
 function saveSchedule(schedule) {
@@ -559,6 +666,20 @@ app.get('/api/schedule/debug', async (req, res) => {
             '',
             'Confirm the spreadsheet is shared with "Anyone with the link can view" or publish it to the web.'
         ].join('\n'));
+    }
+});
+
+app.get('/api/points', async (req, res) => {
+    try {
+        const forceRefresh = req.query.refresh === 'true';
+        const points = await loadPoints(forceRefresh);
+        res.json(points);
+    } catch (err) {
+        console.error('Failed to load points table from Google Sheets:', err.message);
+        res.status(502).json({
+            error: 'Failed to load points table from Google Sheets',
+            details: err.message
+        });
     }
 });
 

@@ -487,6 +487,7 @@
         </header>
 
         <div style="text-align: center; margin-bottom: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="points-table.html" style="display: inline-block; padding: 12px 30px; background-color: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#229954'" onmouseout="this.style.backgroundColor='#27ae60'">Points Table</a>
             <a href="https://www.instagram.com/dpcl_cricketfever?igsh=MWFxZHgzdjNoMmRzdw%3D%3D&utm_source=qr" target="_blank" style="display: inline-block; padding: 12px 30px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#c0392b'" onmouseout="this.style.backgroundColor='#e74c3c'">📸 Instagram</a>
             <a href="admin.html" style="display: inline-block; padding: 12px 30px; background-color: #2c3e50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#1a252f'" onmouseout="this.style.backgroundColor='#2c3e50'">🔐 Admin Dashboard</a>
             <a href="field-booking.html" style="display: inline-block; padding: 12px 30px; background-color: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#229954'" onmouseout="this.style.backgroundColor='#27ae60'">🏟️ Field Booking</a>
@@ -900,7 +901,8 @@
 
         function renderTeams() {
             const teamsList = document.getElementById('teamsList');
-            teamsList.innerHTML = teams.map(t => {
+            const visibleTeams = teams.filter(t => normalizeName(t) !== 'roaringlions');
+            teamsList.innerHTML = visibleTeams.map(t => {
                 const teamInfo = getTeamInfo(t);
                 const logoPath = teamInfo.logo ? `logos/${teamInfo.logo}` : '';
                 return `<div class="team-badge">

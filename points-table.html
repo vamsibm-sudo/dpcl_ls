@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logos/DPCL.jpeg">
+    <link rel="apple-touch-icon" href="logos/DPCL.jpeg">
+    <title>DPCL Points Table</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #2c3e50;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 28px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .league-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            background-color: white;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 14px;
+        }
+
+        .nav-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-actions a {
+            display: inline-block;
+            padding: 10px 22px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .table-wrap {
+            background: white;
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 14px 12px;
+            text-align: right;
+            font-size: 0.95em;
+        }
+
+        th:first-child {
+            text-align: left;
+        }
+
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        td:first-child {
+            text-align: left;
+            color: #2c3e50;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .rank {
+            display: inline-flex;
+            width: 28px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            color: #2c3e50;
+            font-size: 0.85em;
+        }
+
+        .loading,
+        .error {
+            background: white;
+            border-radius: 8px;
+            padding: 22px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            header {
+                padding: 22px 14px;
+            }
+
+            h1 {
+                font-size: 1.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
+            <h1>DPCL Points Table</h1>
+            <div class="nav-actions">
+                <a href="/">Home</a>
+            </div>
+        </header>
+
+        <div id="pointsContent" class="loading">Loading points table...</div>
+    </div>
+
+    <script>
+        async function loadPoints() {
+            const response = await fetch('/api/points');
+            const data = await response.json();
+            if (!response.ok || !Array.isArray(data)) {
+                throw new Error(data.error || 'Invalid points table response');
+            }
+            return data;
+        }
+
+        function renderPoints(points) {
+            const container = document.getElementById('pointsContent');
+
+            if (points.length === 0) {
+                container.className = 'error';
+                container.textContent = 'No points table data found.';
+                return;
+            }
+
+            container.className = 'table-wrap';
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Matches</th>
+                            <th>Win</th>
+                            <th>Lost</th>
+                            <th>Tied</th>
+                            <th>No Result</th>
+                            <th>Points</th>
+                            <th>NRR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${points.map((row, index) => `
+                            <tr>
+                                <td><span class="rank">${index + 1}</span>${row.team}</td>
+                                <td>${row.matches || '0'}</td>
+                                <td>${row.win || '0'}</td>
+                                <td>${row.lost || '0'}</td>
+                                <td>${row.tied || '0'}</td>
+                                <td>${row.noResult || '0'}</td>
+                                <td>${row.points || '0'}</td>
+                                <td>${row.nrr || '0.000'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        loadPoints()
+            .then(renderPoints)
+            .catch(err => {
+                const container = document.getElementById('pointsContent');
+                container.className = 'error';
+                container.textContent = 'Failed to load points table: ' + err.message;
+            });
+    </script>
+</body>
+</html>
