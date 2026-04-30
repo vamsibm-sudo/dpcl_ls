@@ -75,8 +75,24 @@
 
         table {
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
             border-collapse: collapse;
             table-layout: fixed;
+        }
+
+        col.team-col {
+            width: 34%;
+        }
+
+        col.stat-col {
+            width: 8%;
+        }
+
+        col.nr-col,
+        col.points-col,
+        col.nrr-col {
+            width: 11%;
         }
 
         th {
@@ -86,11 +102,11 @@
             text-align: right;
             font-size: 0.95em;
             white-space: nowrap;
+            overflow: hidden;
         }
 
         th:first-child {
             text-align: left;
-            width: 32%;
         }
 
         td {
@@ -99,6 +115,7 @@
             text-align: right;
             font-weight: bold;
             white-space: nowrap;
+            overflow: hidden;
         }
 
         td:first-child {
@@ -157,12 +174,8 @@
 
             th,
             td {
-                padding: 10px 6px;
-                font-size: 0.82em;
-            }
-
-            th:first-child {
-                width: 35%;
+                padding: 9px 4px;
+                font-size: 0.76em;
             }
 
             .rank {
@@ -197,19 +210,31 @@
 
             th,
             td {
-                padding: 8px 4px;
-                font-size: 0.72em;
+                padding: 7px 2px;
+                font-size: 0.64em;
+                white-space: normal;
+                overflow-wrap: anywhere;
             }
 
-            th:first-child {
-                width: 38%;
+            col.team-col {
+                width: 32%;
+            }
+
+            col.stat-col {
+                width: 8%;
+            }
+
+            col.nr-col,
+            col.points-col {
+                width: 11%;
+            }
+
+            col.nrr-col {
+                width: 13%;
             }
 
             .rank {
-                width: 18px;
-                height: 18px;
-                margin-right: 4px;
-                font-size: 0.7em;
+                display: none;
             }
         }
     </style>
@@ -249,6 +274,16 @@
             container.className = 'table-wrap';
             container.innerHTML = `
                 <table>
+                    <colgroup>
+                        <col class="team-col">
+                        <col class="stat-col">
+                        <col class="stat-col">
+                        <col class="stat-col">
+                        <col class="stat-col">
+                        <col class="nr-col">
+                        <col class="points-col">
+                        <col class="nrr-col">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Team</th>
