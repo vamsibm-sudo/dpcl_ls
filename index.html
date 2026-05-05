@@ -165,6 +165,39 @@
             margin-bottom: 15px;
             font-size: 1.3em;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .round-title-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .round-toggle {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            background: white;
+            color: #e74c3c;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .round-toggle:hover {
+            background: #f8f9f9;
         }
 
         .matches-grid {
@@ -172,6 +205,26 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
+        }
+
+        .matches-grid.collapsed {
+            display: none;
+        }
+
+        .schedule-pending {
+            background: white;
+            border-left: 4px solid #95a5a6;
+            border-radius: 6px;
+            padding: 18px;
+            color: #566573;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .schedule-pending.collapsed {
+            display: none;
         }
 
         .match-card {
@@ -500,17 +553,17 @@
                 <label for="roundSelect">League Game:</label>
                 <select id="roundSelect">
                     <option value="all">All League Games</option>
-                    <option value="1">League Game 1</option>
-                    <option value="2">League Game 2</option>
-                    <option value="3">League Game 3</option>
-                    <option value="4">League Game 4</option>
-                    <option value="5">League Game 5</option>
-                    <option value="6">League Game 6</option>
-                    <option value="7">League Game 7</option>
-                    <option value="8">League Game 8</option>
-                    <option value="9">League Game 9</option>
-                    <option value="10">League Game 10</option>
-                    <option value="11">League Game 11</option>
+                    <option value="1">Week 1</option>
+                    <option value="2">Week 2</option>
+                    <option value="3">Week 3</option>
+                    <option value="4">Week 4</option>
+                    <option value="5">Week 5</option>
+                    <option value="6">Week 6</option>
+                    <option value="7">Week 7</option>
+                    <option value="8">Week 8</option>
+                    <option value="9">Week 9</option>
+                    <option value="10">Week 10</option>
+                    <option value="11">Week 11</option>
                 </select>
             </div>
 
@@ -687,11 +740,11 @@
             4: "Apr 10-12",
             5: "Apr 17-19",
             6: "Apr 24-26",
-            7: "May 1-3",
-            8: "May 8-10",
-            9: "May 15-17",
-            10: "May 29-31",
-            11: "Jun 5-7"
+            7: "May 8-10",
+            8: "May 15-17",
+            9: "May 29-31",
+            10: "Jun 5-7",
+            11: "Jun 12-14"
         };
 
         const gameDates = {
@@ -709,16 +762,26 @@
         };
 
         let schedule = [];
+        let publicMaxRound = null;
+        const collapsedRounds = new Set();
+        let collapsedRoundsInitialized = false;
 
         // Load schedule from API instead of hardcoded data
         async function loadSchedule() {
             try {
-                const response = await fetch('/api/schedule');
+                const [response, visibilityResponse] = await Promise.all([
+                    fetch('/api/schedule'),
+                    fetch('/api/schedule/public-visibility')
+                ]);
                 const data = await response.json();
                 if (!response.ok || !Array.isArray(data)) {
                     throw new Error(data.error || 'Invalid schedule response');
                 }
+                const visibility = visibilityResponse.ok ? await visibilityResponse.json() : {};
                 schedule = data;
+                publicMaxRound = Number.isFinite(Number(visibility.maxPublicRound))
+                    ? Number(visibility.maxPublicRound)
+                    : null;
                 console.log('Loaded schedule with', schedule.length, 'total matches');
                 console.log('Rounds in schedule:', [...new Set(schedule.map(m => m.round))].sort((a, b) => a - b));
             } catch (err) {
@@ -796,10 +859,33 @@
                 grouped[match.round].push(match);
             });
 
+            const allRoundNums = Object.keys(roundDates).map(Number).sort((a, b) => a - b);
+            const nonRoundFiltersActive = team !== 'all' || ground !== 'all' || day !== 'all';
+            const hiddenRoundNums = Number.isFinite(publicMaxRound)
+                ? allRoundNums
+                    .filter(roundNum => roundNum > publicMaxRound)
+                    .filter(roundNum => round === 'all' || roundNum === parseInt(round))
+                    .filter(() => !nonRoundFiltersActive || round !== 'all')
+                    .map(String)
+                : [];
+            const roundNums = [...new Set([...Object.keys(grouped), ...hiddenRoundNums])]
+                .sort((a, b) => parseInt(a) - parseInt(b));
+            if (!collapsedRoundsInitialized) {
+                roundNums.forEach(roundNum => {
+                    const hasInProgressMatch = (grouped[roundNum] || []).some(match =>
+                        normalizeName(match.status) === 'inprogress'
+                    );
+                    if (!hasInProgressMatch) {
+                        collapsedRounds.add(String(roundNum));
+                    }
+                });
+                collapsedRoundsInitialized = true;
+            }
+
             const scheduleDiv = document.getElementById('schedule');
             scheduleDiv.innerHTML = '';
 
-            if (filtered.length === 0) {
+            if (filtered.length === 0 && roundNums.length === 0) {
                 scheduleDiv.innerHTML = '<div class="no-matches">No matches found for the selected filters.</div>';
                 return;
             }
@@ -810,8 +896,9 @@
             announcementDiv.innerHTML = 'The DPCL schedule will be announced in three-week windows, with subsequent fixtures released periodically throughout the season to assist teams with planning and availability.';
             scheduleDiv.appendChild(announcementDiv);
 
-            Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(roundNum => {
-                let matches = grouped[roundNum];
+            roundNums.forEach(roundNum => {
+                let matches = grouped[roundNum] || [];
+                const isPendingRound = hiddenRoundNums.includes(String(roundNum)) && matches.length === 0;
                 
                 const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
                 const timeOrder = { "8:00-11:30 am": 0, "12:00-4:00 pm": 1, "6:00-10:00 pm": 2 };
@@ -825,11 +912,30 @@
                 const roundTitle = document.createElement('div');
                 roundTitle.className = 'round-title';
                 const dateStr = roundDates[roundNum] || '';
-                roundTitle.innerHTML = `<span>League Game ${roundNum}</span> <span style="font-size: 0.9em; margin-left: 10px;">${dateStr}</span> <span class="match-count">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>`;
+                const isCollapsed = collapsedRounds.has(String(roundNum));
+                roundTitle.innerHTML = `
+                    <div class="round-title-main">
+                        <span>Week ${roundNum}</span>
+                        <span style="font-size: 0.9em;">${dateStr}</span>
+                        <span class="match-count">${isPendingRound ? 'Schedule pending' : `${matches.length} match${matches.length !== 1 ? 'es' : ''}`}</span>
+                    </div>
+                    <button class="round-toggle" type="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand week' : 'Collapse week'}" data-round="${roundNum}">
+                        ${isCollapsed ? '↓' : '↑'}
+                    </button>
+                `;
                 roundDiv.appendChild(roundTitle);
 
+                if (isPendingRound) {
+                    const pendingDiv = document.createElement('div');
+                    pendingDiv.className = `schedule-pending${isCollapsed ? ' collapsed' : ''}`;
+                    pendingDiv.textContent = 'Schedule will be released soon.';
+                    roundDiv.appendChild(pendingDiv);
+                    scheduleDiv.appendChild(roundDiv);
+                    return;
+                }
+
                 const grid = document.createElement('div');
-                grid.className = 'matches-grid';
+                grid.className = `matches-grid${isCollapsed ? ' collapsed' : ''}`;
                 
                 matches.forEach((match) => {
                     const card = document.createElement('div');
@@ -915,6 +1021,19 @@
                 </div>`;
             }).join('');
         }
+
+        document.getElementById('schedule').addEventListener('click', (event) => {
+            const toggle = event.target.closest('.round-toggle');
+            if (!toggle) return;
+
+            const roundNum = String(toggle.dataset.round);
+            if (collapsedRounds.has(roundNum)) {
+                collapsedRounds.delete(roundNum);
+            } else {
+                collapsedRounds.add(roundNum);
+            }
+            renderSchedule();
+        });
 
         document.getElementById('roundSelect').addEventListener('change', renderSchedule);
         document.getElementById('teamSelect').addEventListener('change', renderSchedule);

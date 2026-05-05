@@ -262,7 +262,8 @@ function sheetRowsToSchedule(csv) {
                 team1: getValue(row, ['team1', 'team 1', 'team a', 'teama', 'home', 'home team', 'hometeam']) || teams[0] || '',
                 team2: getValue(row, ['team2', 'team 2', 'team b', 'teamb', 'away', 'away team', 'awayteam']) || teams[1] || '',
                 team1Score: getValue(row, ['team1score', 'team 1 score', 'team a score', 'home score', 'homescore']),
-                team2Score: getValue(row, ['team2score', 'team 2 score', 'team b score', 'away score', 'awayscore'])
+                team2Score: getValue(row, ['team2score', 'team 2 score', 'team b score', 'away score', 'awayscore']),
+                status: getValue(row, ['status', 'match status', 'matchstatus'])
             };
 
             if (!Number.isFinite(match.round) && previousMatch.round) match.round = previousMatch.round;
@@ -690,6 +691,10 @@ app.get('/api/schedule/visibility', (req, res) => {
         return res.status(401).json({ error: 'Invalid admin code' });
     }
 
+    res.json(loadVisibility());
+});
+
+app.get('/api/schedule/public-visibility', (req, res) => {
     res.json(loadVisibility());
 });
 
