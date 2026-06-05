@@ -116,6 +116,26 @@ function parseNumber(value) {
     return match ? Number(match[0]) : NaN;
 }
 
+const SPECIAL_ROUND_LABELS = {
+    'semifinal': 12,
+    'semi final': 12,
+    'semi finals': 12,
+    'semis': 12,
+    'final': 13,
+    'finals': 13,
+    'grand final': 13,
+    'grand finals': 13
+};
+
+function parseRound(value) {
+    const str = String(value || '').trim();
+    const key = str.toLowerCase().replace(/[^a-z ]/g, '').trim();
+    if (SPECIAL_ROUND_LABELS[key] !== undefined) {
+        return SPECIAL_ROUND_LABELS[key];
+    }
+    return parseNumber(str);
+}
+
 function parseDecimal(value) {
     const match = String(value || '').match(/[+-]?\d+(?:\.\d+)?/);
     return match ? Number(match[0]) : NaN;
@@ -254,7 +274,7 @@ function sheetRowsToSchedule(csv) {
             const umpires = parseUmpires(getValue(row, ['umpires', 'umpire', 'umpire teams']));
             const match = {
                 id: idValue === '' ? index : Number(idValue),
-                round: parseNumber(roundValue),
+                round: parseRound(roundValue),
                 day: normalizeDay(getValue(row, ['day', 'match day', 'matchday'])),
                 date: getValue(row, ['date', 'match date', 'matchdate']),
                 time: getValue(row, ['time', 'slot', 'timeslot', 'time slot', 'start time', 'starttime']),

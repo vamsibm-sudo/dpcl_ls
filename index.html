@@ -564,6 +564,8 @@
                     <option value="9">Week 9</option>
                     <option value="10">Week 10</option>
                     <option value="11">Week 11</option>
+                    <option value="12">Semi Final</option>
+                    <option value="13">Finals</option>
                 </select>
             </div>
 
@@ -744,7 +746,9 @@
             8: "May 15-17",
             9: "May 29-31",
             10: "Jun 5-7",
-            11: "Jun 12-14"
+            11: "Jun 12-14",
+            12: "Jun 20-21",
+            13: "Jun 27, 2026"
         };
 
         const gameDates = {
@@ -868,7 +872,13 @@
                     .filter(() => !nonRoundFiltersActive || round !== 'all')
                     .map(String)
                 : [];
-            const roundNums = [...new Set([...Object.keys(grouped), ...hiddenRoundNums])]
+            // Include all public rounds from roundDates (even those with no matches yet)
+            const publicRoundNums = allRoundNums
+                .filter(roundNum => !Number.isFinite(publicMaxRound) || roundNum <= publicMaxRound)
+                .filter(roundNum => round === 'all' || roundNum === parseInt(round))
+                .filter(() => !nonRoundFiltersActive || round !== 'all')
+                .map(String);
+            const roundNums = [...new Set([...Object.keys(grouped), ...hiddenRoundNums, ...publicRoundNums])]
                 .sort((a, b) => parseInt(a) - parseInt(b));
             if (!collapsedRoundsInitialized) {
                 roundNums.forEach(roundNum => {
@@ -898,7 +908,7 @@
 
             roundNums.forEach(roundNum => {
                 let matches = grouped[roundNum] || [];
-                const isPendingRound = hiddenRoundNums.includes(String(roundNum)) && matches.length === 0;
+                const isPendingRound = matches.length === 0 && roundDates[roundNum] !== undefined;
                 
                 const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
                 const timeOrder = { "8:00-11:30 am": 0, "12:00-4:00 pm": 1, "6:00-10:00 pm": 2 };
@@ -913,13 +923,14 @@
                 roundTitle.className = 'round-title';
                 const dateStr = roundDates[roundNum] || '';
                 const isCollapsed = collapsedRounds.has(String(roundNum));
+                const roundLabel = roundNum == 12 ? 'Semi Final' : roundNum == 13 ? 'Finals' : `Week ${roundNum}`;
                 roundTitle.innerHTML = `
                     <div class="round-title-main">
-                        <span>Week ${roundNum}</span>
+                        <span>${roundLabel}</span>
                         <span style="font-size: 0.9em;">${dateStr}</span>
                         <span class="match-count">${isPendingRound ? 'Schedule pending' : `${matches.length} match${matches.length !== 1 ? 'es' : ''}`}</span>
                     </div>
-                    <button class="round-toggle" type="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand week' : 'Collapse week'}" data-round="${roundNum}">
+                    <button class="round-toggle" type="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand' : 'Collapse'} ${roundLabel}" data-round="${roundNum}">
                         ${isCollapsed ? '↓' : '↑'}
                     </button>
                 `;
@@ -1007,7 +1018,7 @@
 
         function renderTeams() {
             const teamsList = document.getElementById('teamsList');
-            const visibleTeams = teams.filter(t => normalizeName(t) !== 'roaringlions');
+            const visibleTeams = allTeams.filter(t => normalizeName(t) !== 'roaringlions');
             teamsList.innerHTML = visibleTeams.map(t => {
                 const teamInfo = getTeamInfo(t);
                 const logoPath = teamInfo.logo ? `logos/${teamInfo.logo}` : '';
