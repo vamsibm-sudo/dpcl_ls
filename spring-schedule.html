@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logos/DPCL.jpeg">
+    <link rel="apple-touch-icon" href="logos/DPCL.jpeg">
+    <title>League Schedule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .sponsor-sidebar {
+            flex: 0 0 150px;
+            text-align: center;
+        }
+
+        .sponsor-card {
+            background-color: white;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-card img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .sponsor-card-label {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .league-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #ecf0f1;
+        }
+
+        .countdown {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #ecf0f1;
+        }
+
+        .countdown-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            display: block;
+        }
+
+        .controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 12px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            font-size: 1em;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px #3498db;
+        }
+
+        .round-title {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .round-title-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .round-toggle {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            background: white;
+            color: #e74c3c;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .round-toggle:hover {
+            background: #f8f9f9;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .matches-grid.collapsed {
+            display: none;
+        }
+
+        .schedule-pending {
+            background: white;
+            border-left: 4px solid #95a5a6;
+            border-radius: 6px;
+            padding: 18px;
+            color: #566573;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .schedule-pending.collapsed {
+            display: none;
+        }
+
+        .match-card {
+            background-color: white;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .match-meta {
+            font-size: 0.9em;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .reschedule-note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #856404;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .team {
+            flex: 1;
+            padding: 12px;
+            background-color: #ecf0f1;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+        }
+
+        .vs {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 0.9em;
+        }
+
+        .winner-info {
+            background-color: #eafaf1;
+            border-left: 4px solid #27ae60;
+            color: #145a32;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .score-lines {
+            margin-top: 8px;
+            display: grid;
+            gap: 4px;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .score-line {
+            display: grid;
+            grid-template-columns: minmax(120px, 1fr) auto minmax(60px, 1fr);
+            justify-content: center;
+            column-gap: 8px;
+            text-align: left;
+        }
+
+        .score-team {
+            text-align: left;
+        }
+
+        .score-value {
+            text-align: right;
+        }
+
+        .washout-info {
+            background-color: #f2f4f4;
+            border-left: 4px solid #95a5a6;
+            color: #566573;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .legend {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .legend h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .teams-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .team-badge {
+            background-color: white;
+            color: #333;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border: 2px solid #3498db;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .team-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin: 0 auto 8px;
+            display: block;
+        }
+
+        .team-captain {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 6px;
+            font-weight: normal;
+        }
+
+        .match-count {
+            background-color: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .no-matches {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .schedule-announcement {
+            background-color: #e8f4f8;
+            color: #2c3e50;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.05em;
+            line-height: 1.6;
+            border-left: 4px solid #3498db;
+        }
+
+        .visit-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+
+        .sponsor-card {
+            background-color: white;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-card img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .sponsor-card-label {
+            font-size: 0.7em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sponsor-grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Left Sponsor Sidebar -->
+        <div class="sponsor-sidebar">
+            <div class="sponsor-card">
+                <img src="logos/left-sponsor.png" alt="Farm2Home - Guts & Glory Apparel Sponsor" onerror="this.style.display='none'">
+                <div class="sponsor-card-label">Guts & Glory Team Apparel Sponsor</div>
+                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://www.globalcricketstore.com" target="_blank" style="text-decoration: none;">
+                    <img src="logos/gcs_image_logo.jpg" alt="Community Business Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Community Business Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Global Cricket Store</strong><br>
+                    🌐 www.globalcricketstore.com<br>
+                    📍 2608 Bluewood Lane, Northlake, TX 76226<br>
+                    📱 +1 425-999-7455<br>
+                    📷 @globalcricketstore
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>OneFusion</strong><br>
+                    🌐 https://onefusionus.com<br>
+                    📍 8131 Gateway Dr Suite 500<br>
+                    Argyle, TX 76226, USA
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://hhfortworth.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/hyderbadnawabs.jpg" alt="HNH - Royal Lions Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Royal Lions Team Apparel Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Nawabi Hyderbad House</strong><br>
+                    🌐 https://hhfortworth.com<br>
+                    📍 1901 Heritage Trace Pkwy, Suite 101<br>
+                    Fort Worth, TX 76177
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+        <header>
+            <img src="logos/DPCL.jpeg" alt="DPCL Logo" class="league-logo">
+            <h1>🏏 Dallas Premier Cricket League Spring 2026</h1>
+            <p class="subtitle">66 league games · 12 teams · Unlimited fun</p>
+        </header>
+
+        <div style="text-align: center; margin-bottom: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="index.html" style="display: inline-block; padding: 12px 30px; background-color: #f39c12; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#d68910'" onmouseout="this.style.backgroundColor='#f39c12'">☀️ Summer 2026</a>
+            <a href="points-table.html" style="display: inline-block; padding: 12px 30px; background-color: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#229954'" onmouseout="this.style.backgroundColor='#27ae60'">Points Table</a>
+            <a href="highlights.html" style="display: inline-block; padding: 12px 30px; background-color: #f39c12; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#d68910'" onmouseout="this.style.backgroundColor='#f39c12'">✨ Highlights</a>
+            <a href="https://www.instagram.com/dpcl_cricketfever?igsh=MWFxZHgzdjNoMmRzdw%3D%3D&utm_source=qr" target="_blank" style="display: inline-block; padding: 12px 30px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#c0392b'" onmouseout="this.style.backgroundColor='#e74c3c'">📸 Instagram</a>
+            <a href="admin.html" style="display: inline-block; padding: 12px 30px; background-color: #2c3e50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#1a252f'" onmouseout="this.style.backgroundColor='#2c3e50'">🔐 Admin Dashboard</a>
+            <a href="field-booking.html" style="display: inline-block; padding: 12px 30px; background-color: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#229954'" onmouseout="this.style.backgroundColor='#27ae60'">🏟️ Field Booking</a>
+            <a href="sponsorship.html" style="display: inline-block; padding: 12px 30px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#c0392b'" onmouseout="this.style.backgroundColor='#e74c3c'">💼 Interested Sponsors →</a>
+            <a href="https://www.youtube.com/@DPCC-sf3go" target="_blank" style="display: inline-block; padding: 12px 30px; background-color: #ff0000; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1.05em; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#cc0000'" onmouseout="this.style.backgroundColor='#ff0000'">▶️ YouTube</a>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="roundSelect">League Game:</label>
+                <select id="roundSelect">
+                    <option value="all">All League Games</option>
+                    <option value="1">Week 1</option>
+                    <option value="2">Week 2</option>
+                    <option value="3">Week 3</option>
+                    <option value="4">Week 4</option>
+                    <option value="5">Week 5</option>
+                    <option value="6">Week 6</option>
+                    <option value="7">Week 7</option>
+                    <option value="8">Week 8</option>
+                    <option value="9">Week 9</option>
+                    <option value="10">Week 10</option>
+                    <option value="11">Week 11</option>
+                    <option value="12">Semi Final</option>
+                    <option value="13">Finals</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="teamSelect">Team:</label>
+                <select id="teamSelect">
+                    <option value="all">All Teams</option>
+                    <option value="Guts N Glory">Guts N Glory</option>
+                    <option value="Killer Squad Dallas">Killer Squad Dallas</option>
+                    <option value="Mavericks">Mavericks</option>
+                    <option value="Royal Lions">Royal Lions</option>
+                    <option value="India blues">India blues</option>
+                    <option value="Impact XI">Impact XI</option>
+                    <option value="Devils">Devils</option>
+                    <option value="Eagles">Eagles</option>
+                    <option value="Fighters">Fighters</option>
+                    <option value="JustinBoys">JustinBoys</option>
+                    <option value="Warriors">Warriors</option>
+                    <option value="DRAGONS">DRAGONS</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="groundSelect">Ground:</label>
+                <select id="groundSelect">
+                    <option value="all">All Grounds</option>
+                    <option value="Krum">Krum</option>
+                    <option value="FM">FM</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="daySelect">Day:</label>
+                <select id="daySelect">
+                    <option value="all">All Days</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="schedule"></div>
+
+        <div class="legend">
+            <h2>Teams</h2>
+            <div class="teams-list" id="teamsList"></div>
+        </div>
+
+        <div class="legend" style="background-color: #f9f9f9; border-top: 3px solid #e74c3c;">
+            <h2>Follow Us</h2>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; padding: 20px 0;">
+                <a href="https://www.instagram.com/dpcl_cricketfever?igsh=MWFxZHgzdjNoMmRzdw%3D%3D&utm_source=qr" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#c0392b'" onmouseout="this.style.backgroundColor='#e74c3c'">📸 Instagram</a>
+                <a href="https://www.youtube.com/@DPCC-sf3go" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #ff0000; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#cc0000'" onmouseout="this.style.backgroundColor='#ff0000'">▶️ YouTube</a>
+                <a href="https://wa.me/16105642275" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #25d366; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#1da851'" onmouseout="this.style.backgroundColor='#25d366'">💬 WhatsApp</a>
+            </div>
+        </div>
+        </div>
+
+        <!-- Right Sponsor Sidebar -->
+        <div class="sponsor-sidebar">
+            <div class="sponsor-card">
+                <a href="https://hhfortworth.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/hyderbadnawabs.jpg" alt="HNH - Royal Lions Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Royal Lions Team Apparel Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Nawabi Hyderbad House</strong><br>
+                    🌐 https://hhfortworth.com<br>
+                    📍 1901 Heritage Trace Pkwy, Suite 101<br>
+                    Fort Worth, TX 76177
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://onefusionus.com/" target="_blank" style="text-decoration: none;">
+                    <img src="logos/OneFusion.jpg" alt="OneFusion - Justin Boys Apparel Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Justin Boys Team Apparel Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>OneFusion</strong><br>
+                    🌐 https://onefusionus.com<br>
+                    📍 8131 Gateway Dr Suite 500<br>
+                    Argyle, TX 76226, USA
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <a href="https://www.globalcricketstore.com" target="_blank" style="text-decoration: none;">
+                    <img src="logos/gcs_image_logo.jpg" alt="Community Business Sponsor" onerror="this.style.display='none'" style="cursor: pointer;">
+                </a>
+                <div class="sponsor-card-label">Community Business Sponsor</div>
+                <div style="font-size: 0.7em; color: #7f8c8d; margin-top: 8px; line-height: 1.4;">
+                    <strong>Global Cricket Store</strong><br>
+                    🌐 www.globalcricketstore.com<br>
+                    📍 2608 Bluewood Lane, Northlake, TX 76226<br>
+                    📱 +1 425-999-7455<br>
+                    📷 @globalcricketstore
+                </div>
+            </div>
+            <div class="sponsor-card">
+                <img src="logos/left-sponsor.png" alt="Farm2Home - Guts & Glory Apparel Sponsor" onerror="this.style.display='none'">
+                <div class="sponsor-card-label">Guts & Glory Team Apparel Sponsor</div>
+                <div style="font-size: 0.75em; color: #7f8c8d; margin-top: 8px;">Providing Apparel & Streaming Services</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateWeekStatus() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Define week dates
+            const weeks = [
+                { num: 1, start: new Date(2026, 2, 20), end: new Date(2026, 2, 22) },
+                { num: 2, start: new Date(2026, 2, 27), end: new Date(2026, 2, 29) },
+                { num: 3, start: new Date(2026, 3, 3), end: new Date(2026, 3, 5) },
+                { num: 4, start: new Date(2026, 3, 10), end: new Date(2026, 3, 12) },
+                { num: 5, start: new Date(2026, 3, 17), end: new Date(2026, 3, 26) },
+                { num: 6, start: new Date(2026, 4, 1), end: new Date(2026, 4, 3) },
+                { num: 7, start: new Date(2026, 4, 8), end: new Date(2026, 4, 10) },
+                { num: 8, start: new Date(2026, 4, 15), end: new Date(2026, 4, 17) }
+            ];
+            
+            let upcomingWeek = null;
+            let currentWeek = null;
+            for (let week of weeks) {
+                if (today >= week.start && today <= week.end) {
+                    currentWeek = week.num;
+                    break;
+                } else if (today < week.start) {
+                    upcomingWeek = week.num;
+                    break;
+                }
+            }
+            
+            const weekStatusElement = document.getElementById('weekStatus');
+            if (weekStatusElement) {
+                if (currentWeek) {
+                    weekStatusElement.textContent = `Week ${currentWeek} In Progress`;
+                } else if (upcomingWeek) {
+                    weekStatusElement.textContent = `Week ${upcomingWeek} Upcoming`;
+                } else {
+                    weekStatusElement.textContent = '';
+                }
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateWeekStatus();
+        });
+
+        const teamsData = {
+            "Guts N Glory": { captain: "Dipesh Shah", logo: "Guts N Glory.jpeg" },
+            "Mavericks": { captain: "Karthik", logo: "Mavericks .jpeg" },
+            "India blues": { captain: "Pratap", logo: "India blues.jpeg" },
+            "Devils": { captain: "Nikhil Reddy", logo: "DEvils.jpg" },
+            "Fighters": { captain: "Krishna Dodla", logo: "Fighters.jpeg" },
+            "Warriors": { captain: "Srikanth Reddy", logo: "Warriors .jpeg" },
+            "DRAGONS": { captain: "Sreedhar", logo: "DRAGONS .jpeg" },
+            "JustinBoys": { captain: "Varun Tej", logo: "JustinBoys.jpeg" },
+            "Eagles": { captain: "Naresh", logo: "Eagles.jpg" },
+            "Impact XI": { captain: "Manideep", logo: "Impact X1.jpeg" },
+            "Impact XI": { captain: "Manideep", logo: "Impact X1.jpeg" },
+            "Killer Squad Dallas": { captain: "Venkatesh", logo: "Killers Squad .jpeg" },
+            "Royal Lions": { captain: "Abhilash", logo: "Royal Lions.jpg" }
+        };
+
+        const allTeams = ['Guts N Glory', 'Mavericks', 'India blues', 'Devils', 'Killer Squad Dallas', 'Warriors', 'DRAGONS', 'JustinBoys', 'Eagles', 'Impact XI', 'Fighters', 'Royal Lions'];
+
+        const roundDates = {
+            1: "Mar 20-22",
+            2: "Mar 27-29",
+            3: "Apr 3-5",
+            4: "Apr 10-12",
+            5: "Apr 17-19",
+            6: "Apr 24-26",
+            7: "May 8-10",
+            8: "May 15-17",
+            9: "May 29-31",
+            10: "Jun 5-7",
+            11: "Jun 12-14",
+            12: "Jun 20-21",
+            13: "Jun 27, 2026"
+        };
+
+        const gameDates = {
+            "1-Fri": "3/20", "1-Sat": "3/21", "1-Sun": "3/22",
+            "2-Fri": "3/27", "2-Sat": "3/28", "2-Sun": "3/29",
+            "3-Fri": "4/3", "3-Sat": "4/4", "3-Sun": "4/5",
+            "4-Fri": "4/10", "4-Sat": "4/11", "4-Sun": "4/12",
+            "5-Fri": "4/17", "5-Sat": "4/18", "5-Sun": "4/19",
+            "6-Fri": "4/24", "6-Sat": "4/25", "6-Sun": "4/26",
+            "7-Fri": "5/1", "7-Sat": "5/2", "7-Sun": "5/3",
+            "8-Fri": "5/8", "8-Sat": "5/9", "8-Sun": "5/10",
+            "9-Fri": "5/15", "9-Sat": "5/16", "9-Sun": "5/17",
+            "10-Fri": "5/29", "10-Sat": "5/30", "10-Sun": "5/31",
+            "11-Fri": "6/5", "11-Sat": "6/6", "11-Sun": "6/7"
+        };
+
+        let schedule = [];
+        let publicMaxRound = null;
+        const collapsedRounds = new Set();
+        let collapsedRoundsInitialized = false;
+
+        // Load schedule from API instead of hardcoded data
+        async function loadSchedule() {
+            try {
+                const [response, visibilityResponse] = await Promise.all([
+                    fetch('/api/schedule'),
+                    fetch('/api/schedule/public-visibility')
+                ]);
+                const data = await response.json();
+                if (!response.ok || !Array.isArray(data)) {
+                    throw new Error(data.error || 'Invalid schedule response');
+                }
+                const visibility = visibilityResponse.ok ? await visibilityResponse.json() : {};
+                schedule = data;
+                publicMaxRound = Number.isFinite(Number(visibility.maxPublicRound))
+                    ? Number(visibility.maxPublicRound)
+                    : null;
+                console.log('Loaded schedule with', schedule.length, 'total matches');
+                console.log('Rounds in schedule:', [...new Set(schedule.map(m => m.round))].sort((a, b) => a - b));
+            } catch (err) {
+                console.error('Error loading schedule:', err);
+                schedule = [];
+            }
+        }
+
+        let teams = [];
+
+        function normalizeName(value) {
+            return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function getTeamInfo(teamName) {
+            const exact = teamsData[teamName];
+            if (exact) return exact;
+
+            const normalized = normalizeName(teamName);
+            const matchedName = Object.keys(teamsData).find(name => normalizeName(name) === normalized);
+            return matchedName ? teamsData[matchedName] : { captain: 'TBD', logo: '' };
+        }
+
+        function updateDynamicFilters() {
+            teams = [...new Set(schedule.flatMap(match => [match.team1, match.team2]).filter(Boolean))].sort();
+
+            const teamSelect = document.getElementById('teamSelect');
+            teamSelect.innerHTML = '<option value="all">All Teams</option>' + teams.map(team =>
+                `<option value="${team}">${team}</option>`
+            ).join('');
+
+            const groundSelect = document.getElementById('groundSelect');
+            const grounds = [...new Set(schedule.map(match => match.ground).filter(Boolean))].sort();
+            groundSelect.innerHTML = '<option value="all">All Grounds</option>' + grounds.map(ground =>
+                `<option value="${ground}">${ground}</option>`
+            ).join('');
+        }
+
+        function renderSchedule() {
+            const round = document.getElementById('roundSelect').value;
+            const team = document.getElementById('teamSelect').value;
+            const ground = document.getElementById('groundSelect').value;
+            const day = document.getElementById('daySelect').value;
+
+            console.log('renderSchedule called with filters:', { round, team, ground, day });
+            console.log('Total schedule matches:', schedule.length);
+            
+            // Debug: Check first match structure
+            if (schedule.length > 0) {
+                console.log('First match:', schedule[0]);
+                console.log('Team1 type:', typeof schedule[0].team1, 'Value:', schedule[0].team1);
+                console.log('Team2 type:', typeof schedule[0].team2, 'Value:', schedule[0].team2);
+            }
+
+            let filtered = schedule.filter(match => {
+                const roundPass = round === 'all' || match.round === parseInt(round);
+                const teamPass = team === 'all' || match.team1 === team || match.team2 === team;
+                const groundPass = ground === 'all' || match.ground === ground;
+                const dayPass = day === 'all' || match.day === day;
+                
+                if (!roundPass || !teamPass || !groundPass || !dayPass) {
+                    return false;
+                }
+                return true;
+            });
+
+            console.log('Filtered matches:', filtered.length);
+            console.log('Filtered rounds:', [...new Set(filtered.map(m => m.round))].sort((a, b) => a - b));
+
+            const grouped = {};
+            filtered.forEach(match => {
+                if (!grouped[match.round]) {
+                    grouped[match.round] = [];
+                }
+                grouped[match.round].push(match);
+            });
+
+            const allRoundNums = Object.keys(roundDates).map(Number).sort((a, b) => a - b);
+            const nonRoundFiltersActive = team !== 'all' || ground !== 'all' || day !== 'all';
+            const hiddenRoundNums = Number.isFinite(publicMaxRound)
+                ? allRoundNums
+                    .filter(roundNum => roundNum > publicMaxRound)
+                    .filter(roundNum => round === 'all' || roundNum === parseInt(round))
+                    .filter(() => !nonRoundFiltersActive || round !== 'all')
+                    .map(String)
+                : [];
+            // Include all public rounds from roundDates (even those with no matches yet)
+            const publicRoundNums = allRoundNums
+                .filter(roundNum => !Number.isFinite(publicMaxRound) || roundNum <= publicMaxRound)
+                .filter(roundNum => round === 'all' || roundNum === parseInt(round))
+                .filter(() => !nonRoundFiltersActive || round !== 'all')
+                .map(String);
+            const roundNums = [...new Set([...Object.keys(grouped), ...hiddenRoundNums, ...publicRoundNums])]
+                .sort((a, b) => parseInt(a) - parseInt(b));
+            if (!collapsedRoundsInitialized) {
+                roundNums.forEach(roundNum => {
+                    const hasInProgressMatch = (grouped[roundNum] || []).some(match =>
+                        normalizeName(match.status) === 'inprogress'
+                    );
+                    if (!hasInProgressMatch) {
+                        collapsedRounds.add(String(roundNum));
+                    }
+                });
+                collapsedRoundsInitialized = true;
+            }
+
+            const scheduleDiv = document.getElementById('schedule');
+            scheduleDiv.innerHTML = '';
+
+            if (filtered.length === 0 && roundNums.length === 0) {
+                scheduleDiv.innerHTML = '<div class="no-matches">No matches found for the selected filters.</div>';
+                return;
+            }
+
+            // Add announcement heading
+            const announcementDiv = document.createElement('div');
+            announcementDiv.className = 'schedule-announcement';
+            announcementDiv.innerHTML = 'The DPCL schedule will be announced in three-week windows, with subsequent fixtures released periodically throughout the season to assist teams with planning and availability.';
+            scheduleDiv.appendChild(announcementDiv);
+
+            roundNums.forEach(roundNum => {
+                let matches = grouped[roundNum] || [];
+                const isPendingRound = matches.length === 0 && roundDates[roundNum] !== undefined;
+                
+                const dayOrder = { "Friday": 0, "Saturday": 1, "Sunday": 2 };
+                const timeOrder = { "8:00-11:30 am": 0, "12:00-4:00 pm": 1, "6:00-10:00 pm": 2 };
+                matches = matches.sort((a, b) => {
+                    const dayDiff = (dayOrder[a.day] ?? 99) - (dayOrder[b.day] ?? 99);
+                    if (dayDiff !== 0) return dayDiff;
+                    return (timeOrder[a.time] ?? 99) - (timeOrder[b.time] ?? 99);
+                });
+                
+                const roundDiv = document.createElement('div');
+                const roundTitle = document.createElement('div');
+                roundTitle.className = 'round-title';
+                const dateStr = roundDates[roundNum] || '';
+                const isCollapsed = collapsedRounds.has(String(roundNum));
+                const roundLabel = roundNum == 12 ? 'Semi Final' : roundNum == 13 ? 'Finals' : `Week ${roundNum}`;
+                roundTitle.innerHTML = `
+                    <div class="round-title-main">
+                        <span>${roundLabel}</span>
+                        <span style="font-size: 0.9em;">${dateStr}</span>
+                        <span class="match-count">${isPendingRound ? 'Schedule pending' : `${matches.length} match${matches.length !== 1 ? 'es' : ''}`}</span>
+                    </div>
+                    <button class="round-toggle" type="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand' : 'Collapse'} ${roundLabel}" data-round="${roundNum}">
+                        ${isCollapsed ? '↓' : '↑'}
+                    </button>
+                `;
+                roundDiv.appendChild(roundTitle);
+
+                if (isPendingRound) {
+                    const pendingDiv = document.createElement('div');
+                    pendingDiv.className = `schedule-pending${isCollapsed ? ' collapsed' : ''}`;
+                    pendingDiv.textContent = 'Schedule will be released soon.';
+                    roundDiv.appendChild(pendingDiv);
+                    scheduleDiv.appendChild(roundDiv);
+                    return;
+                }
+
+                const grid = document.createElement('div');
+                grid.className = `matches-grid${isCollapsed ? ' collapsed' : ''}`;
+                
+                matches.forEach((match) => {
+                    const card = document.createElement('div');
+                    card.className = 'match-card';
+                    const team1 = match.team1;
+                    const team2 = match.team2;
+                    const team1Info = getTeamInfo(team1);
+                    const team2Info = getTeamInfo(team2);
+                    const logo1Path = team1Info.logo ? `logos/${team1Info.logo}` : '';
+                    const logo2Path = team2Info.logo ? `logos/${team2Info.logo}` : '';
+                    const gameDate = match.date || '?/?';
+                    const scoresInfo = (match.team1Score || match.team2Score) ? `
+                        <div class="score-lines">
+                            ${match.team1Score ? `<div class="score-line"><span class="score-team">${team1}</span><span>&nbsp;&nbsp;:&nbsp;&nbsp;</span><strong class="score-value">${match.team1Score}</strong></div>` : ''}
+                            ${match.team2Score ? `<div class="score-line"><span class="score-team">${team2}</span><span>&nbsp;&nbsp;:&nbsp;&nbsp;</span><strong class="score-value">${match.team2Score}</strong></div>` : ''}
+                        </div>
+                    ` : '';
+                    const winnerInfo = match.winner ? `<div class="winner-info">🏆 Winner: ${match.winner}${scoresInfo}</div>` : '';
+                    const washoutInfo = match.washout ? `<div class="washout-info">⛈️ Washout</div>` : '';
+                    const rescheduleNote = match.note ? `<div class="reschedule-note">📅 ${match.note}</div>` : '';
+                    
+                    // Determine border color based on winner or washout
+                    let borderColor = '#3498db'; // default blue
+                    if (match.washout) {
+                        borderColor = '#95a5a6'; // gray for washout
+                    } else if (match.winner) {
+                        if (team1 === match.winner) {
+                            borderColor = '#27ae60'; // green for team1 if they won
+                        } else {
+                            borderColor = '#e74c3c'; // red for team1 if they lost
+                        }
+                    }
+                    card.style.borderColor = borderColor;
+
+                    card.innerHTML = `
+                        <div class="match-meta">
+                            ${gameDate} ${match.day} · ${match.ground} · ${match.time}
+                        </div>
+                        ${rescheduleNote}
+                        <div class="teams">
+                            <div class="team">
+                                <img src="${logo1Path}" alt="${team1}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${team1}</strong>
+                                <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
+                                    <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
+                                    <div style="font-weight: bold; color: #2c3e50;">${team1Info.captain}</div>
+                                </div>
+                            </div>
+                            <div class="vs">VS</div>
+                            <div class="team">
+                                <img src="${logo2Path}" alt="${team2}" class="team-logo" style="width: 40px; height: 40px;" onerror="this.style.display='none'">
+                                <strong>${team2}</strong>
+                                <div style="font-size: 0.75em; margin-top: 6px; padding-top: 4px; border-top: 1px solid #ddd;">
+                                    <div style="font-weight: bold; color: #e74c3c; font-size: 0.85em;">⭐ Captain</div>
+                                    <div style="font-weight: bold; color: #2c3e50;">${team2Info.captain}</div>
+                                </div>
+                            </div>
+                        </div>
+                        ${washoutInfo}
+                        ${winnerInfo}
+                    `;
+                    grid.appendChild(card);
+                });
+
+                roundDiv.appendChild(grid);
+                scheduleDiv.appendChild(roundDiv);
+            });
+        }
+
+        function renderTeams() {
+            const teamsList = document.getElementById('teamsList');
+            const visibleTeams = allTeams.filter(t => normalizeName(t) !== 'roaringlions');
+            teamsList.innerHTML = visibleTeams.map(t => {
+                const teamInfo = getTeamInfo(t);
+                const logoPath = teamInfo.logo ? `logos/${teamInfo.logo}` : '';
+                return `<div class="team-badge">
+                    <img src="${logoPath}" alt="${t}" class="team-logo" onerror="this.style.display='none'">
+                    <div>${t}</div>
+                    <div style="border-top: 1px solid #bdc3c7; margin-top: 8px; padding-top: 6px;">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #e74c3c;">⭐ CAPTAIN</div>
+                        <div style="font-size: 0.9em; color: #2c3e50; font-weight: bold;">${teamInfo.captain}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        document.getElementById('schedule').addEventListener('click', (event) => {
+            const toggle = event.target.closest('.round-toggle');
+            if (!toggle) return;
+
+            const roundNum = String(toggle.dataset.round);
+            if (collapsedRounds.has(roundNum)) {
+                collapsedRounds.delete(roundNum);
+            } else {
+                collapsedRounds.add(roundNum);
+            }
+            renderSchedule();
+        });
+
+        document.getElementById('roundSelect').addEventListener('change', renderSchedule);
+        document.getElementById('teamSelect').addEventListener('change', renderSchedule);
+        document.getElementById('groundSelect').addEventListener('change', renderSchedule);
+        document.getElementById('daySelect').addEventListener('change', renderSchedule);
+
+        // Load schedule from API and render
+        loadSchedule().then(() => {
+            console.log('Schedule loaded successfully');
+            updateDynamicFilters();
+            renderSchedule();
+            renderTeams();
+        }).catch(err => {
+            console.error('Failed to load schedule:', err);
+            document.getElementById('schedule').innerHTML = '<div class="no-matches">Failed to load schedule. Please refresh the page.</div>';
+        });
+    </script>
+</body>
+</html>
