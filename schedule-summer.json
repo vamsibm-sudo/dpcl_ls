@@ -1,0 +1,483 @@
+{
+  "season": "Summer 2026",
+  "totalWeeks": 7,
+  "divisions": {
+    "A": {
+      "name": "Division A",
+      "teams": [
+        "Avengers",
+        "Devils",
+        "Fighters",
+        "India Blues",
+        "Dragons",
+        "Eagles",
+        "Royal Lions"
+      ]
+    },
+    "B": {
+      "name": "Division B",
+      "teams": [
+        "Mavericks",
+        "Super Chargers XI",
+        "Warriors",
+        "Guts and Glory",
+        "VR Warriors",
+        "Impact XI",
+        "Flower Mound CC"
+      ]
+    }
+  },
+  "matches": [
+    {
+      "id": 1,
+      "week": 1,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 11",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Avengers",
+      "team2": "Devils",
+      "venue": "Krum2"
+    },
+    {
+      "id": 2,
+      "week": 1,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 11",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Fighters",
+      "team2": "India Blues",
+      "venue": "Krum1"
+    },
+    {
+      "id": 3,
+      "week": 1,
+      "division": "B",
+      "day": "Saturday",
+      "date": "July 11",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Mavericks",
+      "team2": "Super Chargers XI",
+      "venue": "Krum3"
+    },
+    {
+      "id": 4,
+      "week": 1,
+      "division": "A",
+      "day": "Sunday",
+      "date": "July 12",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Royal Lions",
+      "team2": "Eagles",
+      "venue": "Krum3"
+    },
+    {
+      "id": 5,
+      "week": 1,
+      "division": "B",
+      "day": "Sunday",
+      "date": "July 12",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Guts and Glory",
+      "team2": "Impact XI",
+      "venue": "Krum2"
+    },
+    {
+      "id": 7,
+      "week": 2,
+      "division": "A",
+      "day": "Friday",
+      "date": "July 17",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Avengers",
+      "team2": "Dragons",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 8,
+      "week": 2,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 18",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Fighters",
+      "team2": "Royal Lions",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 9,
+      "week": 2,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 18",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Devils",
+      "team2": "Eagles",
+      "venue": "Krum2"
+    },
+    {
+      "id": 10,
+      "week": 2,
+      "division": "B",
+      "day": "Saturday",
+      "date": "July 18",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Warriors",
+      "team2": "Flower Mound CC",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 11,
+      "week": 2,
+      "division": "B",
+      "day": "Sunday",
+      "date": "July 19",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Mavericks",
+      "team2": "Guts and Glory",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 12,
+      "week": 2,
+      "division": "B",
+      "day": "Sunday",
+      "date": "July 19",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Impact XI",
+      "team2": "VR Warriors",
+      "venue": "Krum2"
+    },
+    {
+      "id": 13,
+      "week": 3,
+      "division": "A",
+      "day": "Friday",
+      "date": "July 24",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Avengers",
+      "team2": "Royal Lions",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 14,
+      "week": 3,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 25",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Dragons",
+      "team2": "Devils",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 15,
+      "week": 3,
+      "division": "A",
+      "day": "Saturday",
+      "date": "July 25",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Eagles",
+      "team2": "India Blues",
+      "venue": "Krum2"
+    },
+    {
+      "id": 16,
+      "week": 3,
+      "division": "B",
+      "day": "Saturday",
+      "date": "July 25",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Mavericks",
+      "team2": "VR Warriors",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 17,
+      "week": 3,
+      "division": "B",
+      "day": "Sunday",
+      "date": "July 26",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Guts and Glory",
+      "team2": "Warriors",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 18,
+      "week": 3,
+      "division": "B",
+      "day": "Sunday",
+      "date": "July 26",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Impact XI",
+      "team2": "Super Chargers XI",
+      "venue": "Krum2"
+    },
+    {
+      "id": 19,
+      "week": 4,
+      "division": "A",
+      "day": "Friday",
+      "date": "July 31",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Devils",
+      "team2": "India Blues",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 20,
+      "week": 4,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 01",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Avengers",
+      "team2": "Eagles",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 21,
+      "week": 4,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 01",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Dragons",
+      "team2": "Fighters",
+      "venue": "Krum2"
+    },
+    {
+      "id": 22,
+      "week": 4,
+      "division": "B",
+      "day": "Saturday",
+      "date": "August 01",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Super Chargers XI",
+      "team2": "Guts and Glory",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 23,
+      "week": 4,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 02",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Warriors",
+      "team2": "VR Warriors",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 24,
+      "week": 4,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 02",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Flower Mound CC",
+      "team2": "Mavericks",
+      "venue": "Krum2"
+    },
+    {
+      "id": 25,
+      "week": 5,
+      "division": "A",
+      "day": "Friday",
+      "date": "August 07",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Dragons",
+      "team2": "India Blues",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 26,
+      "week": 5,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 08",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Devils",
+      "team2": "Royal Lions",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 27,
+      "week": 5,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 08",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Avengers",
+      "team2": "Fighters",
+      "venue": "Krum2"
+    },
+    {
+      "id": 28,
+      "week": 5,
+      "division": "B",
+      "day": "Saturday",
+      "date": "August 08",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Flower Mound CC",
+      "team2": "VR Warriors",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 29,
+      "week": 5,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 09",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Mavericks",
+      "team2": "Impact XI",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 30,
+      "week": 5,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 09",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Super Chargers XI",
+      "team2": "Warriors",
+      "venue": "Krum2"
+    },
+    {
+      "id": 31,
+      "week": 6,
+      "division": "A",
+      "day": "Friday",
+      "date": "August 14",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Eagles",
+      "team2": "Fighters",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 32,
+      "week": 6,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 15",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Avengers",
+      "team2": "India Blues",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 33,
+      "week": 6,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 15",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Dragons",
+      "team2": "Royal Lions",
+      "venue": "Krum2"
+    },
+    {
+      "id": 34,
+      "week": 6,
+      "division": "B",
+      "day": "Saturday",
+      "date": "August 15",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Guts and Glory",
+      "team2": "Impact XI",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 35,
+      "week": 6,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 16",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Super Chargers XI",
+      "team2": "Flower Mound CC",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 36,
+      "week": 6,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 16",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Warriors",
+      "team2": "Mavericks",
+      "venue": "Krum2"
+    },
+    {
+      "id": 37,
+      "week": 7,
+      "division": "A",
+      "day": "Friday",
+      "date": "August 21",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Devils",
+      "team2": "Fighters",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 38,
+      "week": 7,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 22",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "Dragons",
+      "team2": "Eagles",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 39,
+      "week": 7,
+      "division": "A",
+      "day": "Saturday",
+      "date": "August 22",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "India Blues",
+      "team2": "Royal Lions",
+      "venue": "Krum2"
+    },
+    {
+      "id": 40,
+      "week": 7,
+      "division": "B",
+      "day": "Saturday",
+      "date": "August 22",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Warriors",
+      "team2": "Impact XI",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 41,
+      "week": 7,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 23",
+      "time": "6:00 PM - 10:00 PM",
+      "team1": "VR Warriors",
+      "team2": "Super Chargers XI",
+      "venue": "FM / Bakersfield"
+    },
+    {
+      "id": 42,
+      "week": 7,
+      "division": "B",
+      "day": "Sunday",
+      "date": "August 23",
+      "time": "7:30 AM - 12:00 PM",
+      "team1": "Guts and Glory",
+      "team2": "Flower Mound CC",
+      "venue": "Krum2"
+    }
+  ]
+}
