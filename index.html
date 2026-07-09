@@ -554,6 +554,24 @@
             'Super Chargers XI': 'logos/teams/SuperChargersXI.png'
         };
 
+        // Team captains and vice-captains
+        const teamInfo = {
+            'Mavericks': { captain: 'Karthik', vc: 'Vamsi' },
+            'Fighters': { captain: 'Ajay', vc: 'Krishna' },
+            'Eagles': { captain: 'Naresh', vc: 'Rahul' },
+            'Devils': { captain: 'Srikanth', vc: 'Veeru' },
+            'India Blues': { captain: 'Pratap', vc: 'Avinash' },
+            'Warriors': { captain: 'Srikanth', vc: 'Guna' },
+            'Dragons': { captain: 'Sridhar', vc: 'Kishore' },
+            'Royal Lions': { captain: 'Abhilash', vc: 'Praveen' },
+            'Guts and Glory': { captain: 'Dipesh', vc: 'Swapnil' },
+            'Impact XI': { captain: 'Manideep', vc: 'Jaswarith' },
+            'Flower Mound CC': { captain: 'Abbas', vc: 'Shahid' },
+            'Avengers': { captain: 'Varun', vc: 'Santosh' },
+            'VR Warriors': { captain: 'Somu', vc: 'Ragha' },
+            'Super Chargers XI': { captain: 'Satish', vc: 'Santosh' }
+        };
+
         async function loadSchedule() {
             try {
                 const response = await fetch('schedule-summer.json');
@@ -687,6 +705,9 @@
             const logo1 = teamLogos[match.team1] ? `<img src="${teamLogos[match.team1]}" alt="${match.team1}" class="team-logo">` : '';
             const logo2 = teamLogos[match.team2] ? `<img src="${teamLogos[match.team2]}" alt="${match.team2}" class="team-logo">` : '';
             
+            const team1Info = teamInfo[match.team1] || { captain: 'TBD', vc: 'TBD' };
+            const team2Info = teamInfo[match.team2] || { captain: 'TBD', vc: 'TBD' };
+            
             return `
                 <div class="match-card">
                     <div class="match-header">
@@ -711,11 +732,19 @@
                         <div class="team">
                             ${logo1}
                             <div class="team-name">${match.team1}</div>
+                            <div style="font-size: 0.8em; margin-top: 10px; line-height: 1.4;">
+                                <div style="color: #ff6b35; font-weight: 900;">⭐ ${team1Info.captain}</div>
+                                <div style="color: #0099cc; font-weight: 700; font-size: 0.9em;">(VC: ${team1Info.vc})</div>
+                            </div>
                         </div>
                         <div class="vs">VS</div>
                         <div class="team">
                             ${logo2}
                             <div class="team-name">${match.team2}</div>
+                            <div style="font-size: 0.8em; margin-top: 10px; line-height: 1.4;">
+                                <div style="color: #ff6b35; font-weight: 900;">⭐ ${team2Info.captain}</div>
+                                <div style="color: #0099cc; font-weight: 700; font-size: 0.9em;">(VC: ${team2Info.vc})</div>
+                            </div>
                         </div>
                     </div>
                 </div>
