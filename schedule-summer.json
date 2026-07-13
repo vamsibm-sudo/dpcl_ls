@@ -123,8 +123,8 @@
       "day": "Saturday",
       "date": "July 18",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Warriors",
-      "team2": "Flower Mound CC",
+      "team1": "Flower Mound CC",
+      "team2": "Impact XI",
       "venue": "FM / Bakersfield"
     },
     {
@@ -145,8 +145,8 @@
       "day": "Sunday",
       "date": "July 19",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Impact XI",
-      "team2": "Ekadash XI",
+      "team1": "Ekadash XI",
+      "team2": "Warriors",
       "venue": "Krum2"
     },
     {
@@ -189,8 +189,8 @@
       "day": "Saturday",
       "date": "July 25",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Mavericks",
-      "team2": "Ekadash XI",
+      "team1": "Guts and Glory",
+      "team2": "Warriors",
       "venue": "FM / Bakersfield"
     },
     {
@@ -200,8 +200,8 @@
       "day": "Sunday",
       "date": "July 26",
       "time": "6:00 PM - 10:00 PM",
-      "team1": "Guts and Glory",
-      "team2": "Warriors",
+      "team1": "Mavericks",
+      "team2": "Impact XI",
       "venue": "FM / Bakersfield"
     },
     {
@@ -211,7 +211,7 @@
       "day": "Sunday",
       "date": "July 26",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Impact XI",
+      "team1": "Ekadash XI",
       "team2": "Super Chargers XI",
       "venue": "Krum2"
     },
@@ -255,8 +255,8 @@
       "day": "Saturday",
       "date": "August 01",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Super Chargers XI",
-      "team2": "Guts and Glory",
+      "team1": "Ekadash XI",
+      "team2": "Mavericks",
       "venue": "FM / Bakersfield"
     },
     {
@@ -266,8 +266,8 @@
       "day": "Sunday",
       "date": "August 02",
       "time": "6:00 PM - 10:00 PM",
-      "team1": "Warriors",
-      "team2": "Ekadash XI",
+      "team1": "Super Chargers XI",
+      "team2": "Warriors",
       "venue": "FM / Bakersfield"
     },
     {
@@ -278,7 +278,7 @@
       "date": "August 02",
       "time": "7:30 AM - 12:00 PM",
       "team1": "Flower Mound CC",
-      "team2": "Mavericks",
+      "team2": "Guts and Glory",
       "venue": "Krum2"
     },
     {
@@ -322,7 +322,7 @@
       "date": "August 08",
       "time": "7:30 AM - 12:00 PM",
       "team1": "Flower Mound CC",
-      "team2": "Ekadash XI",
+      "team2": "Super Chargers XI",
       "venue": "FM / Bakersfield"
     },
     {
@@ -332,7 +332,7 @@
       "day": "Sunday",
       "date": "August 09",
       "time": "6:00 PM - 10:00 PM",
-      "team1": "Mavericks",
+      "team1": "Ekadash XI",
       "team2": "Impact XI",
       "venue": "FM / Bakersfield"
     },
@@ -343,7 +343,7 @@
       "day": "Sunday",
       "date": "August 09",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Super Chargers XI",
+      "team1": "Mavericks",
       "team2": "Warriors",
       "venue": "Krum2"
     },
@@ -387,8 +387,8 @@
       "day": "Saturday",
       "date": "August 15",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Guts and Glory",
-      "team2": "Impact XI",
+      "team1": "Impact XI",
+      "team2": "Warriors",
       "venue": "FM / Bakersfield"
     },
     {
@@ -398,8 +398,8 @@
       "day": "Sunday",
       "date": "August 16",
       "time": "6:00 PM - 10:00 PM",
-      "team1": "Super Chargers XI",
-      "team2": "Flower Mound CC",
+      "team1": "Guts and Glory",
+      "team2": "Super Chargers XI",
       "venue": "FM / Bakersfield"
     },
     {
@@ -409,7 +409,7 @@
       "day": "Sunday",
       "date": "August 16",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Warriors",
+      "team1": "Flower Mound CC",
       "team2": "Mavericks",
       "venue": "Krum2"
     },
@@ -453,8 +453,8 @@
       "day": "Saturday",
       "date": "August 22",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Warriors",
-      "team2": "Impact XI",
+      "team1": "Ekadash XI",
+      "team2": "Guts and Glory",
       "venue": "FM / Bakersfield"
     },
     {
@@ -464,8 +464,8 @@
       "day": "Sunday",
       "date": "August 23",
       "time": "6:00 PM - 10:00 PM",
-      "team1": "Ekadash XI",
-      "team2": "Super Chargers XI",
+      "team1": "Flower Mound CC",
+      "team2": "Warriors",
       "venue": "FM / Bakersfield"
     },
     {
@@ -475,8 +475,8 @@
       "day": "Sunday",
       "date": "August 23",
       "time": "7:30 AM - 12:00 PM",
-      "team1": "Guts and Glory",
-      "team2": "Flower Mound CC",
+      "team1": "Impact XI",
+      "team2": "Super Chargers XI",
       "venue": "Krum2"
     }
   ]
